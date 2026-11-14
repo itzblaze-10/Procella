@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# After every commit, push the current branch so GitHub never lags behind local.
+# A failed push never blocks the commit; it prints a warning and sync-check.sh will flag it.
+branch=$(git rev-parse --abbrev-ref HEAD)
+[ "$branch" = "HEAD" ] && exit 0
+if ! git push --quiet origin "$branch" 2>/dev/null; then
+  echo "post-commit: push of '$branch' failed. Run: git pull --rebase origin $branch && git push" >&2
+fi
+exit 0

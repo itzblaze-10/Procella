@@ -1,0 +1,32 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Temporary working files (project rule: temp files live in .tmp)
+.tmp/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Node
+node_modules/
+dist/
+.vite/
+.svelte-kit/
+coverage/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv-*/
+
+# Claude Code local-only files
+.claude/settings.local.json
+.claude/memory/
+.claude/worktrees/
