@@ -178,3 +178,22 @@ solution idea, and our strategy debate was SI-assisted; CLAUDE.md rule 3 (no Cla
 disclosure. (b) Under-18 names and likenesses are barred from submissions; README and docs name both partners.
 Not changed without the owner: only the new HTML header was switched to "Team Procella". Recorded in
 docs/challenge-brief.md "Open items".
+
+## 2026-11-14 13:51 — Stack and experience research landed; two docs written
+
+**Stack agent finished.** Verified its key claim myself: the gsap-core, gsap-timeline, gsap-react, gsap-scrolltrigger,
+threejs and d3-visualization skills I copied from the Business workspace are ~1 KB stubs pointing at
+greensock/skills, which returns 404. The real repos are greensock/gsap-skills (MIT, 18k stars) and
+CloudAI-X/threejs-skills (MIT, 4k stars). Not installed: cloning downloads files, so it waits for the owner.
+This was a copy-time blind spot: I sized skills by du and never opened them.
+
+**Decisions captured in docs/stack.md:** one document with hash routes (separate pages reset audio and WebGL),
+Vite 8.3.5 + vanilla TypeScript, globe.gl 2.46.2 on three 0.187.0 lazy-loaded, GSAP 3.15.0 via npm only (free
+licence, not OSI open source), D3 micro-modules, raw procedural Web Audio (no audio files, no licence risk,
+and it can sonify the series). Budgets, lite tier, offline plan and Playwright checks recorded.
+
+**docs/experience.md:** routes, five quests mapped to the four objectives plus a Twin Case finale, ranked
+goosebump moments, demo modes, data-first rules, three brand candidates (A Terminator recommended).
+
+**Still running:** the data-reality agent (variable catalogue and the trend screen across regions). The roadmap
+page updates in place when it lands. Artifact republished with stack status.
