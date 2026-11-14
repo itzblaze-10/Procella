@@ -45,3 +45,27 @@ workspace (read-only), scaffold the repo, and rank approaches.
   per the owner's instruction.
 - **Open:** submission deadline and deliverable format are not on the challenge page; Twin Case pairs
   unscreened; frontend choice and the A/B work split await the partners.
+
+## 2026-11-14 13:19 — Push rejected: partner had pushed to main during the session
+
+**What broke:** both of my commits failed to push (post-commit hook warned, sync-check showed 2 ahead,
+1 behind). The partner (GitHub user blaze) had pushed "Add files via upload" at 13:04 IST: four
+exploration scripts (GISTEMP trend, GRACE and MERRA-2 searches via earthaccess, an Earthdata login
+test), a 2 MB SRTM test zip, and a README edit.
+
+**What I checked before touching anything:** read the new files with credential-looking strings
+redacted (none found; test_access.py only calls earthaccess.login, which prompts and saves to
+~/.netrc outside the repo). The README change was line-ending only.
+
+**Resolution:** `git pull --rebase -X theirs` so my replayed commits win the README conflict and
+every partner file survives untouched; then pushed normally, no force. local == origin/main at fb1bea3.
+Partner files left at the repo root on purpose: moving a partner's work without asking is not my call.
+
+**Gap found:** the post-commit hook does not fire after a rebase, so a rebase leaves unpushed commits
+until sync-check.sh is run. Rule: after any pull --rebase, run sync-check.sh and push.
+
+**New facts folded into docs/data-access-notes.md:** GISTEMP CSV is open but has no CORS (precompute
+it); CMR search is open; GRACE and MERRA-2 downloads need an Earthdata Login.
+
+**Open:** ask the partner to run scripts/install-hooks.sh in their clone, and agree on short-lived
+branches or at least pull-before-push so two people on main do not collide again.

@@ -45,3 +45,11 @@ Base: `https://modis.ornl.gov/rst/api/v1/`
 Python 3.14.4 (no numpy, scipy, pandas installed), Node 26.10. For the Mann-Kendall test fixtures use a
 separate Python 3.12 virtual environment (`uv venv --python 3.12`) with `pymannkendall`; avoid
 3.14 scientific wheels until proven.
+
+## Found by the partner's exploration scripts (pushed 2026-11-14 13:04, verified 13:2x)
+
+| Source | Finding |
+|---|---|
+| NASA GISTEMP CSV (`data.giss.nasa.gov/gistemp/tabledata_v4/GLB.Ts+dSST.csv`) | Open, HTTP 200, global annual anomaly. No CORS header, so fetch it in a build script and commit the result; do not call it from the browser |
+| NASA CMR search (via `earthaccess.search_data`) | Search is open, no login (verified: MERRA-2 M2TMNXSLV collection found). Downloads need a free Earthdata Login |
+| GRACE mascon (`TELLUS_GRAC-GRFO_MASCON_CRI_GRID_RL06.3_V4`) | Single NetCDF covering 2002 to present; download needs Earthdata Login. Candidate for a precomputed water-storage case |
