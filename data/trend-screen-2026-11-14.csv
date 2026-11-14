@@ -1,0 +1,222 @@
+region,lat,lon,tag,variable,units,first_year,n,sen_per_year,ols_per_year,mk_z,mk_p,verdict
+Gandhinagar,23.22,72.65,monsoon,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.0182759,-0.0197715,-2.3634,0.01811,detected
+Gandhinagar,23.22,72.65,monsoon,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0520833,-0.0512511,-6.5907,4.378e-11,detected
+Gandhinagar,23.22,72.65,monsoon,AOD_55,dimensionless,2001,25,0.00666667,0.00633846,4.2181,2.464e-05,detected
+Gandhinagar,23.22,72.65,monsoon,CLOUD_AMT,%,1984,42,-0.120625,-0.118897,-1.0621,0.2882,not detectable yet
+Gandhinagar,23.22,72.65,monsoon,GWETROOT,1,1981,45,0.00149074,0.00165086,2.8319,0.004627,detected
+Gandhinagar,23.22,72.65,monsoon,IMERG_PRECTOT,mm/day,1998,28,0.0202104,0.0188604,1.0866,0.2772,not detectable yet
+Gandhinagar,23.22,72.65,monsoon,PRECTOTCORR,mm/day,1981,45,0.0209934,0.0203347,2.6416,0.008251,detected
+Gandhinagar,23.22,72.65,monsoon,PS,kPa,1981,45,0.000960061,0.00127273,1.9058,0.05667,not detectable yet
+Gandhinagar,23.22,72.65,monsoon,QV2M,g/kg,1981,45,0.0530909,0.0498762,4.5392,5.646e-06,detected
+Gandhinagar,23.22,72.65,monsoon,RH2M,%,1981,45,0.285441,0.275196,4.0501,5.12e-05,detected
+Gandhinagar,23.22,72.65,monsoon,T2M,C,1981,45,-0.013374,-0.0131133,-1.5851,0.1129,not detectable yet
+Gandhinagar,23.22,72.65,monsoon,TO3,Dobsons,1981,45,0.144466,0.127951,2.9643,0.003033,detected
+Gandhinagar,23.22,72.65,monsoon,TS,C,1981,45,-0.0219211,-0.0211845,-2.1522,0.03138,detected
+Gandhinagar,23.22,72.65,monsoon,WS10M,m/s,1981,45,-0.005,-0.00447563,-3.2506,0.001152,detected
+Delhi,28.61,77.21,megacity,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.02725,-0.0310899,-3.362,0.0007739,detected
+Delhi,28.61,77.21,megacity,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.060625,-0.0595106,-6.6991,2.097e-11,detected
+Delhi,28.61,77.21,megacity,AOD_55,dimensionless,2001,25,0.00514706,0.00539231,3.825,0.0001308,detected
+Delhi,28.61,77.21,megacity,CLOUD_AMT,%,1984,42,-0.0626471,-0.067356,-0.8562,0.3919,not detectable yet
+Delhi,28.61,77.21,megacity,GWETROOT,1,1981,45,0.000909091,0.000957839,2.1037,0.03541,detected
+Delhi,28.61,77.21,megacity,IMERG_PRECTOT,mm/day,1998,28,0.0160175,0.0146177,1.3237,0.1856,not detectable yet
+Delhi,28.61,77.21,megacity,PRECTOTCORR,mm/day,1981,45,0.0075,0.00813834,1.1056,0.2689,not detectable yet
+Delhi,28.61,77.21,megacity,PS,kPa,1981,45,0.00145503,0.0016469,2.0224,0.04314,detected
+Delhi,28.61,77.21,megacity,QV2M,g/kg,1981,45,0.0522069,0.0484216,4.4518,8.515e-06,detected
+Delhi,28.61,77.21,megacity,RH2M,%,1981,45,0.282273,0.265267,3.874,0.0001071,detected
+Delhi,28.61,77.21,megacity,T2M,C,1981,45,-0.0124265,-0.01217,-1.6443,0.1001,not detectable yet
+Delhi,28.61,77.21,megacity,TO3,Dobsons,1981,45,0.0494246,0.0585744,1.125,0.2606,not detectable yet
+Delhi,28.61,77.21,megacity,TS,C,1981,45,-0.0140588,-0.0148735,-2.0449,0.04087,detected
+Delhi,28.61,77.21,megacity,WS10M,m/s,1981,45,-0.00833333,-0.00771278,-4.211,2.542e-05,detected
+Beijing,39.9,116.4,megacity,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.0025,-0.00267563,-0.4771,0.6333,not detectable yet
+Beijing,39.9,116.4,megacity,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0366667,-0.0401734,-3.6639,0.0002484,detected
+Beijing,39.9,116.4,megacity,AOD_55,dimensionless,2001,25,-0.01,-0.00845385,-2.9467,0.003211,detected
+Beijing,39.9,116.4,megacity,CLOUD_AMT,%,1984,42,-0.02,-0.0143959,-0.4552,0.649,not detectable yet
+Beijing,39.9,116.4,megacity,GWETROOT,1,1981,45,0.00103448,0.0011357,3.2712,0.001071,detected
+Beijing,39.9,116.4,megacity,IMERG_PRECTOT,mm/day,1998,28,0.0385391,0.0389669,4.3267,1.514e-05,detected
+Beijing,39.9,116.4,megacity,PRECTOTCORR,mm/day,1981,45,0.0144722,0.0147945,3.5424,0.0003965,detected
+Beijing,39.9,116.4,megacity,PS,kPa,1981,45,0.00142857,0.00165613,2.7913,0.005249,detected
+Beijing,39.9,116.4,megacity,QV2M,g/kg,1981,45,0.0211111,0.0203294,3.9722,7.121e-05,detected
+Beijing,39.9,116.4,megacity,RH2M,%,1981,45,0.0900214,0.082668,1.6532,0.09829,not detectable yet
+Beijing,39.9,116.4,megacity,T2M,C,1981,45,0.0251667,0.0248538,3.1702,0.001523,detected
+Beijing,39.9,116.4,megacity,TO3,Dobsons,1981,45,-0.260605,-0.239224,-3.424,0.0006171,detected
+Beijing,39.9,116.4,megacity,TS,C,1981,45,0.0212917,0.0212675,2.5928,0.00952,detected
+Beijing,39.9,116.4,megacity,WS10M,m/s,1981,45,0.000833333,0.00101449,0.6864,0.4925,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0,-0.00193339,0.0,1,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.018,-0.0168252,-3.6313,0.000282,detected
+Sahel Niger,13.0,2.0,monsoon,AOD_55,dimensionless,2001,25,-0.00166667,-0.00147692,-1.2902,0.197,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,CLOUD_AMT,%,1984,42,0.1335,0.143039,2.5793,0.0099,detected
+Sahel Niger,13.0,2.0,monsoon,GWETROOT,1,1981,45,0.000845238,0.00106851,4.1898,2.792e-05,detected
+Sahel Niger,13.0,2.0,monsoon,IMERG_PRECTOT,mm/day,1998,28,0.00227169,0.00321401,0.3754,0.7074,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,PRECTOTCORR,mm/day,1981,45,0.0135599,0.0150619,3.8952,9.813e-05,detected
+Sahel Niger,13.0,2.0,monsoon,PS,kPa,1981,45,0.000923295,0.00108827,2.5175,0.01182,detected
+Sahel Niger,13.0,2.0,monsoon,QV2M,g/kg,1981,45,0.0270484,0.0273636,4.0796,4.511e-05,detected
+Sahel Niger,13.0,2.0,monsoon,RH2M,%,1981,45,0.111583,0.113037,3.3261,0.0008806,detected
+Sahel Niger,13.0,2.0,monsoon,T2M,C,1981,45,0.00937255,0.00800527,1.6632,0.09627,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,TO3,Dobsons,1981,45,0.0798095,0.0595336,2.0054,0.04492,detected
+Sahel Niger,13.0,2.0,monsoon,TS,C,1981,45,0.0039697,0.00315152,0.6948,0.4872,not detectable yet
+Sahel Niger,13.0,2.0,monsoon,WS10M,m/s,1981,45,-0.00571429,-0.00542819,-3.9664,7.297e-05,detected
+Central Chile,-35.0,-71.0,agricultural belt,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.0403125,-0.0316652,-4.5956,4.315e-06,detected
+Central Chile,-35.0,-71.0,agricultural belt,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.0437037,0.0434049,3.9453,7.971e-05,detected
+Central Chile,-35.0,-71.0,agricultural belt,AOD_55,dimensionless,2001,25,-0.000555556,-0.000546154,-1.7403,0.08181,not detectable yet
+Central Chile,-35.0,-71.0,agricultural belt,CLOUD_AMT,%,1984,42,-0.412857,-0.407353,-5.9172,3.274e-09,detected
+Central Chile,-35.0,-71.0,agricultural belt,GWETROOT,1,1981,45,-0.002,-0.00220685,-4.2592,2.052e-05,detected
+Central Chile,-35.0,-71.0,agricultural belt,IMERG_PRECTOT,mm/day,1998,28,-0.0308122,-0.0211448,-1.7583,0.07869,not detectable yet
+Central Chile,-35.0,-71.0,agricultural belt,PRECTOTCORR,mm/day,1981,45,-0.0281981,-0.0298867,-4.3154,1.593e-05,detected
+Central Chile,-35.0,-71.0,agricultural belt,PS,kPa,1981,45,0.00146341,0.00166271,3.934,8.354e-05,detected
+Central Chile,-35.0,-71.0,agricultural belt,QV2M,g/kg,1981,45,-0.0112098,-0.0106522,-2.613,0.008976,detected
+Central Chile,-35.0,-71.0,agricultural belt,RH2M,%,1981,45,-0.133944,-0.137399,-3.1988,0.00138,detected
+Central Chile,-35.0,-71.0,agricultural belt,T2M,C,1981,45,0.0104097,0.0114954,2.0743,0.03805,detected
+Central Chile,-35.0,-71.0,agricultural belt,TO3,Dobsons,1981,45,-0.0518199,-0.0656337,-0.8119,0.4168,not detectable yet
+Central Chile,-35.0,-71.0,agricultural belt,TS,C,1981,45,0.0132456,0.0145718,2.5931,0.009513,detected
+Central Chile,-35.0,-71.0,agricultural belt,WS10M,m/s,1981,45,-0.00125,-0.00127404,-1.8052,0.07105,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.0322222,0.0336302,4.3571,1.318e-05,detected
+Svalbard,78.0,16.0,glacier/polar,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.00810811,-0.00845393,-2.1576,0.03096,detected
+Svalbard,78.0,16.0,glacier/polar,AOD_55,dimensionless,2001,25,0,-0.000323077,-1.3609,0.1735,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,CLOUD_AMT,%,1984,42,0.964062,1.08439,5.2886,1.232e-07,detected
+Svalbard,78.0,16.0,glacier/polar,GWETROOT,1,1981,45,0.000377493,0.000465086,2.9425,0.003255,detected
+Svalbard,78.0,16.0,glacier/polar,IMERG_PRECTOT,mm/day,1998,28,0.0050282,0.00994505,1.0471,0.2951,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,PRECTOTCORR,mm/day,1981,45,0,0.00073386,0.0685,0.9454,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,PS,kPa,1981,45,-0.000851449,-0.0006917,-0.4406,0.6595,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,QV2M,g/kg,1981,45,0.0121429,0.0117404,5.8624,4.562e-09,detected
+Svalbard,78.0,16.0,glacier/polar,RH2M,%,1981,45,-0.0308172,-0.0302819,-3.2286,0.001244,detected
+Svalbard,78.0,16.0,glacier/polar,T2M,C,1981,45,0.0757359,0.0750909,5.2145,1.843e-07,detected
+Svalbard,78.0,16.0,glacier/polar,TO3,Dobsons,1981,45,-0.0397661,-0.0428116,-0.2641,0.7917,not detectable yet
+Svalbard,78.0,16.0,glacier/polar,TS,C,1981,45,0.0717424,0.0707826,5.0775,3.824e-07,detected
+Svalbard,78.0,16.0,glacier/polar,WS10M,m/s,1981,45,-0.006,-0.0041357,-1.87,0.06149,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.00545455,0.00129406,0.824,0.41,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.026,0.0256689,3.6851,0.0002286,detected
+Southeast US,33.0,-87.0,agricultural belt,AOD_55,dimensionless,2001,25,-0.005,-0.00499231,-4.6527,3.276e-06,detected
+Southeast US,33.0,-87.0,agricultural belt,CLOUD_AMT,%,1984,42,-0.312414,-0.288362,-4.3894,1.137e-05,detected
+Southeast US,33.0,-87.0,agricultural belt,GWETROOT,1,1981,45,-0.000952381,-0.000812912,-1.5033,0.1328,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,IMERG_PRECTOT,mm/day,1998,28,0.0166671,0.0175206,0.8495,0.3956,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,PRECTOTCORR,mm/day,1981,45,-0.00127016,-0.00226614,-0.225,0.822,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,PS,kPa,1981,45,-0.00112698,-0.00115415,-1.7865,0.07402,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,QV2M,g/kg,1981,45,0.0181232,0.019058,3.7964,0.0001468,detected
+Southeast US,33.0,-87.0,agricultural belt,RH2M,%,1981,45,-0.0306708,-0.016058,-0.7728,0.4396,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,T2M,C,1981,45,0.0342857,0.0333847,3.8644,0.0001114,detected
+Southeast US,33.0,-87.0,agricultural belt,TO3,Dobsons,1981,45,-0.0655316,-0.064859,-1.1152,0.2647,not detectable yet
+Southeast US,33.0,-87.0,agricultural belt,TS,C,1981,45,0.0349,0.03378,3.8644,0.0001114,detected
+Southeast US,33.0,-87.0,agricultural belt,WS10M,m/s,1981,45,0,-3.42556e-05,-0.0591,0.9529,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.00702703,-0.00681873,-1.3116,0.1897,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.012,0.0123167,1.7561,0.07908,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,AOD_55,dimensionless,2001,25,0,3.07692e-05,-0.4545,0.6494,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,CLOUD_AMT,%,1984,42,-0.213077,-0.208731,-4.6286,3.682e-06,detected
+Iowa Corn Belt,42.0,-93.5,agricultural belt,GWETROOT,1,1981,45,-0.00105263,-0.00114229,-1.6188,0.1055,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,IMERG_PRECTOT,mm/day,1998,28,0.00604909,0.00664369,0.6125,0.5402,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,PRECTOTCORR,mm/day,1981,45,-0.0071131,-0.00654018,-1.2722,0.2033,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,PS,kPa,1981,45,-0.000909091,-0.00098946,-1.5342,0.125,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,QV2M,g/kg,1981,45,0.00910714,0.0101884,1.4968,0.1344,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,RH2M,%,1981,45,-0.111458,-0.0777997,-1.4479,0.1477,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,T2M,C,1981,45,0.0409545,0.0391621,2.9935,0.002758,detected
+Iowa Corn Belt,42.0,-93.5,agricultural belt,TO3,Dobsons,1981,45,-0.0389312,-0.0389065,-0.7631,0.4454,not detectable yet
+Iowa Corn Belt,42.0,-93.5,agricultural belt,TS,C,1981,45,0.0426136,0.0410646,3.0233,0.0025,detected
+Iowa Corn Belt,42.0,-93.5,agricultural belt,WS10M,m/s,1981,45,-0.00277778,-0.00266535,-1.4682,0.1421,not detectable yet
+Rondonia Amazon,-10.5,-63.0,rain forest,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.0233333,-0.0216806,-3.4804,0.0005007,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.037,0.0378551,6.0592,1.368e-09,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,AOD_55,dimensionless,2001,25,-0.00279221,-0.00271538,-1.8795,0.06017,not detectable yet
+Rondonia Amazon,-10.5,-63.0,rain forest,CLOUD_AMT,%,1984,42,-0.191538,-0.174717,-2.8831,0.003938,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,GWETROOT,1,1981,45,-0.0024069,-0.00255204,-4.9502,7.415e-07,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,IMERG_PRECTOT,mm/day,1998,28,-0.0750881,-0.0761721,-3.9315,8.44e-05,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,PRECTOTCORR,mm/day,1981,45,-0.0602941,-0.0633333,-5.7629,8.269e-09,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,PS,kPa,1981,45,0,9.22266e-06,0.0098,0.9921,not detectable yet
+Rondonia Amazon,-10.5,-63.0,rain forest,QV2M,g/kg,1981,45,-0.00902381,-0.0120949,-2.084,0.03716,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,RH2M,%,1981,45,-0.223095,-0.254661,-4.8031,1.562e-06,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,T2M,C,1981,45,0.0514087,0.0539723,5.6455,1.647e-08,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,TO3,Dobsons,1981,45,0.0734914,0.0546153,2.0348,0.04187,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,TS,C,1981,45,0.0532857,0.0550632,5.783,7.338e-09,detected
+Rondonia Amazon,-10.5,-63.0,rain forest,WS10M,m/s,1981,45,0,5.27009e-05,0.2301,0.818,not detectable yet
+Congo Basin,0.5,23.0,rain forest,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.00666667,0.00697512,2.5052,0.01224,detected
+Congo Basin,0.5,23.0,rain forest,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0242857,-0.0246495,-5.3145,1.07e-07,detected
+Congo Basin,0.5,23.0,rain forest,AOD_55,dimensionless,2001,25,0,0.00177692,0.3058,0.7597,not detectable yet
+Congo Basin,0.5,23.0,rain forest,CLOUD_AMT,%,1984,42,0.209167,0.230127,2.9044,0.003679,detected
+Congo Basin,0.5,23.0,rain forest,GWETROOT,1,1981,45,-0.008,-0.00770356,-4.5817,4.612e-06,detected
+Congo Basin,0.5,23.0,rain forest,IMERG_PRECTOT,mm/day,1998,28,-0.00255902,-0.00687039,-0.2568,0.7973,not detectable yet
+Congo Basin,0.5,23.0,rain forest,PRECTOTCORR,mm/day,1981,45,-0.0385774,-0.0407708,-4.7553,1.981e-06,detected
+Congo Basin,0.5,23.0,rain forest,PS,kPa,1981,45,0.000256579,0.000486166,0.7378,0.4606,not detectable yet
+Congo Basin,0.5,23.0,rain forest,QV2M,g/kg,1981,45,0.00195238,0.00361133,0.6168,0.5374,not detectable yet
+Congo Basin,0.5,23.0,rain forest,RH2M,%,1981,45,-0.128551,-0.155304,-3.9327,8.4e-05,detected
+Congo Basin,0.5,23.0,rain forest,T2M,C,1981,45,0.0369967,0.0387484,5.1949,2.048e-07,detected
+Congo Basin,0.5,23.0,rain forest,TO3,Dobsons,1981,45,0.0909722,0.0868485,2.0836,0.03719,detected
+Congo Basin,0.5,23.0,rain forest,TS,C,1981,45,0.0379394,0.0400593,5.1071,3.271e-07,detected
+Congo Basin,0.5,23.0,rain forest,WS10M,m/s,1981,45,0,3.29381e-05,0.0701,0.9441,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.00433333,0.00376469,0.683,0.4946,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.00625,0.00519488,0.9434,0.3455,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,AOD_55,dimensionless,2001,25,0.002,0.00157692,1.8889,0.0589,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,CLOUD_AMT,%,1984,42,-0.3516,-0.32444,-5.1586,2.488e-07,detected
+Tamanrasset Sahara,22.8,5.5,desert,GWETROOT,1,1981,45,0,0.000310935,1.7895,0.07354,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,IMERG_PRECTOT,mm/day,1998,28,0.00275302,0.00255939,1.0866,0.2772,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,PRECTOTCORR,mm/day,1981,45,0.00473333,0.00803426,2.3107,0.02085,detected
+Tamanrasset Sahara,22.8,5.5,desert,PS,kPa,1981,45,0.00157072,0.00165744,3.2176,0.001293,detected
+Tamanrasset Sahara,22.8,5.5,desert,QV2M,g/kg,1981,45,0.0194591,0.0204242,4.1097,3.962e-05,detected
+Tamanrasset Sahara,22.8,5.5,desert,RH2M,%,1981,45,0.0326786,0.0410738,1.2228,0.2214,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,T2M,C,1981,45,0.0317519,0.031274,5.0293,4.922e-07,detected
+Tamanrasset Sahara,22.8,5.5,desert,TO3,Dobsons,1981,45,-0.0546711,-0.0626495,-1.0664,0.2863,not detectable yet
+Tamanrasset Sahara,22.8,5.5,desert,TS,C,1981,45,0.029213,0.0278511,4.4909,7.091e-06,detected
+Tamanrasset Sahara,22.8,5.5,desert,WS10M,m/s,1981,45,0.00236695,0.00204611,1.342,0.1796,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.00366667,0.000462685,0.835,0.4037,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0466667,-0.0481241,-6.6983,2.109e-11,detected
+Ganges Delta,22.0,89.5,estuary/delta,AOD_55,dimensionless,2001,25,0.01,0.00985385,4.7831,1.726e-06,detected
+Ganges Delta,22.0,89.5,estuary/delta,CLOUD_AMT,%,1984,42,0.0427273,0.0455425,1.1597,0.2462,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,GWETROOT,1,1981,45,0.00190476,0.00191963,5.288,1.237e-07,detected
+Ganges Delta,22.0,89.5,estuary/delta,IMERG_PRECTOT,mm/day,1998,28,-0.00725433,0.00167807,-0.4939,0.6214,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,PRECTOTCORR,mm/day,1981,45,0.0905798,0.106161,5.1362,2.803e-07,detected
+Ganges Delta,22.0,89.5,estuary/delta,PS,kPa,1981,45,0.001,0.00106061,1.5706,0.1163,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,QV2M,g/kg,1981,45,0.0316228,0.0305955,6.0368,1.572e-09,detected
+Ganges Delta,22.0,89.5,estuary/delta,RH2M,%,1981,45,0.154919,0.148993,5.4884,4.056e-08,detected
+Ganges Delta,22.0,89.5,estuary/delta,T2M,C,1981,45,-0.00232946,-0.00214229,-0.7146,0.4749,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,TO3,Dobsons,1981,45,0.164226,0.147375,3.7566,0.0001722,detected
+Ganges Delta,22.0,89.5,estuary/delta,TS,C,1981,45,-0.00394397,-0.00391041,-1.0766,0.2817,not detectable yet
+Ganges Delta,22.0,89.5,estuary/delta,WS10M,m/s,1981,45,-0.00810633,-0.00731225,-4.759,1.946e-06,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,0.0103704,0.0139041,1.4092,0.1588,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.00891892,-0.0085374,-3.4928,0.000478,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,AOD_55,dimensionless,2001,25,0,2.30769e-05,0.1591,0.8736,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,CLOUD_AMT,%,1984,42,0.955417,1.07495,5.2019,1.972e-07,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,IMERG_PRECTOT,mm/day,1998,28,-0.000297328,-0.000530033,-1.4506,0.1469,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,PRECTOTCORR,mm/day,1981,45,0.000871212,0.000918314,0.7352,0.4622,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,PS,kPa,1981,45,0.00775986,0.00709486,2.8879,0.003878,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,QV2M,g/kg,1981,45,0.00220486,0.00219104,3.1448,0.001662,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,RH2M,%,1981,45,0.00337398,-0.00026614,0.9101,0.3628,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,T2M,C,1981,45,0.051455,0.0520975,4.0118,6.025e-05,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,TO3,Dobsons,1981,45,-0.239208,-0.175336,-1.6141,0.1065,not detectable yet
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,TS,C,1981,45,0.0565938,0.0603518,4.0209,5.797e-05,detected
+Greenland Ice Sheet,72.0,-40.0,glacier/polar,WS10M,m/s,1981,45,-0.000606618,-0.00123584,-0.3231,0.7466,not detectable yet
+Tibetan Plateau,32.0,90.0,mountain,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1984,42,-0.03,-0.0309116,-3.6635,0.0002488,detected
+Tibetan Plateau,32.0,90.0,mountain,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0132353,-0.00739,-1.1271,0.2597,not detectable yet
+Tibetan Plateau,32.0,90.0,mountain,AOD_55,dimensionless,2001,25,0.00108187,0.00156923,3.7364,0.0001867,detected
+Tibetan Plateau,32.0,90.0,mountain,CLOUD_AMT,%,1984,42,-0.177857,-0.181746,-3.7174,0.0002012,detected
+Tibetan Plateau,32.0,90.0,mountain,GWETROOT,1,1981,45,0.00103448,0.000762846,3.026,0.002478,detected
+Tibetan Plateau,32.0,90.0,mountain,IMERG_PRECTOT,mm/day,1998,28,-0.00334188,-0.00239199,-0.5729,0.5667,not detectable yet
+Tibetan Plateau,32.0,90.0,mountain,PRECTOTCORR,mm/day,1981,45,0.0103438,0.00917391,3.5843,0.000338,detected
+Tibetan Plateau,32.0,90.0,mountain,PS,kPa,1981,45,0.0034699,0.00328854,4.8733,1.097e-06,detected
+Tibetan Plateau,32.0,90.0,mountain,QV2M,g/kg,1981,45,0.018,0.0164572,5.7832,7.329e-09,detected
+Tibetan Plateau,32.0,90.0,mountain,RH2M,%,1981,45,0.154833,0.125188,3.8836,0.0001029,detected
+Tibetan Plateau,32.0,90.0,mountain,T2M,C,1981,45,0.0225,0.0226535,4.11,3.957e-05,detected
+Tibetan Plateau,32.0,90.0,mountain,TO3,Dobsons,1981,45,-0.187929,-0.165908,-2.7979,0.005144,detected
+Tibetan Plateau,32.0,90.0,mountain,TS,C,1981,45,0.018625,0.0200171,3.1511,0.001627,detected
+Tibetan Plateau,32.0,90.0,mountain,WS10M,m/s,1981,45,-0.00273864,-0.00248748,-0.9102,0.3627,not detectable yet
+Maldives,3.2,73.5,ocean/island,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1988,38,-0.00290323,-0.00158442,-0.7046,0.481,not detectable yet
+Maldives,3.2,73.5,ocean/island,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,0.00714286,0.00584556,1.2467,0.2125,not detectable yet
+Maldives,3.2,73.5,ocean/island,AOD_55,dimensionless,2001,25,0.00075,0.000838462,1.8964,0.0579,not detectable yet
+Maldives,3.2,73.5,ocean/island,CLOUD_AMT,%,1984,42,0.0517391,0.0353626,1.2571,0.2087,not detectable yet
+Maldives,3.2,73.5,ocean/island,IMERG_PRECTOT,mm/day,1998,28,-0.00496477,-0.00740062,-0.1778,0.8589,not detectable yet
+Maldives,3.2,73.5,ocean/island,PRECTOTCORR,mm/day,1981,45,0.025,0.0238063,2.7882,0.0053,detected
+Maldives,3.2,73.5,ocean/island,PS,kPa,1981,45,-0.000666667,-0.000561265,-1.5441,0.1226,not detectable yet
+Maldives,3.2,73.5,ocean/island,QV2M,g/kg,1981,45,0.0235682,0.0240382,6.2636,3.762e-10,detected
+Maldives,3.2,73.5,ocean/island,RH2M,%,1981,45,0,0.00193676,0.0,1,not detectable yet
+Maldives,3.2,73.5,ocean/island,T2M,C,1981,45,0.0238278,0.0213808,6.0678,1.296e-09,detected
+Maldives,3.2,73.5,ocean/island,TO3,Dobsons,1981,45,0.160769,0.147647,2.6805,0.007352,detected
+Maldives,3.2,73.5,ocean/island,TS,C,1981,45,0.0204773,0.0187233,5.5677,2.581e-08,detected
+Maldives,3.2,73.5,ocean/island,WS10M,m/s,1981,45,0.00295833,0.00307378,0.5774,0.5637,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,ALLSKY_SFC_LW_DWN,MJ/m^2/day,1987,39,0.0015,0.00340688,0.339,0.7346,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,ALLSKY_SFC_SW_DWN,MJ/m^2/day,1984,42,-0.0321053,-0.0312373,-5.4633,4.673e-08,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,AOD_55,dimensionless,2001,25,0.000555556,0.000715385,4.192,2.766e-05,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,CLOUD_AMT,%,1984,42,0.256923,0.262611,5.0397,4.663e-07,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,IMERG_PRECTOT,mm/day,1998,28,0.00534215,0.00532166,3.655,0.0002572,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,PRECTOTCORR,mm/day,1981,45,-0.000884615,0.000638999,-0.0783,0.9376,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,PS,kPa,1981,45,-0.005,-0.00468379,-1.987,0.04692,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,QV2M,g/kg,1981,45,-0.00153947,-0.00114493,-1.1456,0.252,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,RH2M,%,1981,45,-0.0255482,-0.0255296,-3.9626,7.414e-05,detected
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,T2M,C,1981,45,-0.0158947,-0.0102925,-1.1251,0.2606,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,TO3,Dobsons,1981,45,-0.026875,-0.0640975,-0.2152,0.8296,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,TS,C,1981,45,-0.0280909,-0.0210474,-1.8686,0.06168,not detectable yet
+Antarctic Peninsula,-68.0,-66.0,glacier/polar,WS10M,m/s,1981,45,0.00134183,0.000566535,0.4013,0.6882,not detectable yet

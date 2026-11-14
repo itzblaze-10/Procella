@@ -197,3 +197,28 @@ goosebump moments, demo modes, data-first rules, three brand candidates (A Termi
 
 **Still running:** the data-reality agent (variable catalogue and the trend screen across regions). The roadmap
 page updates in place when it lands. Artifact republished with stack status.
+
+## 2026-11-14 14:05 — Data research landed and stopped; real GSAP and three.js skills installed
+
+**Data agent stopped on the owner's call** once the research was enough: 221 trend rows (16 regions x 14
+variables, all re-checked against pymannkendall), access map, Giovanni login answer, twin cases, nulls,
+fragile cases, snapshot sizing. Only the optional MODIS NDVI pull was unfinished (ORNL: 8 to 59 s per 10-date
+call). Killed its three leftover ndvi.py processes too, which kept running after the agent stopped.
+Notes moved into the repo as docs/data-reality.md and data/trend-screen-2026-11-14.csv.
+
+**What the data research overturned:**
+- The strategy's Chile-vs-Sahel rainfall twin fails a satellite cross-check (IMERG: Sahel flat, Chile borderline).
+- Ganges Delta MERRA-2 rainfall jumps in 2016 while IMERG shows no trend: treat as an artefact.
+- No temperature twin exists in our 16 regions: every significant T2M trend is warming.
+- POWER monthly IMERG returns -999 everywhere; IMERG is daily-only (build annual means from daily).
+- Solar, longwave and cloud are spliced (GEWEX SRB to ~2000, CERES after).
+- Giovanni needs Earthdata Login to download; guest plotting is limited; GES DISC hydrology Data Rods is being discontinued.
+- AIRS, OMI and GLDAS have no open data route we could verify.
+- Surviving twins: sunlight Delhi (dimming) vs central Chile (brightening), robust in both products;
+  IMERG rainfall Beijing (up) vs Rondonia (down), corroborated by MERRA-2; haze Delhi (up) vs SE US (down).
+- Rule adopted: cross-source agreement (MERRA-2 vs IMERG) is the credibility filter. Show it in the app.
+
+**Skills:** cloned greensock/gsap-skills and CloudAI-X/threejs-skills into an isolated scratch folder,
+scanned for agent-directed instructions, shell, network and secrets (clean), then installed only what a
+vanilla TypeScript build uses: 6 GSAP skills, 11 three.js skills. Removed the six empty stubs (including
+d3-visualization). MIT licence texts kept under .claude/skills/LICENSES; CREDITS.md started.
