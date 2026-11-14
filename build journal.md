@@ -107,3 +107,21 @@ iCloud-synced folder can corrupt .git and keeps spawning conflict copies. Fix is
 sync or move the repo to a non-synced folder (for example ~/Developer). Changing an iCloud setting is
 a system setting, so left for the owner. Until then: run scripts/sync-check.sh after every commit
 and do not trust an unpushed local state.
+
+## 2026-11-14 13:35 — 5-minute sync automation and Windows tooling installed
+
+**Request:** Make sure this repo and the local files are synced on a 5 minute basis.
+
+**What was checked:**
+- Remote origin is https://github.com/itzblaze-10/Procella.git. Partner (dakshdayalani) had pushed 4 commits (toolkit, strategy, ponytail rules, CLAUDE.md) that were not yet pulled locally.
+- Untracked .dodsrc contained local NASA netrc credentials; .gitignore lacked .dodsrc. Added .dodsrc to .gitignore under Secrets immediately so credentials are never staged or leaked.
+- Local repository fast-forwarded cleanly to origin/main (33c0a42).
+- Existing sync tooling (scripts/install-hooks.sh, scripts/sync-check.sh) was bash-only and failed under Windows sandbox MSYS2 initialization.
+
+**Resolution:**
+- Configured core.hooksPath = scripts/hooks so every local commit auto-pushes via post-commit hook.
+- Added native PowerShell tooling for Windows: scripts/sync.ps1, scripts/sync-check.ps1, scripts/install-hooks.ps1.
+- scripts/sync.ps1 handles robust two-way sync: fetches origin, pulls incoming commits with --rebase --autostash (aborts cleanly on conflicts to prevent workspace corruption), auto-commits local untracked/modified files with timestamp, and pushes to origin.
+- Added scripts/install-sync-task.ps1 and scripts/uninstall-sync-task.ps1 to configure a recurring Windows Scheduled Task (Procella-5Min-Sync) running scripts/sync.ps1 every 5 minutes in the background.
+
+**Verification:** Verified with scripts/sync-check.ps1 and tested sync pass.
