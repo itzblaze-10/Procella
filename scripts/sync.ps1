@@ -22,7 +22,13 @@ param(
 
 $ErrorActionPreference = "Continue"
 
-# Resolve repo root
+# Resolve repo root (fallback to script's parent directory if invoked from outside)
+if (-not (git rev-parse --is-inside-work-tree 2>$null)) {
+    if ($PSScriptRoot -and (Test-Path "$PSScriptRoot\..\.git")) {
+        Set-Location (Resolve-Path "$PSScriptRoot\..").Path
+    }
+}
+
 $repoRoot = (git rev-parse --show-toplevel 2>$null)
 if (-not $repoRoot) {
     Write-Error "sync: not inside a git repository."
