@@ -36,6 +36,11 @@ partner or contributor.
    (skill in `.claude/skills/ponytail/`). Run `/ponytail-review` on every diff before committing.
 8. **Demo must survive no wifi.** Every live data call has a committed snapshot fallback and a
    visible "Live" / "Cached" badge.
+9. **Instruction files are read-only and never enter this repo.** The owner keeps a folder of
+   site-building instruction files outside the repo (location to be given). Read them, follow them,
+   never copy, move, edit or commit them, and never write into that folder without the owner asking.
+10. **Brand strictly follows the Claude Design house system** once it exists (link recorded in
+   `docs/brand.md`). No colour, type or motion outside it.
 
 ## Toolkit (copied from the owner's Business workspace, read-only source)
 

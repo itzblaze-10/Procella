@@ -125,3 +125,31 @@ and do not trust an unpushed local state.
 - Added scripts/install-sync-task.ps1 and scripts/uninstall-sync-task.ps1 to configure a recurring Windows Scheduled Task (Procella-5Min-Sync) running scripts/sync.ps1 every 5 minutes in the background.
 
 **Verification:** Verified with scripts/sync-check.ps1 and tested sync pass.
+## 2026-11-14 13:40 — Starter roadmap run for real; groundwork research launched (3 agents)
+
+**Request:** pick a named variable, preview in Giovanni, download a series, test the trend, report rate
+per year; then lay the groundwork for a cinematic, multi-page, quest-driven web app with music, 3D and a
+Claude Design house brand.
+
+**Starter workflow:** Giovanni needs an Earthdata Login and Claude never types passwords, so step 1 is
+left as a signed-in handoff (documented in docs/roadmap.md). Ran the same workflow on open MERRA-2
+derived data via NASA POWER: Gandhinagar, annual means 1981-2025, Mann-Kendall + Sen's slope in
+scripts/trend.py (stdlib). T2M: -0.0134 C/yr, p=0.113, not detectable. PRECTOTCORR: +0.0210 mm/day/yr,
+p=0.0083, detected. Matches pymannkendall.original_test exactly on the live series.
+
+**Mistake caught:** I pre-wrote "reference" values (S=38, Z=3.3779) into the selftest from memory and
+labelled them "checked". pymannkendall's real values for that tied series are S=39, var=120.333,
+Z=3.4641. Replaced with the real values and re-ran. Lesson: never write expected values into a test
+before computing them with the reference library.
+
+**Ponytail review of trend.py** (rule: review before commit): shrank the nested z ternary to
+`(s - (s > 0) + (s < 0)) / sqrt(var)` and replaced the hand-rolled OLS with
+statistics.linear_regression. 73 to 68 lines, results identical.
+
+**Rules added:** instruction files supplied by the owner are read-only and never enter the repo (CLAUDE.md
+rule 9); the brand follows the Claude Design house system strictly (rule 10). The only existing
+Claude Design system on the account is "Munshi House Style" (a different project), so Procella gets its own.
+
+**Research launched, max 3 agents:** stack and components; official rules, experience design and brand
+candidates; data reality with a full variable-by-region trend screen. Notes land in .tmp/research (git-ignored)
+and get synthesised into docs/.
