@@ -242,3 +242,14 @@ Remaining CPU is a Chrome tab playing video (VideoToolbox decoder plus coreaudio
 throttling. The real pressure is memory: an 8 GB Mac with about 6 GB swapped. Four idle older Claude sessions each
 keep chrome-devtools and playwright MCP servers alive; they are idle and not orphaned, so left for the owner.
 Running one agent at a time from here.
+
+## 2026-11-14 14:20 — Judges' deck built by one sub-agent
+
+7-slide "Procella Initial Statement" on the Claude Slides type, globe-trotter house style:
+https://claude.ai/artifact/5gVgHjZxrk4M4SFjFQz1Pf. Topics as the owners asked: challenge, team, solution, roadmap and
+approach, datasets, plus findings. Every number traced to docs/roadmap.md and docs/data-reality.md (checked against
+what this session computed: Gandhinagar rainfall +0.0210/yr p=0.0083 with the start-year strip; Delhi -0.061 and
+central Chile +0.044 MJ/m2/day per year). Open: slide 3 names both partners (fine for review, must become
+"Team Procella" if submitted as the demo); lane assignment on slide 3 (Daksh on data and stats, Priyanshu on UI)
+was the agent's guess from name order and needs the partners' confirmation. Agent ran one headless render and
+closed it; no stray browser processes left.

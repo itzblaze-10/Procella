@@ -16,3 +16,10 @@ what 40 years of NASA records say before going. Evidence first (series, rate per
   order, the destinations we can stand behind).
 
 No colour, type or motion outside the system (CLAUDE.md rule 10).
+
+## Judges' deck
+
+"Procella Initial Statement", 7 slides on the house style: https://claude.ai/artifact/5gVgHjZxrk4M4SFjFQz1Pf
+(private until shared; downloads as .pptx or PDF from the page). Slides: title, challenge, team, how we solve it,
+roadmap, datasets, findings. NASA allows a demo of at most 7 slides including title and intro. Before it is used
+as the submission demo, slide 3 must say "Team Procella" instead of the partners' names (under-18 rule).
