@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Procella Roadmap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one reading column with a data-sheet feel. Sections are numbered because the approach is a real sequence.
+   Interim documentation styling. The Procella house brand (Claude Design system) replaces this once it exists. */
+:root {
+  --bg: #F4F6F7; --surface: #FFFFFF; --ink: #0F1B22; --muted: #52646E; --line: #D5DEE3;
+  --accent: #0A6B80; --accent-soft: #DCEEF2;
+  --ok: #1B6B45; --ok-soft: #DDF0E5; --warn: #8A5200; --warn-soft: #F8EBD2; --bad: #A32A22; --bad-soft: #F8DEDB;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0B1216; --surface: #121C22; --ink: #E4EDF0; --muted: #93A6AF; --line: #253640;
+  --accent: #55B8CE; --accent-soft: #123039;
+  --ok: #6FCB95; --ok-soft: #12301F; --warn: #E3A650; --warn-soft: #342610; --bad: #F2847C; --bad-soft: #3A1815; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0B1216; --surface: #121C22; --ink: #E4EDF0; --muted: #93A6AF; --line: #253640;
+  --accent: #55B8CE; --accent-soft: #123039;
+  --ok: #6FCB95; --ok-soft: #12301F; --warn: #E3A650; --warn-soft: #342610; --bad: #F2847C; --bad-soft: #3A1815; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--font-body);
+  padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 56px; }
+h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; letter-spacing: -0.02em; }
+h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+code, .mono { font-family: var(--font-mono); font-size: 0.9em; }
+.eyebrow { font: 500 0.75rem/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 1.15rem; color: var(--muted); }
+
+header { display: flex; flex-direction: column; gap: 16px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+nav { display: flex; flex-wrap: wrap; gap: 8px; }
+nav a { font: 500 0.8rem/1 var(--font-mono); text-decoration: none; color: var(--ink); padding: 8px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+section { display: flex; flex-direction: column; gap: 20px; scroll-margin-top: 16px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; }
+.sec-head .eyebrow { color: var(--accent); }
+
+.glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.glance > div { padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.glance b { font-weight: 600; }
+.glance span { color: var(--muted); font-size: 0.92rem; }
+
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.92rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th { font: 500 0.72rem/1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: var(--bg); position: sticky; top: 0; }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td:first-child { font-weight: 500; }
+.pill { display: inline-block; font: 500 0.72rem/1 var(--font-mono); padding: 5px 8px; border-radius: 999px; white-space: nowrap; }
+.p-ok { background: var(--ok-soft); color: var(--ok); } .p-warn { background: var(--warn-soft); color: var(--warn); }
+.p-bad { background: var(--bad-soft); color: var(--bad); } .p-info { background: var(--accent-soft); color: var(--accent); }
+
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; counter-reset: s; }
+.flow > div { position: relative; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.flow > div::before { counter-increment: s; content: counter(s); font: 500 0.75rem/1 var(--font-mono); color: var(--accent); }
+.flow > div:not(:last-child)::after { content: "\2192"; position: absolute; right: -11px; top: 50%; transform: translateY(-50%); color: var(--muted); background: var(--bg); width: 14px; text-align: center; z-index: 1; }
+.flow small { color: var(--muted); font-size: 0.85rem; }
+@media (max-width: 700px) { .flow > div::after { display: none; } }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.cols > * { min-width: 0; }
+.box { padding: 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; display: flex; flex-direction: column; gap: 10px; }
+ul.tight, ol.tight { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
+dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 10px 18px; }
+dt { font-weight: 600; } dd { margin: 0; color: var(--muted); min-width: 0; }
+@media (max-width: 600px) { dl { grid-template-columns: 1fr; gap: 2px; } dd { margin-bottom: 10px; } }
+
+pre { margin: 0; padding: 14px 16px; background: var(--ink); color: var(--bg); border-radius: 8px; overflow-x: auto; font: 400 0.82rem/1.55 var(--font-mono); }
+.cmd { position: relative; }
+.cmd button { position: absolute; top: 8px; right: 8px; font: 500 0.72rem/1 var(--font-mono); padding: 6px 9px; border-radius: 6px; border: 1px solid var(--muted); background: transparent; color: var(--bg); cursor: pointer; }
+.cmd pre { padding-right: 76px; }
+
+figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+figcaption { color: var(--muted); font-size: 0.85rem; }
+svg.chart { width: 100%; height: auto; display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+svg .ax { stroke: var(--line); stroke-width: 1; } svg .grid { stroke: var(--line); stroke-width: 1; opacity: 0.6; }
+svg text { fill: var(--muted); font: 400 11px var(--font-mono); }
+svg .pt { fill: var(--muted); } svg .ln { stroke: var(--muted); stroke-width: 1; fill: none; opacity: 0.55; }
+svg .trend { stroke: var(--accent); stroke-width: 2.2; stroke-dasharray: 7 5; fill: none; }
+details { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+summary { cursor: pointer; padding: 12px 16px; font-weight: 500; }
+details .scroll { border: 0; border-top: 1px solid var(--line); border-radius: 0; max-height: 360px; overflow: auto; }
+.callout { padding: 16px 18px; border-radius: 8px; background: var(--warn-soft); color: var(--ink); border-left: 4px solid var(--warn); max-width: 80ch; }
+.callout.info { background: var(--accent-soft); border-left-color: var(--accent); }
+footer { color: var(--muted); font-size: 0.85rem; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 20px; }
+@media (prefers-reduced-motion: no-preference) { nav a { transition: border-color .15s, color .15s; } }
+</style>
+
+<div class="wrap">
+<header>
+  <span class="eyebrow">NASA Space Apps 2026 · Earth System Trend Detective</span>
+  <h1>Procella roadmap</h1>
+  <p class="lede">How a NASA model or satellite variable becomes a rate of change per year, which data we can actually reach, and what we already ran.</p>
+  <span class="eyebrow">Team Procella · checked 14 Nov 2026</span>
+  <nav aria-label="Sections">
+    <a href="#clock">0 Deadline</a><a href="#approach">1 Approach</a><a href="#data">2 Data reality</a><a href="#collect">3 Collection</a>
+    <a href="#stats">4 The test</a><a href="#result">5 First result</a><a href="#giovanni">6 Giovanni path</a><a href="#status">7 Status</a>
+  </nav>
+</header>
+
+<div class="glance" aria-label="Summary">
+  <div><b>Two sources work with no login.</b><span>NASA POWER (MERRA-2 and CERES derived) and ORNL MODIS both answer a plain browser request. Everything in the live app starts there.</span></div>
+  <div><b>Giovanni waits for a signed-in person.</b><span>Claude never types a password. You sign in once in Chrome; the preview and CSV download can then run in that session.</span></div>
+  <div><b>First result: rain detected, temperature not.</b><span>Gandhinagar, 45 years. Both verdicts change with the start year, which is why the app shows a trust check.</span></div>
+</div>
+
+<section id="clock">
+  <div class="sec-head"><span class="eyebrow">0 · Deadline</span><h2>Submission closes Sunday 15 Nov 2026, 11:59 pm local time</h2>
+  <p>From NASA's submission guide. Local time means the time zone of your Local Event. If that is India, about <b id="hrs">34 hours</b> remain from 2 pm IST on 14 Nov. Every plan on this page has to fit inside that.</p></div>
+  <div class="callout"><b>The final project link carries most of the score.</b> NASA says the majority of judging rests on the project submission. The demo is capped at <b>30 seconds of video or 7 slides</b>, hosted publicly with no login. Going over either makes the project ineligible for Global Judging.</div>
+  <div class="scroll"><table>
+    <thead><tr><th>Form field</th><th>What NASA asks</th><th>Our answer</th></tr></thead>
+    <tbody>
+      <tr><td>Project name</td><td>A name</td><td>Procella</td></tr>
+      <tr><td>High-level summary</td><td>What we built, how it meets the challenge, why it matters</td><td>Drafted from <code>docs/challenge-brief.md</code></td></tr>
+      <tr><td>Link to project demo</td><td>Video of 30 seconds or less, or at most 7 slides. Public, no login</td><td><span class="pill p-warn">To make</span> cut from the app's judge mode</td></tr>
+      <tr><td>Link to final project</td><td>Public link, no login</td><td><span class="pill p-warn">To deploy</span> static site</td></tr>
+      <tr><td>Detailed description</td><td>What it does, how it works, tools used</td><td>Sections 1 to 5 of this page</td></tr>
+      <tr><td>Use of Super Intelligence (SI)</td><td>Whether and how SI tools were used. SI must not be used to come up with the solution idea. SI-made images and video carry a visible watermark. SI audio, code and data are acknowledged in text and metadata</td><td><span class="pill p-bad">Your decision</span> see Status</td></tr>
+      <tr><td>NASA data</td><td>Which NASA data we used. At least one is required for a Global Award</td><td>MERRA-2 and CERES derived fields through NASA POWER; MODIS through ORNL DAAC</td></tr>
+      <tr><td>Other references</td><td>Every code, text and image resource, including open source</td><td>Kept in a running list, fonts and libraries included</td></tr>
+    </tbody></table></div>
+  <p>Judging scores Impact, Creativity, Validity, Relevance and Presentation from 1 to 5. NASA data has to be a core part of the project for Relevance.</p>
+</section>
+
+<section id="approach">
+  <div class="sec-head"><span class="eyebrow">1 · Approach</span><h2>Four steps from a variable to a rate per year</h2>
+  <p>The challenge asks for a variable, a region, a long time series and a significance test. Each step has a Giovanni route (manual) and an open route (what we run in code).</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Step</th><th>Giovanni route</th><th>Open route we run</th><th>Output</th></tr></thead>
+    <tbody>
+      <tr><td>1. Pick variable and region</td><td>Variable menu, bounding-box map preview</td><td>A POWER parameter (<code>T2M</code>, <code>PRECTOTCORR</code>) and one lat/lon, which snaps to one MERRA-2 grid cell</td><td>Variable id, point</td></tr>
+      <tr><td>2. Get a long series</td><td>Time Series, Area-Averaged, then download CSV</td><td>One HTTP call for monthly values 1981 to 2025, keeping POWER's own annual mean</td><td>45 yearly values</td></tr>
+      <tr><td>3. Test the trend</td><td>Run the CSV through our script</td><td>Mann-Kendall, two-sided, ties corrected</td><td>S, Z, p</td></tr>
+      <tr><td>4. Report the rate</td><td>Same script</td><td>Sen's slope, with a least-squares slope as cross-check</td><td>Units per year</td></tr>
+    </tbody></table></div>
+</section>
+
+<section id="data">
+  <div class="sec-head"><span class="eyebrow">2 · Data reality</span><h2>What we can reach, tested from this machine on 14 Nov 2026</h2>
+  <p>Most of the official resource list needs a login or blocks scripts. The app is built on the two sources that answer an open request.</p></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Source</th><th>What it gives</th><th>Access</th><th>Role in Procella</th></tr></thead>
+    <tbody>
+      <tr><td>NASA POWER</td><td>MERRA-2 and CERES derived fields, monthly and daily, any lat/lon, from 1981</td><td><span class="pill p-ok">Open</span> browser calls allowed</td><td>Core. Live data for the app</td></tr>
+      <tr><td>ORNL DAAC MODIS REST</td><td>MODIS land products at a point, for example MOD13Q1 NDVI every 16 days from 18 Feb 2000</td><td><span class="pill p-ok">Open</span> browser calls allowed</td><td>Second tier. Vegetation case</td></tr>
+      <tr><td>NASA GISTEMP CSV</td><td>Global annual temperature anomaly</td><td><span class="pill p-warn">Open, no browser access</span></td><td>Fetched at build time, committed</td></tr>
+      <tr><td>NASA CMR search</td><td>Finds datasets and files</td><td><span class="pill p-warn">Search open, download needs login</span></td><td>Discovery only</td></tr>
+      <tr><td>Giovanni</td><td>Plots and CSV for MERRA-2, GLDAS, AIRS, GPM, MODIS and more</td><td><span class="pill p-bad">Login expected</span> not yet confirmed</td><td>Manual preview by a signed-in person</td></tr>
+      <tr><td>AppEEARS</td><td>Subsets land products into time series</td><td><span class="pill p-bad">Login, queued jobs</span></td><td>Skipped for the live app</td></tr>
+      <tr><td>GES DISC OPeNDAP</td><td>Raw model and instrument files</td><td><span class="pill p-bad">Login, NetCDF</span></td><td>Skipped</td></tr>
+      <tr><td>KNMI Climate Explorer</td><td>Climate analysis tool</td><td><span class="pill p-bad">Human-check wall</span></td><td>Reference only</td></tr>
+      <tr><td>NOAA Climate Data Online</td><td>Weather station records</td><td><span class="pill p-warn">Emailed token, paged</span></td><td>Optional later</td></tr>
+    </tbody></table></div>
+
+  <h3>Where the five named sources land</h3>
+  <div class="scroll"><table>
+    <thead><tr><th>Named in the challenge</th><th>Route in our app</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>MERRA-2</td><td>NASA POWER parameters such as <code>T2M</code>, <code>PRECTOTCORR</code>, <code>GWETROOT</code></td><td><span class="pill p-ok">Verified live</span></td></tr>
+      <tr><td>MODIS</td><td>ORNL REST, band <code>250m_16_days_NDVI</code></td><td><span class="pill p-ok">Verified live</span></td></tr>
+      <tr><td>GPM</td><td>Precipitation fields in POWER, or Giovanni</td><td><span class="pill p-info">Route being checked</span></td></tr>
+      <tr><td>GLDAS, AIRS</td><td>Giovanni, or login-based download</td><td><span class="pill p-info">Route being checked</span></td></tr>
+    </tbody></table></div>
+
+  <h3>Traps found while testing</h3>
+  <dl>
+    <dt>Month key 13</dt><dd>Each POWER year has keys 01 to 12 plus 13. Key 13 is the annual mean. Mixing it into a monthly series corrupts the trend, so we use it only as the annual value.</dd>
+    <dt>Fill value -999</dt><dd>Missing data arrives as <code>-999</code>. It becomes "missing" before any maths.</dd>
+    <dt>Different start years</dt><dd>Each variable starts at its own year. Surface solar radiation returned <code>-999</code> for 1981. The app stores a first valid year per variable.</dd>
+    <dt>NDVI scaling</dt><dd>MODIS NDVI needs scale factor <code>0.0001</code> and ignores fill value <code>-3000</code>. Both were read from the service's band list.</dd>
+    <dt>Model, not instrument</dt><dd>POWER values come from MERRA-2 and CERES models. The app says so on every result, and one lat/lon means one grid cell of about 0.5 by 0.625 degrees.</dd>
+  </dl>
+</section>
+
+<section id="collect">
+  <div class="sec-head"><span class="eyebrow">3 · Collection</span><h2>How the data gets into the app</h2>
+  <p>The browser asks NASA directly. If that fails, the app falls back in a fixed order, so the demo works with no wifi and the page always says which data it is showing.</p></div>
+  <div class="flow">
+    <div><b>Live request</b><small>Browser calls NASA POWER with an 8 second timeout.</small></div>
+    <div><b>Local cache</b><small>The last good answer is kept in the browser, keyed by variable and place.</small></div>
+    <div><b>Committed snapshot</b><small>A JSON file in the repo, written at build time by a script, for the curated places.</small></div>
+    <div><b>Badge</b><small>"Live NASA POWER" or "Cached snapshot, with its date" sits next to every chart.</small></div>
+  </div>
+  <div class="cols">
+    <div class="box"><h3>The request</h3>
+      <div class="cmd"><pre id="url">https://power.larc.nasa.gov/api/temporal/monthly/point
+  ?parameters=T2M,PRECTOTCORR&amp;community=AG
+  &amp;latitude=23.22&amp;longitude=72.65
+  &amp;start=1981&amp;end=2025&amp;format=JSON</pre><button type="button" data-copy="url">Copy</button></div>
+      <p>The answer holds one value per month plus the annual mean for each year. Missing values are <code>-999</code>.</p></div>
+    <div class="box"><h3>Build time</h3>
+      <p>A script pulls POWER and ORNL for each curated place, applies the cleaning rules above and writes one JSON snapshot per place. The snapshots are committed, so a NASA outage cannot break the demo.</p>
+      <p>Visitors can still pick a new place. That request runs live and shows the Live badge, or an error message if NASA does not answer.</p></div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="sec-head"><span class="eyebrow">4 · The test</span><h2>How a trend gets its verdict</h2>
+  <p>Challenge wording: "determine whether these changes are significant". We use the Mann-Kendall test, which makes no assumption about the shape of the data.</p></div>
+  <dl>
+    <dt>Mann-Kendall</dt><dd>Compare every pair of years. Count pairs where the later year is higher, subtract pairs where it is lower. That count is <code>S</code>. A large positive or negative <code>S</code> means a steady direction. <code>S</code> becomes <code>Z</code> with a tie correction, and <code>Z</code> becomes a two-sided <code>p</code>.</dd>
+    <dt>Sen's slope</dt><dd>The median of the slope between every pair of years. It is the rate of change per year, and a few extreme years barely move it.</dd>
+    <dt>Verdict</dt><dd>Detected when <code>p</code> is below 0.05 and there are at least 15 years. Too short to judge under 15 years. Otherwise not detectable yet. "Not detectable" means the change cannot be told apart from yearly noise at this record length. It does not mean nothing changed.</dd>
+    <dt>Proof it works</dt><dd><code>S</code>, <code>Z</code>, <code>p</code> and Sen's slope match <code>pymannkendall</code> to nine decimals on the live Gandhinagar series. A self-check ships with the script.</dd>
+    <dt>Not built yet</dt><dd>A confidence interval on the slope and a correction for year-to-year correlation. Both go into the app's engine.</dd>
+  </dl>
+  <div class="cmd"><pre id="run">python3 scripts/trend.py --selftest
+python3 scripts/trend.py --lat 23.22 --lon 72.65 --param PRECTOTCORR --start 1981 --end 2025</pre><button type="button" data-copy="run">Copy</button></div>
+</section>
+
+<section id="result">
+  <div class="sec-head"><span class="eyebrow">5 · First result</span><h2>Gandhinagar, 1981 to 2025</h2>
+  <p>Annual means from the MERRA-2 grid cell at 23.22 N, 72.65 E, via NASA POWER. The dashed line is Sen's slope.</p></div>
+  <div class="cols">
+    <figure><svg class="chart" id="c-t" role="img" aria-label="Annual mean 2 metre air temperature, 1981 to 2025, with a nearly flat trend line"></svg>
+      <figcaption>Air temperature at 2 m, °C. Sen's slope -0.0134 °C per year, p = 0.113.</figcaption></figure>
+    <figure><svg class="chart" id="c-p" role="img" aria-label="Annual mean precipitation, 1981 to 2025, with a rising trend line"></svg>
+      <figcaption>Corrected precipitation, mm per day. Sen's slope +0.0210 mm per day per year, p = 0.0083.</figcaption></figure>
+  </div>
+  <div class="scroll"><table>
+    <thead><tr><th>Variable</th><th class="num">Sen's slope per year</th><th class="num">Least squares per year</th><th class="num">Z</th><th class="num">p</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>Air temperature (<code>T2M</code>)</td><td class="num">-0.0134 °C</td><td class="num">-0.0131 °C</td><td class="num">-1.585</td><td class="num">0.113</td><td><span class="pill p-warn">Not detectable yet</span></td></tr>
+      <tr><td>Rainfall (<code>PRECTOTCORR</code>)</td><td class="num">+0.0210 mm/day</td><td class="num">+0.0203 mm/day</td><td class="num">+2.642</td><td class="num">0.0083</td><td><span class="pill p-ok">Detected, rising</span></td></tr>
+    </tbody></table></div>
+  <h3>Can I trust this? Change the start year</h3>
+  <p>Same method, shorter windows. Both verdicts move.</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Start year</th><th class="num">Years</th><th class="num">Temp slope per year</th><th class="num">Temp p</th><th>Temp verdict</th><th class="num">Rain slope per year</th><th class="num">Rain p</th><th>Rain verdict</th></tr></thead>
+    <tbody>
+      <tr><td>1981</td><td class="num">45</td><td class="num">-0.0134</td><td class="num">0.113</td><td><span class="pill p-warn">Not detectable</span></td><td class="num">+0.0210</td><td class="num">0.0083</td><td><span class="pill p-ok">Detected</span></td></tr>
+      <tr><td>1990</td><td class="num">36</td><td class="num">-0.0198</td><td class="num">0.042</td><td><span class="pill p-ok">Detected, falling</span></td><td class="num">+0.0245</td><td class="num">0.031</td><td><span class="pill p-ok">Detected</span></td></tr>
+      <tr><td>2000</td><td class="num">26</td><td class="num">-0.0207</td><td class="num">0.134</td><td><span class="pill p-warn">Not detectable</span></td><td class="num">+0.0300</td><td class="num">0.085</td><td><span class="pill p-warn">Not detectable</span></td></tr>
+      <tr><td>2005</td><td class="num">21</td><td class="num">-0.0021</td><td class="num">0.928</td><td><span class="pill p-warn">Not detectable</span></td><td class="num">+0.0076</td><td class="num">0.672</td><td><span class="pill p-warn">Not detectable</span></td></tr>
+    </tbody></table></div>
+  <div class="callout"><b>What this tells us.</b> The rainfall rise leans on a dry stretch in the 1980s (0.65 mm/day in 1987). Start in 2000 and it is no longer detectable. The temperature series shows "detected cooling" only if you start in 1990. A tool that reports a single verdict would mislead a student, so every case file in Procella shows this table next to the chart.</div>
+  <details><summary>Data behind both charts</summary><div class="scroll"><table id="data-table"><thead><tr><th>Year</th><th class="num">T2M, °C</th><th class="num">PRECTOTCORR, mm/day</th></tr></thead><tbody></tbody></table></div></details>
+</section>
+
+<section id="giovanni">
+  <div class="sec-head"><span class="eyebrow">6 · Giovanni path</span><h2>The manual route the brief describes</h2>
+  <p>Giovanni is NASA's own plotting tool and the brief points to it. Menu names below come from memory of the Giovanni guide, so we confirm them on screen once you are signed in.</p></div>
+  <ol class="tight">
+    <li>You sign in to NASA Earthdata in Chrome, then tell Claude. Claude never types the password.</li>
+    <li>Open Giovanni and choose plot type <b>Time Series, Area-Averaged</b>.</li>
+    <li>Search the variable. Examples: MERRA-2 2-meter air temperature, or GPM monthly precipitation.</li>
+    <li>Enter a bounding box around Gandhinagar, for example west 72.4, south 23.0, east 72.9, north 23.4.</li>
+    <li>Set the dates to January 1981 through December 2025 for monthly products.</li>
+    <li>Choose <b>Plot Data</b> to preview, then download the CSV.</li>
+    <li>Run the CSV through the same Mann-Kendall and Sen's slope code. A CSV input mode for <code>scripts/trend.py</code> is a small addition.</li>
+  </ol>
+  <div class="callout info">Giovanni averages a box. NASA POWER returns one grid cell. If both are run for the same place, expect small differences and say which one a result used.</div>
+</section>
+
+<section id="status">
+  <div class="sec-head"><span class="eyebrow">7 · Status</span><h2>Done, running, next, waiting</h2></div>
+  <div class="scroll"><table>
+    <thead><tr><th>Item</th><th>State</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td>Starter pipeline and test</td><td><span class="pill p-ok">Done</span></td><td><code>scripts/trend.py</code>, 68 lines, standard library only, matches pymannkendall</td></tr>
+      <tr><td>Challenge brief, resources, data notes, strategy</td><td><span class="pill p-ok">Done</span></td><td>In <code>docs/</code>, pushed to GitHub</td></tr>
+      <tr><td>Variable-by-region trend screen</td><td><span class="pill p-info">Running</span></td><td>Finds the real twin cases (opposite trends), honest nulls and fragile cases from about 15 regions</td></tr>
+      <tr><td>Official rules, judging, experience design, brand candidates</td><td><span class="pill p-ok">Done</span></td><td>Deadline, 30-second demo cap, quests, goosebump moments, three brand directions</td></tr>
+      <tr><td>Stack and component research</td><td><span class="pill p-info">Running</span></td><td>3D globe, scroll motion, music, licence-checked open-source components</td></tr>
+      <tr><td>Scope cut for the clock</td><td><span class="pill p-warn">Next</span></td><td>Pick the build order that ships before the deadline: sonified chart, verdict seal and start-year check first, globe dive and timelapse only if time remains</td></tr>
+      <tr><td>Public repo, licence, FortiGuard request</td><td><span class="pill p-warn">Next</span></td><td>NASA suggests open source, Apache-2.0 by default. Judges can only open a public link. Request web-filter classification once the site is live</td></tr>
+      <tr><td>SI disclosure versus the no-Claude-credit rule</td><td><span class="pill p-bad">Waiting on you</span></td><td>NASA requires disclosing SI use and says awards can depend on it. The repo rule forbids crediting Claude. You decide how to word an accurate disclosure</td></tr>
+      <tr><td>Under-18 names in public files</td><td><span class="pill p-bad">Waiting on you</span></td><td>NASA bars recognisable names, voices and likenesses of under-18s from submissions. The README and docs name both partners. Use "Team Procella" in anything public, and check the rule with your Local Lead</td></tr>
+      <tr><td>Stats engine in TypeScript with start-year check</td><td><span class="pill p-warn">Next</span></td><td>Port the verified logic, add confidence interval, test against pymannkendall fixtures</td></tr>
+      <tr><td>Snapshot generator and Live/Cached badge</td><td><span class="pill p-warn">Next</span></td><td>Curated places, committed JSON</td></tr>
+      <tr><td>Giovanni preview and CSV</td><td><span class="pill p-bad">Waiting on you</span></td><td>Needs your Earthdata sign-in in Chrome</td></tr>
+      <tr><td>Brand direction for Claude Design</td><td><span class="pill p-bad">Waiting on you</span></td><td>Pick one of the candidates coming from the research</td></tr>
+      <tr><td>Annual or monthly series, vanilla or React, select box or map</td><td><span class="pill p-bad">Waiting on you</span></td><td>Recommendations are in <code>docs/strategy.md</code></td></tr>
+    </tbody></table></div>
+</section>
+
+<footer>
+  <span>Limits: one grid cell is not a region average. POWER is model-derived. Start-year changes can flip a verdict. A single test is not proof of cause.</span>
+  <span>Sources: <a href="https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/">Challenge page</a> · <a href="https://power.larc.nasa.gov/">NASA POWER</a> · <a href="https://modis.ornl.gov/rst/api/v1/">ORNL MODIS REST</a> · <a href="https://giovanni.gsfc.nasa.gov/giovanni/">Giovanni</a> · <a href="https://github.com/itzblaze-10/Procella">Procella repository</a></span>
+</footer>
+</div>
+
+<script>
+var YEARS = Array.from({length: 45}, function (_, i) { return 1981 + i; });
+var T2M = [27.13,27.31,27.05,27.29,28.2,28.17,29.12,28.22,27.93,27.9,28.28,27.73,28.35,26.78,28.39,27.62,26.78,27.88,28.45,28.31,28.07,28.64,27.32,27.7,26.81,27.3,27.27,27.35,28.45,27.65,27.33,27.41,26.68,27.49,28.0,28.09,27.49,28.36,27.13,26.81,27.58,27.47,27.09,27.39,26.74];
+var PRC = [2.54,2.22,1.72,1.53,1.32,0.96,0.65,1.77,1.43,1.95,1.25,1.4,1.63,3.16,1.0,1.84,2.77,2.08,1.21,1.5,1.31,1.0,2.44,2.09,2.64,2.7,2.83,1.7,1.59,3.15,1.98,1.49,2.74,2.12,1.8,1.51,2.36,1.31,2.68,2.68,1.94,2.15,2.52,2.73,3.0];
+
+function chart(id, vals, sen, icpt, lo, hi, step, fmt) {
+  var W = 560, H = 300, L = 46, R = 14, T = 14, B = 34, NS = "http://www.w3.org/2000/svg";
+  var el = document.getElementById(id); el.setAttribute("viewBox", "0 0 " + W + " " + H);
+  var x = function (y) { return L + (y - 1981) / 44 * (W - L - R); };
+  var y = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
+  var h = "";
+  for (var v = lo; v <= hi + 1e-9; v += step) h += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '"/><text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + fmt(v) + '</text>';
+  [1981, 1990, 2000, 2010, 2020, 2025].forEach(function (yr) { h += '<text x="' + x(yr) + '" y="' + (H - 12) + '" text-anchor="middle">' + yr + '</text>'; });
+  h += '<line class="ax" x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '"/>';
+  h += '<polyline class="ln" points="' + vals.map(function (v, i) { return x(YEARS[i]) + "," + y(v); }).join(" ") + '"/>';
+  vals.forEach(function (v, i) { h += '<circle class="pt" cx="' + x(YEARS[i]) + '" cy="' + y(v) + '" r="2.6"/>'; });
+  h += '<line class="trend" x1="' + x(1981) + '" y1="' + y(sen * 1981 + icpt) + '" x2="' + x(2025) + '" y2="' + y(sen * 2025 + icpt) + '"/>';
+  el.innerHTML = h;
+}
+chart("c-t", T2M, -0.013374, 54.368, 26.5, 29.5, 0.5, function (v) { return v.toFixed(1); });
+chart("c-p", PRC, 0.020993, -40.11, 0.5, 3.5, 0.5, function (v) { return v.toFixed(1); });
+
+document.querySelector("#data-table tbody").innerHTML = YEARS.map(function (yr, i) {
+  return "<tr><td>" + yr + '</td><td class="num">' + T2M[i].toFixed(2) + '</td><td class="num">' + PRC[i].toFixed(2) + "</td></tr>";
+}).join("");
+
+var left = (Date.parse("2026-11-15T23:59:00+05:30") - Date.now()) / 36e5;
+if (left > 0 && left < 400) document.getElementById("hrs").textContent = "about " + Math.floor(left) + " hours";
+document.querySelectorAll("[data-copy]").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var node = document.getElementById(b.getAttribute("data-copy")), txt = node.textContent;
+    var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1400); };
+    try { navigator.clipboard.writeText(txt).then(done, function () { sel(node); }); } catch (e) { sel(node); }
+  });
+});
+function sel(node) { var r = document.createRange(); r.selectNodeContents(node); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+</script>

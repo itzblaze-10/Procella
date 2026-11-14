@@ -1,0 +1,550 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]: NASA Space Apps 2026 · Earth System Trend Detective
+    - heading "Procella roadmap" [level=1] [ref=e5]
+    - paragraph [ref=e6]: How a NASA model or satellite variable becomes a rate of change per year, which data we can actually reach, and what we already ran.
+    - generic [ref=e7]: Team Procella · checked 14 Nov 2026
+    - navigation "Sections" [ref=e8]:
+      - link "0 Deadline" [ref=e9] [cursor=pointer]:
+        - /url: "#clock"
+      - link "1 Approach" [ref=e10] [cursor=pointer]:
+        - /url: "#approach"
+      - link "2 Data reality" [ref=e11] [cursor=pointer]:
+        - /url: "#data"
+      - link "3 Collection" [ref=e12] [cursor=pointer]:
+        - /url: "#collect"
+      - link "4 The test" [ref=e13] [cursor=pointer]:
+        - /url: "#stats"
+      - link "5 First result" [ref=e14] [cursor=pointer]:
+        - /url: "#result"
+      - link "6 Giovanni path" [ref=e15] [cursor=pointer]:
+        - /url: "#giovanni"
+      - link "7 Status" [ref=e16] [cursor=pointer]:
+        - /url: "#status"
+  - generic "Summary" [ref=e17]:
+    - generic [ref=e18]:
+      - generic [ref=e19]: Two sources work with no login.
+      - generic [ref=e20]: NASA POWER (MERRA-2 and CERES derived) and ORNL MODIS both answer a plain browser request. Everything in the live app starts there.
+    - generic [ref=e21]:
+      - generic [ref=e22]: Giovanni waits for a signed-in person.
+      - generic [ref=e23]: Claude never types a password. You sign in once in Chrome; the preview and CSV download can then run in that session.
+    - generic [ref=e24]:
+      - generic [ref=e25]: "First result: rain detected, temperature not."
+      - generic [ref=e26]: Gandhinagar, 45 years. Both verdicts change with the start year, which is why the app shows a trust check.
+  - generic [ref=e27]:
+    - generic [ref=e28]:
+      - generic [ref=e29]: 0 · Deadline
+      - heading "Submission closes Sunday 15 Nov 2026, 11:59 pm local time" [level=2] [ref=e30]
+      - paragraph [ref=e31]: From NASA's submission guide. Local time means the time zone of your Local Event. If that is India, about about 34 hours remain from 2 pm IST on 14 Nov. Every plan on this page has to fit inside that.
+    - generic [ref=e32]: The final project link carries most of the score. NASA says the majority of judging rests on the project submission. The demo is capped at 30 seconds of video or 7 slides, hosted publicly with no login. Going over either makes the project ineligible for Global Judging.
+    - table [ref=e34]:
+      - rowgroup [ref=e35]:
+        - row [ref=e36]:
+          - columnheader "Form field" [ref=e37]
+          - columnheader "What NASA asks" [ref=e38]
+          - columnheader "Our answer" [ref=e39]
+      - rowgroup [ref=e40]:
+        - row [ref=e41]:
+          - cell "Project name" [ref=e42]
+          - cell "A name" [ref=e43]
+          - cell "Procella" [ref=e44]
+        - row [ref=e45]:
+          - cell "High-level summary" [ref=e46]
+          - cell "What we built, how it meets the challenge, why it matters" [ref=e47]
+          - cell [ref=e48]:
+            - text: Drafted from
+            - code [ref=e49]: docs/challenge-brief.md
+        - row [ref=e50]:
+          - cell "Link to project demo" [ref=e51]
+          - cell "Video of 30 seconds or less, or at most 7 slides. Public, no login" [ref=e52]
+          - cell "To make cut from the app's judge mode" [ref=e53]:
+            - generic [ref=e54]: To make
+            - text: cut from the app's judge mode
+        - row [ref=e55]:
+          - cell "Link to final project" [ref=e56]
+          - cell "Public link, no login" [ref=e57]
+          - cell "To deploy static site" [ref=e58]:
+            - generic [ref=e59]: To deploy
+            - text: static site
+        - row [ref=e60]:
+          - cell "Detailed description" [ref=e61]
+          - cell "What it does, how it works, tools used" [ref=e62]
+          - cell "Sections 1 to 5 of this page" [ref=e63]
+        - row [ref=e64]:
+          - cell "Use of Super Intelligence (SI)" [ref=e65]
+          - cell "Whether and how SI tools were used. SI must not be used to come up with the solution idea. SI-made images and video carry a visible watermark. SI audio, code and data are acknowledged in text and metadata" [ref=e66]
+          - cell "Your decision see Status" [ref=e67]:
+            - generic [ref=e68]: Your decision
+            - text: see Status
+        - row [ref=e69]:
+          - cell "NASA data" [ref=e70]
+          - cell "Which NASA data we used. At least one is required for a Global Award" [ref=e71]
+          - cell "MERRA-2 and CERES derived fields through NASA POWER; MODIS through ORNL DAAC" [ref=e72]
+        - row [ref=e73]:
+          - cell "Other references" [ref=e74]
+          - cell "Every code, text and image resource, including open source" [ref=e75]
+          - cell "Kept in a running list, fonts and libraries included" [ref=e76]
+    - paragraph [ref=e77]: Judging scores Impact, Creativity, Validity, Relevance and Presentation from 1 to 5. NASA data has to be a core part of the project for Relevance.
+  - generic [ref=e78]:
+    - generic [ref=e79]:
+      - generic [ref=e80]: 1 · Approach
+      - heading "Four steps from a variable to a rate per year" [level=2] [ref=e81]
+      - paragraph [ref=e82]: The challenge asks for a variable, a region, a long time series and a significance test. Each step has a Giovanni route (manual) and an open route (what we run in code).
+    - table [ref=e84]:
+      - rowgroup [ref=e85]:
+        - row [ref=e86]:
+          - columnheader "Step" [ref=e87]
+          - columnheader "Giovanni route" [ref=e88]
+          - columnheader "Open route we run" [ref=e89]
+          - columnheader "Output" [ref=e90]
+      - rowgroup [ref=e91]:
+        - row [ref=e92]:
+          - cell "1. Pick variable and region" [ref=e93]
+          - cell "Variable menu, bounding-box map preview" [ref=e94]
+          - cell [ref=e95]:
+            - text: A POWER parameter (
+            - code [ref=e96]: T2M
+            - text: ","
+            - code [ref=e97]: PRECTOTCORR
+            - text: ) and one lat/lon, which snaps to one MERRA-2 grid cell
+          - cell "Variable id, point" [ref=e98]
+        - row [ref=e99]:
+          - cell "2. Get a long series" [ref=e100]
+          - cell "Time Series, Area-Averaged, then download CSV" [ref=e101]
+          - cell "One HTTP call for monthly values 1981 to 2025, keeping POWER's own annual mean" [ref=e102]
+          - cell "45 yearly values" [ref=e103]
+        - row [ref=e104]:
+          - cell "3. Test the trend" [ref=e105]
+          - cell "Run the CSV through our script" [ref=e106]
+          - cell "Mann-Kendall, two-sided, ties corrected" [ref=e107]
+          - cell "S, Z, p" [ref=e108]
+        - row [ref=e109]:
+          - cell "4. Report the rate" [ref=e110]
+          - cell "Same script" [ref=e111]
+          - cell "Sen's slope, with a least-squares slope as cross-check" [ref=e112]
+          - cell "Units per year" [ref=e113]
+  - generic [ref=e114]:
+    - generic [ref=e115]:
+      - generic [ref=e116]: 2 · Data reality
+      - heading "What we can reach, tested from this machine on 14 Nov 2026" [level=2] [ref=e117]
+      - paragraph [ref=e118]: Most of the official resource list needs a login or blocks scripts. The app is built on the two sources that answer an open request.
+    - table [ref=e120]:
+      - rowgroup [ref=e121]:
+        - row [ref=e122]:
+          - columnheader "Source" [ref=e123]
+          - columnheader "What it gives" [ref=e124]
+          - columnheader "Access" [ref=e125]
+          - columnheader "Role in Procella" [ref=e126]
+      - rowgroup [ref=e127]:
+        - row [ref=e128]:
+          - cell "NASA POWER" [ref=e129]
+          - cell "MERRA-2 and CERES derived fields, monthly and daily, any lat/lon, from 1981" [ref=e130]
+          - cell "Open browser calls allowed" [ref=e131]:
+            - generic [ref=e132]: Open
+            - text: browser calls allowed
+          - cell "Core. Live data for the app" [ref=e133]
+        - row [ref=e134]:
+          - cell "ORNL DAAC MODIS REST" [ref=e135]
+          - cell "MODIS land products at a point, for example MOD13Q1 NDVI every 16 days from 18 Feb 2000" [ref=e136]
+          - cell "Open browser calls allowed" [ref=e137]:
+            - generic [ref=e138]: Open
+            - text: browser calls allowed
+          - cell "Second tier. Vegetation case" [ref=e139]
+        - row [ref=e140]:
+          - cell "NASA GISTEMP CSV" [ref=e141]
+          - cell "Global annual temperature anomaly" [ref=e142]
+          - cell "Open, no browser access" [ref=e143]
+          - cell "Fetched at build time, committed" [ref=e145]
+        - row [ref=e146]:
+          - cell "NASA CMR search" [ref=e147]
+          - cell "Finds datasets and files" [ref=e148]
+          - cell "Search open, download needs login" [ref=e149]
+          - cell "Discovery only" [ref=e151]
+        - row [ref=e152]:
+          - cell "Giovanni" [ref=e153]
+          - cell "Plots and CSV for MERRA-2, GLDAS, AIRS, GPM, MODIS and more" [ref=e154]
+          - cell "Login expected not yet confirmed" [ref=e155]:
+            - generic [ref=e156]: Login expected
+            - text: not yet confirmed
+          - cell "Manual preview by a signed-in person" [ref=e157]
+        - row [ref=e158]:
+          - cell "AppEEARS" [ref=e159]
+          - cell "Subsets land products into time series" [ref=e160]
+          - cell "Login, queued jobs" [ref=e161]
+          - cell "Skipped for the live app" [ref=e163]
+        - row [ref=e164]:
+          - cell "GES DISC OPeNDAP" [ref=e165]
+          - cell "Raw model and instrument files" [ref=e166]
+          - cell "Login, NetCDF" [ref=e167]
+          - cell "Skipped" [ref=e169]
+        - row [ref=e170]:
+          - cell "KNMI Climate Explorer" [ref=e171]
+          - cell "Climate analysis tool" [ref=e172]
+          - cell "Human-check wall" [ref=e173]
+          - cell "Reference only" [ref=e175]
+        - row [ref=e176]:
+          - cell "NOAA Climate Data Online" [ref=e177]
+          - cell "Weather station records" [ref=e178]
+          - cell "Emailed token, paged" [ref=e179]
+          - cell "Optional later" [ref=e181]
+    - heading "Where the five named sources land" [level=3] [ref=e182]
+    - table [ref=e184]:
+      - rowgroup [ref=e185]:
+        - row [ref=e186]:
+          - columnheader "Named in the challenge" [ref=e187]
+          - columnheader "Route in our app" [ref=e188]
+          - columnheader "Status" [ref=e189]
+      - rowgroup [ref=e190]:
+        - row [ref=e191]:
+          - cell "MERRA-2" [ref=e192]
+          - cell [ref=e193]:
+            - text: NASA POWER parameters such as
+            - code [ref=e194]: T2M
+            - text: ","
+            - code [ref=e195]: PRECTOTCORR
+            - text: ","
+            - code [ref=e196]: GWETROOT
+          - cell "Verified live" [ref=e197]
+        - row [ref=e199]:
+          - cell "MODIS" [ref=e200]
+          - cell [ref=e201]:
+            - text: ORNL REST, band
+            - code [ref=e202]: 250m_16_days_NDVI
+          - cell "Verified live" [ref=e203]
+        - row [ref=e205]:
+          - cell "GPM" [ref=e206]
+          - cell "Precipitation fields in POWER, or Giovanni" [ref=e207]
+          - cell "Route being checked" [ref=e208]
+        - row [ref=e210]:
+          - cell "GLDAS, AIRS" [ref=e211]
+          - cell "Giovanni, or login-based download" [ref=e212]
+          - cell "Route being checked" [ref=e213]
+    - heading "Traps found while testing" [level=3] [ref=e215]
+    - generic [ref=e216]:
+      - term [ref=e217]: Month key 13
+      - definition [ref=e218]: Each POWER year has keys 01 to 12 plus 13. Key 13 is the annual mean. Mixing it into a monthly series corrupts the trend, so we use it only as the annual value.
+      - term [ref=e219]: Fill value -999
+      - definition [ref=e220]:
+        - text: Missing data arrives as
+        - code [ref=e221]: "-999"
+        - text: . It becomes "missing" before any maths.
+      - term [ref=e222]: Different start years
+      - definition [ref=e223]:
+        - text: Each variable starts at its own year. Surface solar radiation returned
+        - code [ref=e224]: "-999"
+        - text: for 1981. The app stores a first valid year per variable.
+      - term [ref=e225]: NDVI scaling
+      - definition [ref=e226]:
+        - text: MODIS NDVI needs scale factor
+        - code [ref=e227]: "0.0001"
+        - text: and ignores fill value
+        - code [ref=e228]: "-3000"
+        - text: . Both were read from the service's band list.
+      - term [ref=e229]: Model, not instrument
+      - definition [ref=e230]: POWER values come from MERRA-2 and CERES models. The app says so on every result, and one lat/lon means one grid cell of about 0.5 by 0.625 degrees.
+  - generic [ref=e231]:
+    - generic [ref=e232]:
+      - generic [ref=e233]: 3 · Collection
+      - heading "How the data gets into the app" [level=2] [ref=e234]
+      - paragraph [ref=e235]: The browser asks NASA directly. If that fails, the app falls back in a fixed order, so the demo works with no wifi and the page always says which data it is showing.
+    - generic [ref=e236]:
+      - generic [ref=e237]:
+        - generic [ref=e238]: Live request
+        - generic [ref=e239]: Browser calls NASA POWER with an 8 second timeout.
+        - text: →
+      - generic [ref=e240]:
+        - generic [ref=e241]: Local cache
+        - generic [ref=e242]: The last good answer is kept in the browser, keyed by variable and place.
+        - text: →
+      - generic [ref=e243]:
+        - generic [ref=e244]: Committed snapshot
+        - generic [ref=e245]: A JSON file in the repo, written at build time by a script, for the curated places.
+        - text: →
+      - generic [ref=e246]:
+        - generic [ref=e247]: Badge
+        - generic [ref=e248]: "\"Live NASA POWER\" or \"Cached snapshot, with its date\" sits next to every chart."
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - heading "The request" [level=3] [ref=e251]
+        - generic [ref=e252]:
+          - generic [ref=e253]: https://power.larc.nasa.gov/api/temporal/monthly/point ?parameters=T2M,PRECTOTCORR&community=AG &latitude=23.22&longitude=72.65 &start=1981&end=2025&format=JSON
+          - button "Copy" [ref=e254] [cursor=pointer]
+        - paragraph [ref=e255]:
+          - text: The answer holds one value per month plus the annual mean for each year. Missing values are
+          - code [ref=e256]: "-999"
+          - text: .
+      - generic [ref=e257]:
+        - heading "Build time" [level=3] [ref=e258]
+        - paragraph [ref=e259]: A script pulls POWER and ORNL for each curated place, applies the cleaning rules above and writes one JSON snapshot per place. The snapshots are committed, so a NASA outage cannot break the demo.
+        - paragraph [ref=e260]: Visitors can still pick a new place. That request runs live and shows the Live badge, or an error message if NASA does not answer.
+  - generic [ref=e261]:
+    - generic [ref=e262]:
+      - generic [ref=e263]: 4 · The test
+      - heading "How a trend gets its verdict" [level=2] [ref=e264]
+      - paragraph [ref=e265]: "Challenge wording: \"determine whether these changes are significant\". We use the Mann-Kendall test, which makes no assumption about the shape of the data."
+    - generic [ref=e266]:
+      - term [ref=e267]: Mann-Kendall
+      - definition [ref=e268]:
+        - text: Compare every pair of years. Count pairs where the later year is higher, subtract pairs where it is lower. That count is
+        - code [ref=e269]: S
+        - text: . A large positive or negative
+        - code [ref=e270]: S
+        - text: means a steady direction.
+        - code [ref=e271]: S
+        - text: becomes
+        - code [ref=e272]: Z
+        - text: with a tie correction, and
+        - code [ref=e273]: Z
+        - text: becomes a two-sided
+        - code [ref=e274]: p
+        - text: .
+      - term [ref=e275]: Sen's slope
+      - definition [ref=e276]: The median of the slope between every pair of years. It is the rate of change per year, and a few extreme years barely move it.
+      - term [ref=e277]: Verdict
+      - definition [ref=e278]:
+        - text: Detected when
+        - code [ref=e279]: p
+        - text: is below 0.05 and there are at least 15 years. Too short to judge under 15 years. Otherwise not detectable yet. "Not detectable" means the change cannot be told apart from yearly noise at this record length. It does not mean nothing changed.
+      - term [ref=e280]: Proof it works
+      - definition [ref=e281]:
+        - code [ref=e282]: S
+        - text: ","
+        - code [ref=e283]: Z
+        - text: ","
+        - code [ref=e284]: p
+        - text: and Sen's slope match
+        - code [ref=e285]: pymannkendall
+        - text: to nine decimals on the live Gandhinagar series. A self-check ships with the script.
+      - term [ref=e286]: Not built yet
+      - definition [ref=e287]: A confidence interval on the slope and a correction for year-to-year correlation. Both go into the app's engine.
+    - generic [ref=e288]:
+      - generic [ref=e289]: python3 scripts/trend.py --selftest python3 scripts/trend.py --lat 23.22 --lon 72.65 --param PRECTOTCORR --start 1981 --end 2025
+      - button "Copy" [ref=e290] [cursor=pointer]
+  - generic [ref=e291]:
+    - generic [ref=e292]:
+      - generic [ref=e293]: 5 · First result
+      - heading "Gandhinagar, 1981 to 2025" [level=2] [ref=e294]
+      - paragraph [ref=e295]: Annual means from the MERRA-2 grid cell at 23.22 N, 72.65 E, via NASA POWER. The dashed line is Sen's slope.
+    - generic [ref=e296]:
+      - figure "Air temperature at 2 m, °C. Sen's slope -0.0134 °C per year, p = 0.113." [ref=e297]:
+        - img "Annual mean 2 metre air temperature, 1981 to 2025, with a nearly flat trend line" [ref=e298]:
+          - generic [ref=e299]: "26.5"
+          - generic [ref=e300]: "27.0"
+          - generic [ref=e301]: "27.5"
+          - generic [ref=e302]: "28.0"
+          - generic [ref=e303]: "28.5"
+          - generic [ref=e304]: "29.0"
+          - generic [ref=e305]: "29.5"
+          - generic [ref=e306]: "1981"
+          - generic [ref=e307]: "1990"
+          - generic [ref=e308]: "2000"
+          - generic [ref=e309]: "2010"
+          - generic [ref=e310]: "2020"
+          - generic [ref=e311]: "2025"
+      - figure "Corrected precipitation, mm per day. Sen's slope +0.0210 mm per day per year, p = 0.0083." [ref=e360]:
+        - img "Annual mean precipitation, 1981 to 2025, with a rising trend line" [ref=e361]:
+          - generic [ref=e362]: "0.5"
+          - generic [ref=e363]: "1.0"
+          - generic [ref=e364]: "1.5"
+          - generic [ref=e365]: "2.0"
+          - generic [ref=e366]: "2.5"
+          - generic [ref=e367]: "3.0"
+          - generic [ref=e368]: "3.5"
+          - generic [ref=e369]: "1981"
+          - generic [ref=e370]: "1990"
+          - generic [ref=e371]: "2000"
+          - generic [ref=e372]: "2010"
+          - generic [ref=e373]: "2020"
+          - generic [ref=e374]: "2025"
+    - table [ref=e424]:
+      - rowgroup [ref=e425]:
+        - row [ref=e426]:
+          - columnheader "Variable" [ref=e427]
+          - columnheader "Sen's slope per year" [ref=e428]
+          - columnheader "Least squares per year" [ref=e429]
+          - columnheader "Z" [ref=e430]
+          - columnheader "p" [ref=e431]
+          - columnheader "Verdict" [ref=e432]
+      - rowgroup [ref=e433]:
+        - row [ref=e434]:
+          - cell [ref=e435]:
+            - text: Air temperature (
+            - code [ref=e436]: T2M
+            - text: )
+          - cell "-0.0134 °C" [ref=e437]
+          - cell "-0.0131 °C" [ref=e438]
+          - cell "-1.585" [ref=e439]
+          - cell "0.113" [ref=e440]
+          - cell "Not detectable yet" [ref=e441]
+        - row [ref=e443]:
+          - cell [ref=e444]:
+            - text: Rainfall (
+            - code [ref=e445]: PRECTOTCORR
+            - text: )
+          - cell "+0.0210 mm/day" [ref=e446]
+          - cell "+0.0203 mm/day" [ref=e447]
+          - cell "+2.642" [ref=e448]
+          - cell "0.0083" [ref=e449]
+          - cell "Detected, rising" [ref=e450]
+    - heading "Can I trust this? Change the start year" [level=3] [ref=e452]
+    - paragraph [ref=e453]: Same method, shorter windows. Both verdicts move.
+    - table [ref=e455]:
+      - rowgroup [ref=e456]:
+        - row [ref=e457]:
+          - columnheader "Start year" [ref=e458]
+          - columnheader "Years" [ref=e459]
+          - columnheader "Temp slope per year" [ref=e460]
+          - columnheader "Temp p" [ref=e461]
+          - columnheader "Temp verdict" [ref=e462]
+          - columnheader "Rain slope per year" [ref=e463]
+          - columnheader "Rain p" [ref=e464]
+          - columnheader "Rain verdict" [ref=e465]
+      - rowgroup [ref=e466]:
+        - row [ref=e467]:
+          - cell "1981" [ref=e468]
+          - cell "45" [ref=e469]
+          - cell "-0.0134" [ref=e470]
+          - cell "0.113" [ref=e471]
+          - cell "Not detectable" [ref=e472]
+          - cell "+0.0210" [ref=e474]
+          - cell "0.0083" [ref=e475]
+          - cell "Detected" [ref=e476]
+        - row [ref=e478]:
+          - cell "1990" [ref=e479]
+          - cell "36" [ref=e480]
+          - cell "-0.0198" [ref=e481]
+          - cell "0.042" [ref=e482]
+          - cell "Detected, falling" [ref=e483]
+          - cell "+0.0245" [ref=e485]
+          - cell "0.031" [ref=e486]
+          - cell "Detected" [ref=e487]
+        - row [ref=e489]:
+          - cell "2000" [ref=e490]
+          - cell "26" [ref=e491]
+          - cell "-0.0207" [ref=e492]
+          - cell "0.134" [ref=e493]
+          - cell "Not detectable" [ref=e494]
+          - cell "+0.0300" [ref=e496]
+          - cell "0.085" [ref=e497]
+          - cell "Not detectable" [ref=e498]
+        - row [ref=e500]:
+          - cell "2005" [ref=e501]
+          - cell "21" [ref=e502]
+          - cell "-0.0021" [ref=e503]
+          - cell "0.928" [ref=e504]
+          - cell "Not detectable" [ref=e505]
+          - cell "+0.0076" [ref=e507]
+          - cell "0.672" [ref=e508]
+          - cell "Not detectable" [ref=e509]
+    - generic [ref=e511]: What this tells us. The rainfall rise leans on a dry stretch in the 1980s (0.65 mm/day in 1987). Start in 2000 and it is no longer detectable. The temperature series shows "detected cooling" only if you start in 1990. A tool that reports a single verdict would mislead a student, so every case file in Procella shows this table next to the chart.
+    - group [ref=e512]:
+      - generic "Data behind both charts" [ref=e513] [cursor=pointer]
+  - generic [ref=e514]:
+    - generic [ref=e515]:
+      - generic [ref=e516]: 6 · Giovanni path
+      - heading "The manual route the brief describes" [level=2] [ref=e517]
+      - paragraph [ref=e518]: Giovanni is NASA's own plotting tool and the brief points to it. Menu names below come from memory of the Giovanni guide, so we confirm them on screen once you are signed in.
+    - list [ref=e519]:
+      - listitem [ref=e520]: You sign in to NASA Earthdata in Chrome, then tell Claude. Claude never types the password.
+      - listitem [ref=e521]: Open Giovanni and choose plot type Time Series, Area-Averaged.
+      - listitem [ref=e522]: "Search the variable. Examples: MERRA-2 2-meter air temperature, or GPM monthly precipitation."
+      - listitem [ref=e523]: Enter a bounding box around Gandhinagar, for example west 72.4, south 23.0, east 72.9, north 23.4.
+      - listitem [ref=e524]: Set the dates to January 1981 through December 2025 for monthly products.
+      - listitem [ref=e525]: Choose Plot Data to preview, then download the CSV.
+      - listitem [ref=e526]:
+        - text: Run the CSV through the same Mann-Kendall and Sen's slope code. A CSV input mode for
+        - code [ref=e527]: scripts/trend.py
+        - text: is a small addition.
+    - generic [ref=e528]: Giovanni averages a box. NASA POWER returns one grid cell. If both are run for the same place, expect small differences and say which one a result used.
+  - generic [ref=e529]:
+    - generic [ref=e530]:
+      - generic [ref=e531]: 7 · Status
+      - heading "Done, running, next, waiting" [level=2] [ref=e532]
+    - table [ref=e534]:
+      - rowgroup [ref=e535]:
+        - row [ref=e536]:
+          - columnheader "Item" [ref=e537]
+          - columnheader "State" [ref=e538]
+          - columnheader "Detail" [ref=e539]
+      - rowgroup [ref=e540]:
+        - row [ref=e541]:
+          - cell "Starter pipeline and test" [ref=e542]
+          - cell "Done" [ref=e543]
+          - cell [ref=e545]:
+            - code [ref=e546]: scripts/trend.py
+            - text: ", 68 lines, standard library only, matches pymannkendall"
+        - row [ref=e547]:
+          - cell "Challenge brief, resources, data notes, strategy" [ref=e548]
+          - cell "Done" [ref=e549]
+          - cell [ref=e551]:
+            - text: In
+            - code [ref=e552]: docs/
+            - text: ", pushed to GitHub"
+        - row [ref=e553]:
+          - cell "Variable-by-region trend screen" [ref=e554]
+          - cell "Running" [ref=e555]
+          - cell "Finds the real twin cases (opposite trends), honest nulls and fragile cases from about 15 regions" [ref=e557]
+        - row [ref=e558]:
+          - cell "Official rules, judging, experience design, brand candidates" [ref=e559]
+          - cell "Done" [ref=e560]
+          - cell "Deadline, 30-second demo cap, quests, goosebump moments, three brand directions" [ref=e562]
+        - row [ref=e563]:
+          - cell "Stack and component research" [ref=e564]
+          - cell "Running" [ref=e565]
+          - cell "3D globe, scroll motion, music, licence-checked open-source components" [ref=e567]
+        - row [ref=e568]:
+          - cell "Scope cut for the clock" [ref=e569]
+          - cell "Next" [ref=e570]
+          - 'cell "Pick the build order that ships before the deadline: sonified chart, verdict seal and start-year check first, globe dive and timelapse only if time remains" [ref=e572]'
+        - row [ref=e573]:
+          - cell "Public repo, licence, FortiGuard request" [ref=e574]
+          - cell "Next" [ref=e575]
+          - cell "NASA suggests open source, Apache-2.0 by default. Judges can only open a public link. Request web-filter classification once the site is live" [ref=e577]
+        - row [ref=e578]:
+          - cell "SI disclosure versus the no-Claude-credit rule" [ref=e579]
+          - cell "Waiting on you" [ref=e580]
+          - cell "NASA requires disclosing SI use and says awards can depend on it. The repo rule forbids crediting Claude. You decide how to word an accurate disclosure" [ref=e582]
+        - row [ref=e583]:
+          - cell "Under-18 names in public files" [ref=e584]
+          - cell "Waiting on you" [ref=e585]
+          - cell "NASA bars recognisable names, voices and likenesses of under-18s from submissions. The README and docs name both partners. Use \"Team Procella\" in anything public, and check the rule with your Local Lead" [ref=e587]
+        - row [ref=e588]:
+          - cell "Stats engine in TypeScript with start-year check" [ref=e589]
+          - cell "Next" [ref=e590]
+          - cell "Port the verified logic, add confidence interval, test against pymannkendall fixtures" [ref=e592]
+        - row [ref=e593]:
+          - cell "Snapshot generator and Live/Cached badge" [ref=e594]
+          - cell "Next" [ref=e595]
+          - cell "Curated places, committed JSON" [ref=e597]
+        - row [ref=e598]:
+          - cell "Giovanni preview and CSV" [ref=e599]
+          - cell "Waiting on you" [ref=e600]
+          - cell "Needs your Earthdata sign-in in Chrome" [ref=e602]
+        - row [ref=e603]:
+          - cell "Brand direction for Claude Design" [ref=e604]
+          - cell "Waiting on you" [ref=e605]
+          - cell "Pick one of the candidates coming from the research" [ref=e607]
+        - row [ref=e608]:
+          - cell "Annual or monthly series, vanilla or React, select box or map" [ref=e609]
+          - cell "Waiting on you" [ref=e610]
+          - cell [ref=e612]:
+            - text: Recommendations are in
+            - code [ref=e613]: docs/strategy.md
+  - contentinfo [ref=e614]:
+    - generic [ref=e615]: "Limits: one grid cell is not a region average. POWER is model-derived. Start-year changes can flip a verdict. A single test is not proof of cause."
+    - generic [ref=e616]:
+      - text: "Sources:"
+      - link "Challenge page" [ref=e617] [cursor=pointer]:
+        - /url: https://www.spaceappschallenge.org/2026/challenges/earth-system-trend-detective/
+      - text: ·
+      - link "NASA POWER" [ref=e618] [cursor=pointer]:
+        - /url: https://power.larc.nasa.gov/
+      - text: ·
+      - link "ORNL MODIS REST" [ref=e619] [cursor=pointer]:
+        - /url: https://modis.ornl.gov/rst/api/v1/
+      - text: ·
+      - link "Giovanni" [ref=e620] [cursor=pointer]:
+        - /url: https://giovanni.gsfc.nasa.gov/giovanni/
+      - text: ·
+      - link "Procella repository" [ref=e621] [cursor=pointer]:
+        - /url: https://github.com/itzblaze-10/Procella

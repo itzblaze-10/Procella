@@ -9,6 +9,8 @@ The four steps the challenge expects, with a worked example we actually ran.
 | 3 | Test the trend with Mann-Kendall (or a t-test) | `scripts/trend.py` | Done, verified |
 | 4 | Report the rate of change per year | Sen's slope, OLS as cross-check | Done |
 
+> A designed version of this page is `docs/roadmap.html`.
+
 ## Step 1 — Giovanni preview (needs a person signed in)
 
 Giovanni (https://giovanni.gsfc.nasa.gov/giovanni/) needs a free NASA Earthdata Login to plot. Claude
@@ -35,6 +37,18 @@ python3 scripts/trend.py --lat 23.22 --lon 72.65 --param PRECTOTCORR --start 198
 | PRECTOTCORR (rainfall) | +0.0210 mm/day (about +7.7 mm of yearly total per year) | +0.0203 mm/day | +2.642 | 0.0083 | Detected, rising |
 
 Both tests are identical to `pymannkendall.original_test` (S, Z, p and Sen's slope matched on the live series).
+
+**Start-year check (same series, shorter windows):**
+
+| Start year | Years | Temp slope/yr | Temp p | Rain slope/yr | Rain p |
+|---|---|---|---|---|---|
+| 1981 | 45 | -0.0134 | 0.113 (not detectable) | +0.0210 | 0.0083 (detected) |
+| 1990 | 36 | -0.0198 | 0.042 (detected, falling) | +0.0245 | 0.031 (detected) |
+| 2000 | 26 | -0.0207 | 0.134 (not detectable) | +0.0300 | 0.085 (not detectable) |
+| 2005 | 21 | -0.0021 | 0.928 (not detectable) | +0.0076 | 0.672 (not detectable) |
+
+Both verdicts change with the start year. The rainfall rise leans on a dry stretch in the 1980s
+(0.65 mm/day in 1987). Never publish a single verdict without this table.
 
 **What to say about it:** Gandhinagar's rainfall has risen detectably over 45 years while its
 annual-mean temperature shows no detectable trend in this model-derived record. A non-significant

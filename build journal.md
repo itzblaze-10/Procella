@@ -153,3 +153,28 @@ Claude Design system on the account is "Munshi House Style" (a different project
 **Research launched, max 3 agents:** stack and components; official rules, experience design and brand
 candidates; data reality with a full variable-by-region trend screen. Notes land in .tmp/research (git-ignored)
 and get synthesised into docs/.
+
+## 2026-11-14 13:48 — Designed roadmap page; deadline discovered; start-year fragility found
+
+**Request:** a designed HTML of the roadmap, 70% work (approach, data reality, collection, how it works), 30% design.
+
+**Built:** docs/roadmap.html (standalone, tokens for light and dark, no framework, charts drawn from the real
+45-year series) and a private Artifact at https://claude.ai/artifact/HdvDSMhPJNxkKHoSdf7gax. Browser blocks file:
+URLs, so checked it once through a temporary localhost server (only console error: missing favicon). Interim
+neutral styling; the Claude Design house system replaces it later.
+
+**Finding 1, the deadline:** the research agent read NASA's submission guide: submission closes Sunday 15 Nov 2026
+11:59 pm local time, about 34 hours from now. I re-checked the saved page text myself before believing it. Demo is
+capped at 30 s video or 7 slides; most judging weight is on the final project link. This overrides any plan that
+assumes days of work: the cinematic scope must be cut to what ships tonight and tomorrow.
+
+**Finding 2, my headline was too strong:** testing the Gandhinagar verdicts across start years showed both flip.
+Rainfall "detected" (1981, 1990) becomes not detectable from 2000; temperature "not detectable" becomes "detected
+falling" if you start in 1990 (p=0.042). roadmap.md had shown "Detected" with no caveat; corrected, and the page now
+carries the start-year table. This is the strongest argument for the trust panel.
+
+**Finding 3, compliance flags for the owner:** (a) SI disclosure is required, SI must not be used to come up with the
+solution idea, and our strategy debate was SI-assisted; CLAUDE.md rule 3 (no Claude credit) conflicts with
+disclosure. (b) Under-18 names and likenesses are barred from submissions; README and docs name both partners.
+Not changed without the owner: only the new HTML header was switched to "Team Procella". Recorded in
+docs/challenge-brief.md "Open items".
