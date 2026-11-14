@@ -1,0 +1,8 @@
+<!-- @dsCard group="Evidence" height=560 subtitle="Evidence on paper: Gandhinagar rainfall, 1981–2025" -->
+<div class="pc-row" id="r"></div>
+<script>
+var yrs = []; for (var y = 1981; y <= 2025; y++) yrs.push(y);
+document.getElementById("r").innerHTML = Procella.ChartPlate({eyebrow: "Gandhinagar · 23.22 N · 72.65 E", title: "Rainfall, annual mean", unit: "mm/day", years: yrs, values: [2.54, 2.22, 1.72, 1.53, 1.32, 0.96, 0.65, 1.77, 1.43, 1.95, 1.25, 1.4, 1.63, 3.16, 1.0, 1.84, 2.77, 2.08, 1.21, 1.5, 1.31, 1.0, 2.44, 2.09, 2.64, 2.7, 2.83, 1.7, 1.59, 3.15, 1.98, 1.49, 2.74, 2.12, 1.8, 1.51, 2.36, 1.31, 2.68, 2.68, 1.94, 2.15, 2.52, 2.73, 3.0], sen: 0.020993, intercept: -40.11,
+ caption: "Sen's slope +0.021 mm/day per year, p = 0.0083: detected from 1981. Start in 2000 and it is not detectable (p = 0.085).",
+ source: "Data: NASA POWER, MERRA-2 PRECTOTCORR. One grid cell.", badges: [{kind: "cached", text: "Cached 14 Nov 2026"}, {kind: "model", text: "Model-derived"}]});
+</script>

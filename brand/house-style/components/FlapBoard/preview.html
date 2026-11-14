@@ -1,0 +1,7 @@
+<!-- @dsCard group="Story furniture" height=200 subtitle="Departure-board names. Press Next destination." -->
+<div class="pc-row" id="r" style="flex-direction:column"></div>
+<script>
+var r = document.getElementById("r"), stops = ["DELHI", "CHILE", "BEIJING", "RONDONIA", "SVALBARD"], i = 0;
+r.innerHTML = Procella.FlapBoard({text: stops[0], length: 8}) + '<button type="button" class="pc-dispatch__cta" id="next">Next destination</button>';
+document.getElementById("next").addEventListener("click", function () { i = (i + 1) % stops.length; Procella.flapTo(r.querySelector(".pc-flap"), stops[i]); });
+</script>

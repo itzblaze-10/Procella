@@ -1,0 +1,8 @@
+<!-- @dsCard group="Story furniture" height=150 subtitle="One variable, labelled like luggage" -->
+<div class="pc-row" id="r"></div>
+<script>document.getElementById("r").innerHTML = [
+ Procella.LuggageTag({name: "Sunlight", unit: "MJ/m²/day", source: "SRB + CERES", years: "1984–2025", icon: "sun", button: true, selected: true}),
+ Procella.LuggageTag({name: "Rainfall", unit: "mm/day", source: "GPM IMERG", years: "1998–2025", icon: "rain", button: true}),
+ Procella.LuggageTag({name: "Haze", unit: "AOD 550 nm", source: "CERES", years: "2001–2025", icon: "haze", button: true}),
+ Procella.LuggageTag({name: "Soil water", unit: "0 to 1", source: "MERRA-2", years: "1981–2025", icon: "soil", button: true})
+].join("");</script>

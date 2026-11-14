@@ -222,3 +222,23 @@ Notes moved into the repo as docs/data-reality.md and data/trend-screen-2026-11-
 scanned for agent-directed instructions, shell, network and secrets (clean), then installed only what a
 vanilla TypeScript build uses: 6 GSAP skills, 11 three.js skills. Removed the six empty stubs (including
 d3-visualization). MIT licence texts kept under .claude/skills/LICENSES; CREDITS.md started.
+
+## 2026-11-14 14:16 — Procella House Style built in Claude Design; machine heat diagnosed
+
+**Brand (owner's brief):** a globe-trotter reading news leads and checking a destination's climate record before
+going; data and method first, story second; every icon and object coded. Built "Procella House Style" in Claude
+Design: https://claude.ai/artifact/LN7Qu38c1iJNLoif9dLgcs. Night and Day themes, plate (evidence paper) constant
+across themes, 26 colour tokens all contrast-checked by script (fixed day warm and wet, plate warm and wet, which
+missed 4.5:1 on the first pass), 13 type styles (Barlow Condensed, Hanken Grotesk, JetBrains Mono, Caveat for one
+field note per screen), spacing, radii, shadows, durations, easings. Ten coded components with live previews and
+guidelines: Icon (41 icons), Stamp, LuggageTag, Dossier, ChartPlate, Dispatch, FlapBoard, Compass, SourceBadge,
+RouteLine, plus a cover. Previews use only real data: the Delhi and central Chile sunlight series were refetched and
+matched the screen exactly. First publish was refused for index.d.ts (no served type); resent as text/plain.
+Mirrored to brand/house-style/.
+
+**Heat:** load average hit about 25 during the research burst (three agents, NDVI downloads, headless renders) and
+fell to about 10 after they stopped. Only one Chrome instance exists (the owner's, about 45 processes, 1.5 GB).
+Remaining CPU is a Chrome tab playing video (VideoToolbox decoder plus coreaudiod), WindowServer and kernel_task
+throttling. The real pressure is memory: an 8 GB Mac with about 6 GB swapped. Four idle older Claude sessions each
+keep chrome-devtools and playwright MCP servers alive; they are idle and not orphaned, so left for the owner.
+Running one agent at a time from here.

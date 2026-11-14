@@ -1,0 +1,7 @@
+<!-- @dsCard group="Story furniture" height=200 subtitle="Points at the destination. Press to turn." -->
+<div class="pc-row" id="r" style="align-items:center"></div>
+<script>
+var r = document.getElementById("r");
+r.innerHTML = Procella.Compass({bearing: 40, size: 140}) + Procella.Compass({bearing: 300, size: 64}) + '<button type="button" class="pc-dispatch__cta" id="turn">Turn</button>';
+document.getElementById("turn").addEventListener("click", function () { var s = r.querySelector(".pc-compass"); Procella.compassTo(s, Math.round(Math.random() * 360)); });
+</script>

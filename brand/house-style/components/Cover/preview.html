@@ -1,0 +1,30 @@
+<!-- @dsCard height=300 -->
+<div class="cv">
+<style>
+.cv { position: relative; width: 960px; height: 300px; overflow: hidden; background: var(--ground); }
+.cv-art { position: absolute; inset: 0; }
+.b-lantern { fill: var(--lantern); } .b-cool { fill: var(--cool); } .b-wet { fill: var(--wet); } .b-ink { fill: var(--ink); }
+.r-card { rx: var(--radius-card); }
+.arc { fill: none; stroke: var(--ground); stroke-width: 4; stroke-dasharray: 8 8; stroke-linecap: round; }
+.pin { fill: var(--ground); }
+.cv-text { position: absolute; left: 40px; bottom: 40px; max-width: 440px; display: flex; flex-direction: column; gap: 10px; }
+.cv-name { margin: 0; font: 700 88px/0.92 var(--font-display); color: var(--ink); letter-spacing: 0.01em; }
+.cv-tag { margin: 0; font: 400 14px/1.4 var(--font-text); color: var(--ink-muted); }
+</style>
+<svg class="cv-art" viewBox="0 0 960 300" width="960" height="300" aria-hidden="true">
+<!-- blocks: lantern 160x236, cool 288x148 (bleeds top and right), wet 136x136 (bleeds bottom), ink 136x104; all cut with radius-card
+     arrangement: one tall lantern slab with three satellites, x from 496, gaps of space-4 (16px)
+     pattern: literal motif, two dashed route arcs cut from the ground colour with four pins, because the brand is a traveller's route between twin destinations
+     scales: gap space-4, padding space-6 (32px) from the slab top, radius-card corners, dash 8 = space-2, pin radius 7 -->
+<rect class="b-lantern r-card" x="496" y="32" width="160" height="236"/>
+<rect class="b-cool r-card" x="672" y="-12" width="300" height="160"/>
+<rect class="b-wet r-card" x="672" y="164" width="136" height="148"/>
+<rect class="b-ink r-card" x="824" y="164" width="148" height="104"/>
+<path class="arc" d="M520 244 C 600 120, 720 250, 936 64"/>
+<path class="arc" d="M572 52 C 660 150, 760 120, 880 284"/>
+<circle class="pin" cx="520" cy="244" r="7"/><circle class="pin" cx="936" cy="64" r="7"/>
+<circle class="pin" cx="572" cy="52" r="7"/><circle class="pin" cx="880" cy="284" r="7"/>
+</svg>
+<div class="cv-text"><h1 class="cv-name">Procella</h1><p class="cv-tag">Read the weather record before you book the ticket.</p></div>
+</div>
+<script></script>
