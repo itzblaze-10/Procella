@@ -69,3 +69,41 @@ it); CMR search is open; GRACE and MERRA-2 downloads need an Earthdata Login.
 
 **Open:** ask the partner to run scripts/install-hooks.sh in their clone, and agree on short-lived
 branches or at least pull-before-push so two people on main do not collide again.
+
+## 2026-11-14 13:23 — Ponytail installed and enforced; plan re-cut against it
+
+**Request:** make sure ponytail is installed and that all code adheres to it.
+
+**Done:** copied the six ponytail skills (ponytail, -audit, -debt, -gain, -help, -review) from the Business
+workspace into .claude/skills (read-only source; ponytail diffed identical). Added
+.claude/rules/procella/ponytail.md and a standing rule in CLAUDE.md so every human and Claude session
+on this repo loads it, including the partner's clone and cloud sessions. Rule: /ponytail-review on
+every diff before commit, /ponytail-audit at milestones, `ponytail:` comments for known ceilings.
+
+**Honest finding:** my own strategy failed the ladder. The debate plan carried about 215 lines of stats
+(seasonal MK, Hamed-Rao, Pettitt), a service worker, a map stack and React, none of which the brief
+requires. The brief says linear trends are enough. Biggest cut: POWER already serves an annual mean
+(month key 13), so annual-series Mann-Kendall removes the whole seasonal-adjustment layer. Full table in
+docs/strategy.md "Ponytail pass". Scientist's non-negotiables are kept, and ponytail's own exceptions
+(trust-boundary validation, fill values, statistical correctness, accessibility, tests) are untouched.
+
+**Limit:** this is enforcement by instruction, not by machine. No hook blocks a non-ponytail commit.
+It holds only if /ponytail-review is actually run. Revisit a pre-commit check if it slips.
+
+## 2026-11-14 13:26 — iCloud Desktop sync hung git and spawned 286 junk duplicates
+
+**What broke:** the ponytail commit hung for 90 s+ in `git add -A` and left a stale .git/index.lock.
+The working tree held 286 untracked files named "<name> 2.<ext>" with June mtimes, many of them
+dataless iCloud placeholders; git stalled trying to download them. Cause: this repo lives on
+~/Desktop and Finder's "Desktop & Documents in iCloud" is ON (FXICloudDriveDesktop = 1). iCloud
+conflict-copied the freshly rsynced skill files.
+
+**Checked before deleting:** none of the 286 were tracked or on origin/main, and every one had its
+original beside it. Killed my own stuck git process, removed the stale lock, deleted only the copies,
+added "* 2" and "* 2.*" to .gitignore, and ran git fsck (clean).
+
+**Not fixed, needs the owner:** the root cause is the folder location. A git repo inside an
+iCloud-synced folder can corrupt .git and keeps spawning conflict copies. Fix is to turn off Desktop
+sync or move the repo to a non-synced folder (for example ~/Developer). Changing an iCloud setting is
+a system setting, so left for the owner. Until then: run scripts/sync-check.sh after every commit
+and do not trust an unpushed local state.

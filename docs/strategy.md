@@ -87,3 +87,29 @@ leads", and only call it AI if a model wrote the card text offline and we say so
 2. Frontend: React (recommended, no learning tax) vs Svelte.
 3. Who is Partner A and who is Partner B.
 4. Deadline and deliverable format from the Space Apps portal.
+
+## Ponytail pass (2026-11-14): what the lazy-senior-dev rule cuts from the plan above
+
+The ladder (`.claude/rules/procella/ponytail.md`) applied to the architecture. The debate optimised for
+rigor and polish; this pass removes what the brief does not require. **Proposed, pending the partners.**
+
+| Plan item | Ladder verdict | Lazier replacement | Lines saved (est.) |
+|---|---|---|---|
+| Monthly anomalies + seasonal Mann-Kendall | Rung 1: brief says linear trends are "a great start" | Run Mann-Kendall + Sen's slope on POWER's own annual mean (month key 13, which we were going to drop), about 40 points per variable. Seasonal cycle disappears by construction. Handle `-999` for the incomplete latest year | about 55 |
+| Hamed-Rao correction (60 lines) | Rung 6 | Lag-1 effective-sample-size correction on the annual series, about 10 lines. Test against `pymannkendall.yue_wang_modification_test` fixtures. `// ponytail: lag-1 only, upgrade to Hamed-Rao if sensitivity tests disagree` | about 50 |
+| Pettitt change-point | Rung 1: stretch, not required | Cut from v1. The start-year sensitivity strip (about 20 lines, a loop over Sen's slope) already shows fragility | 25 |
+| Service worker + PWA plugin | Rung 1 | Cut. A page already loaded survives wifi loss; the real risk is data calls, which snapshots cover. Run `vite preview` on the laptop as the backup | about 30 + a dependency |
+| Leaflet / TopoJSON region picker | Rung 4: native first | `<select>` of curated places plus two `<input type="number">` for lat/lon. The map becomes a stretch goal | one or two dependencies |
+| React | Rungs 4 and 5 | Vite + plain TypeScript modules + one chart library (uPlot or Observable Plot). React is only justified if both partners want it; the earlier "React, no learning tax" call did not apply the ladder | framework weight |
+| Hand-rolled seasonal/Pettitt test suites | Rung 1 | One fixture file from `pymannkendall` (`original_test`, `yue_wang_modification_test`) plus one `assert` self-check. Required by ponytail's "one runnable check" rule | tests shrink with the code |
+
+**Kept on purpose (ponytail never skips these):** `-999` and key-13 handling, minimum-record gate and
+the three-state verdict, committed snapshot fallback with the Live/Cached badge, the pymannkendall
+fixture test, provenance and units on every result, accessibility basics.
+
+**Result:** stats engine drops from about 215 lines to about 80 (Mann-Kendall about 25, Sen + CI
+about 25, lag-1 correction about 10, sensitivity loop about 20), and two to three dependencies go away.
+Scientist's three non-negotiables (clean data, MK + Sen CI, autocorrelation handled) all remain.
+
+**New decisions for the partners:** annual-only vs monthly series (annual recommended), vanilla
+TypeScript vs React (vanilla recommended), `<select>` picker vs map (select recommended for v1).

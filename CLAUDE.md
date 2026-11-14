@@ -32,12 +32,14 @@ partner or contributor.
 5. **Temporary files go in `.tmp/`** (git-ignored).
 6. **Honest statistics.** No verdict without slope, confidence interval, record length and method on
    screen. "Not significant" is reported as "no detectable trend", never "no change".
-7. **Demo must survive no wifi.** Every live data call has a committed snapshot fallback and a
+7. **Ponytail on all code.** The laziest solution that works, per `.claude/rules/procella/ponytail.md`
+   (skill in `.claude/skills/ponytail/`). Run `/ponytail-review` on every diff before committing.
+8. **Demo must survive no wifi.** Every live data call has a committed snapshot fallback and a
    visible "Live" / "Cached" badge.
 
 ## Toolkit (copied from the owner's Business workspace, read-only source)
 
-`.claude/skills/` holds 64 skills for design, frontend, data visualisation, testing, review,
+`.claude/skills/` holds 70 skills (including the six ponytail skills) for design, frontend, data visualisation, testing, review,
 pitch decks and demo video. `.claude/rules/` holds the frontend (Tailwind), design-standards and
 credential rules. `.claude/agents/` holds `karpathy-reviewer`, `deep-reasoner` and
 `handoff-author`. The source workspace is never modified.

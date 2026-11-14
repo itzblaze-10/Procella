@@ -30,3 +30,7 @@ __pycache__/
 .claude/settings.local.json
 .claude/memory/
 .claude/worktrees/
+
+# iCloud / Finder conflict copies ("name 2.ext"); never commit them
+* 2
+* 2.*
