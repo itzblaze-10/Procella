@@ -39,11 +39,12 @@ export class World {
     await this.loadCity(lat, lon);
     s(this.city ? `Building ${this.city.data.name} from OpenStreetMap…` : 'Finding where people live and work nearby…');
     const open = (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2 && !this.city?.blocked(x, z) && !this.landmarkHit(x, z, 2);
-    let spawn = this.terrain.findNear(0, 0, open, this.city ? 15 : 100, 8000) || { x: 0, z: 0 };
+    const street = (x, z) => this.city.surfaceAt(x, z) === 'road' && !this.city.collide(x, z, 4) && !this.landmarkHit(x, z, 4); // in a city you arrive on a real street
+    let spawn = (this.city && this.terrain.findNear(0, 0, street, 8, 1500)) || this.terrain.findNear(0, 0, open, this.city ? 15 : 100, 8000) || { x: 0, z: 0 };
     const mean = id => { const v = this.pt.annual[id].values; return v.length ? v.reduce((a, b) => a + b, 0) / v.length : undefined; };
     this.tMean = mean('T2M') ?? 15; this.rainMean = mean('PRECTOTCORR') ?? 2;
     this.settlements = new Settlements(this.scene);
-    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName, { tMean: this.tMean, aod: this.values.AOD_55, city: this.city ? { blocked: (x, z) => this.city.blocked(x, z) || !!this.landmarkHit(x, z, 2) } : null });
+    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName, { tMean: this.tMean, aod: this.values.AOD_55, city: this.city ? { blocked: (x, z) => !!this.city.collide(x, z, 2) || this.city.surfaceAt(x, z) === 'water' || !!this.landmarkHit(x, z, 2) } : null });
     s('Growing the vegetation this climate supports…');
     this.biome = biomeFor(this.tMean, this.rainMean);
     this.veg = new Vegetation(this.scene, this.renderer, this.terrain, this.biome);
@@ -57,9 +58,10 @@ export class World {
       surfaceAt: (x, z) => this.settlements.deckAt(x, z) != null ? 'wood' : this.city?.surfaceAt(x, z) || this.terrain.surfaceAt(x, z),
       collide: (x, z, r, y) => this.city?.collide(x, z, r, y) || this.landmarkHit(x, z, r, y) || this.settlements.collide(x, z, r, y) || this.veg.collide(x, z, r),
     };
+    this.solid = (x, z, r, y) => this.city?.collide(x, z, r, y) || this.landmarkHit(x, z, r, y) || this.settlements.collide(x, z, r, y); // buildings only, for the camera
     Object.defineProperties(this.env, { wet: { get: () => this.values.GWETROOT ?? 0.4 }, rain: { get: () => this.weather.rainRate } });
     const near = this.settlements.sites[0]; // start a short walk from the first site
-    if (near) spawn = this.terrain.findNear(near.x + (this.city ? 25 : 120), near.z + (this.city ? 25 : 120), open, this.city ? 5 : 40, 2000) || spawn;
+    if (near) spawn = this.terrain.findNear(near.x + (this.city ? 25 : 120), near.z + (this.city ? 25 : 120), this.city ? street : open, this.city ? 5 : 40, 2000) || spawn;
     this.player = createCharacter(this.o.characterId); this.scene.add(this.player.object);
     this.player.onStep = () => this.footstep();
     this.player.object.position.set(spawn.x, this.terrain.heightAt(spawn.x, spawn.z), spawn.z);
@@ -241,7 +243,13 @@ export class World {
       off = new THREE.Vector3(0, 0, this.camDist).applyAxisAngle(new THREE.Vector3(1, 0, 0), -this.camPitch).applyAxisAngle(UP, this.camYaw);
       base.y += 1.6;
     }
-    const want = base.clone().add(off), g = this.terrain.heightAt(want.x, want.z) + 1.5;
+    const want = base.clone().add(off);
+    // keep the camera out of walls: march from the target towards the wanted spot and stop at the first solid
+    if (this.solid) for (let i = 1, n = 16; i <= n; i++) {
+      const p = base.clone().lerp(want, i / n);
+      if (this.solid(p.x, p.z, 0.6, p.y)) { want.copy(base.clone().lerp(want, Math.max(0.05, (i - 1.5) / n))); break; }
+    }
+    const g = this.terrain.heightAt(want.x, want.z) + 1.5;
     if (want.y < g) want.y = g;
     this.camera.position.lerp(want, 1 - Math.exp(-dt * 8));
     // sense of speed: the view widens and, on the ground, shakes a little as speed builds

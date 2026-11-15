@@ -446,3 +446,9 @@ Bug found: a failed boat spawn inland deleted the current vehicle first. Now the
 - `world/city.js` builds extruded OSM footprints on the real terrain, with a procedural window and facade shader, glass towers, night window lights, road ribbons, water, parks and street lamps. Collisions use a spatial hash.
 - `world.js` loads the city and landmarks when the pin is within 4 km of a city centre. People stand in real streets (settlements in city mode generate no buildings), and the spawn avoids buildings.
 - In-game Paris: 5,952 buildings, 47 fps, 6.1M triangles, 15.7 s total load. The Seine, Champ de Mars and Trocadéro are recognisable from the air.
+
+## 2026-11-15 20:20 City play fixes
+- *Camera inside buildings.* The chase camera passed through walls in Manhattan. It now marches from the target to the wanted spot and stops before the first solid. It tests buildings, landmarks and settlements only, not trees, so forests don't make it jitter.
+- *Spawn in a back courtyard.* In cities the traveller (and the first settlement site) now lands on a real OSM street with 4 m of clearance.
+- *City NPCs placed by `blocked`.* That test excluded roads, which pushed people into courtyards. They now only avoid buildings, water and landmarks.
+- *Load times.* New York takes 7.8 s: NASA POWER 1.8 s, terrain and imagery 4.3 s, city build 0.3 s. Paris's 15.7 s earlier was a cold texture load.
