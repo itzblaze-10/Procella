@@ -76,7 +76,7 @@ export class HUD {
     }
     const im = w.imerg, mer = w.values.PRECTOTCORR;
     h += `<section><h4>GPM IMERG</h4><p class="note">Satellite rainfall, the cross-check for MERRA-2 rain</p><div class="sat-row static">${P().Icon('rain', { size: 18 })}<span class="lbl">Satellite rain this month<small>${w.o.mode === 'future' ? 'No observations in the future' : im ? `${im.mean.toFixed(1)} mm/day · ${im.wetDays} wet days of ${im.days}` + (mer != null ? ` · MERRA-2 says ${mer.toFixed(1)}` : '') : w.o.year < 1998 ? 'IMERG starts in 1998' : 'Loading…'}</small></span></div></section>`;
-    h += `<section><h4>MODIS</h4><p class="note">Ground colour: Blue Marble Next Generation monthly composite</p></section>
+    h += `<section><h4>Ground</h4><p class="note">Colour: Sentinel-2 cloudless 2020 mosaic (EOX, 10 m), the same in every year you pick; NASA Blue Marble while it loads. Vegetation: ${esc(w.biome?.name || "")} plants, chosen from this place\'s 45-year NASA temperature and rainfall means, placed where the imagery is green.</p></section>
       <section class="locked"><h4>AIRS · GLDAS · GRACE</h4><p class="note">Need an Earthdata Login to fetch values. AIRS temperature imagery is in the Globe Lab.</p></section>`;
     const body = this.$('satBody'); body.innerHTML = h;
     body.querySelectorAll('input[data-fx]').forEach(cb => cb.onchange = () => {
@@ -98,7 +98,7 @@ export class HUD {
     this.$('tele').innerHTML = tel
       ? `<b>${tel.speedKmh.toFixed(0)}</b><span>km/h</span><b>${tel.altitudeM.toFixed(0)}</b><span>m altitude</span><b>${tel.aglM.toFixed(0)}</b><span>m above ground</span><b>${tel.headingDeg.toFixed(0)}°</b><span>${esc(tel.status)}</span>`
       : `<b>${w.player.object.position.y.toFixed(0)}</b><span>m elevation</span><b>${(w.dist.total / 1000).toFixed(1)}</b><span>km travelled</span>`;
-    this.$('help').innerHTML = (w.driving && v ? v.controlsHelp : ['W A S D walk', 'Shift run', 'Space jump', 'Drag to look', 'Wheel zoom']).map(s => `<span>${esc(s)}</span>`).join('')
+    this.$('help').innerHTML = (w.driving && v ? v.controlsHelp : ['W A S D walk', 'Shift jog', 'Space jump', 'Drag to look', 'Wheel zoom', '[ ] time of day']).map(s => `<span>${esc(s)}</span>`).join('')
       + `<span><kbd>F</kbd> ${w.driving ? 'get out' : 'get in'}</span>`;
     const npc = w.nearestNPC();
     this.$('prompt').textContent = npc ? `Press E to talk with the ${npc.role}${npc.heard ? ' again' : ''}` : (!w.driving && v && v.object.position.distanceTo(w.player.object.position) < 14 ? 'Press F to get in' : '');
@@ -113,7 +113,7 @@ export class HUD {
   }
 
   openModal(html, wide) { const m = this.$('modal'); m.hidden = false; m.className = 'modal' + (wide ? ' wide' : ''); m.innerHTML = `<div class="sheet"><button class="close" id="mClose">Close <kbd>Esc</kbd></button>${html}</div>`; m.querySelector('#mClose').onclick = () => this.closeModal(); this.app.modalOpen = true; return m; }
-  closeModal() { this.$('modal').hidden = true; this.app.modalOpen = false; }
+  closeModal() { this.$('modal').hidden = true; this.app.modalOpen = false; this.w.hooks.sound?.stopVoice?.(); if (this.talking) { this.talking.talking = false; this.talking.person.setTalking(false); this.talking = null; } }
 
   dossier(id) {
     const w = this.w, se = w.pt.annual[id], meta = VARS[id];
@@ -148,7 +148,9 @@ export class HUD {
 
   story(npc) {
     const w = this.w, s = storyFor(npc.role, npc.seed, w.pt, { year: w.o.year, month: w.o.month, mode: w.o.mode, futureYear: w.o.futureYear, placeName: w.placeName });
-    npc.person.setTalking(true);
+    npc.person.setTalking(true); npc.talking = true; this.talking = npc;
+    const LANG = { in: 'en-IN', gb: 'en-GB', au: 'en-AU', nz: 'en-NZ', za: 'en-ZA', ie: 'en-IE', us: 'en-US', ca: 'en-CA', ng: 'en-NG', ke: 'en-KE' };
+    w.hooks.sound?.say?.(s.lines.join(' '), { seed: npc.seed, lang: LANG[w.cc] || 'en' });
     const m = this.openModal(`<div class="story"><span class="eyebrow">${esc(npc.site.label)} · ${esc(w.placeName)}</span><h2>${esc(s.name)}, ${npc.role === 'factory' ? 'factory worker' : npc.role}</h2>
       <div class="lines" id="lines"></div><div class="story-plate" id="sPlate"></div><button class="primary" id="thank" hidden>Thank ${esc(s.name)}</button></div>`);
     const box = m.querySelector('#lines'); let i = 0;
@@ -159,7 +161,6 @@ export class HUD {
     };
     next();
     m.querySelector('#thank').onclick = () => {
-      npc.person.setTalking(false);
       if (!npc.heard) { w.settlements.markHeard(npc); w.hooks.progress.heardStory(npc.role); knock(); this.renderEra(); }
       this.closeModal();
     };

@@ -1,6 +1,7 @@
 // One play session at a real place and time: NASA data, terrain, weather, people, vehicles, camera.
 import * as THREE from 'three';
-import { Terrain } from './terrain.js';
+import { Terrain, loadGroundTextures } from './terrain.js';
+import { Vegetation, biomeFor } from './vegetation.js';
 import { Weather } from './weather.js';
 import { Settlements } from './settlements.js';
 import { fetchPoint, fetchImergMonth, snapshot, climatology, reverse, VAR_IDS, bound } from '../data/power.js';
@@ -16,6 +17,7 @@ export class World {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(62, 1, 0.5, 60000);
     this.camYaw = 0; this.camPitch = 0.25; this.camDist = 9; this.dist = { land: 0, water: 0, total: 0 };
+    this.stepT = 0; this.lastStep = 0;
   }
 
   async start() {
@@ -27,19 +29,36 @@ export class World {
     const rv = await reverse(lat, lon);
     const a = rv?.address || {};
     this.placeName = a.village || a.town || a.city || a.county || a.state_district || a.state || rv?.name || `${lat.toFixed(2)}, ${lon.toFixed(2)}`;
-    this.country = a.country || '';
-    s('Loading real elevation and NASA Blue Marble imagery…');
+    this.country = a.country || ''; this.cc = a.country_code || '';
+    s('Loading real elevation and Sentinel-2 imagery…');
+    await loadGroundTextures().catch(() => null); // close-up grain is optional
     this.terrain = new Terrain(this.scene, lat, lon, month === 13 ? 7 : month);
     await this.terrain.update(0, 0);
-    this.weather = new Weather(this.scene, this.renderer); this.weather.set(this.values, this.terrain);
+    this.weather = new Weather(this.scene, this.renderer, lat, month === 13 ? 7 : month); this.weather.set(this.values, this.terrain); this.weather.bakeEnv();
     if (mode !== 'future') fetchImergMonth(lat, lon, year, month).then(r => { this.imerg = r; this.hooks.refresh?.(); }).catch(() => { this.imerg = null; });
     s('Finding where people live and work nearby…');
     let spawn = this.terrain.findNear(0, 0, (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2, 100, 8000) || { x: 0, z: 0 };
+    const mean = id => { const v = this.pt.annual[id].values; return v.length ? v.reduce((a, b) => a + b, 0) / v.length : undefined; };
+    this.tMean = mean('T2M') ?? 15; this.rainMean = mean('PRECTOTCORR') ?? 2;
     this.settlements = new Settlements(this.scene);
-    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName);
+    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName, { tMean: this.tMean, aod: this.values.AOD_55 });
+    s('Growing the vegetation this climate supports…');
+    this.biome = biomeFor(this.tMean, this.rainMean);
+    this.veg = new Vegetation(this.scene, this.renderer, this.terrain, this.biome);
+    if (this.o.quality === 'low') { this.veg.cap = 20; this.veg.grassDensity = 0.4; } this.veg.blocked = (x, z) => this.settlements.blocked(x, z);
+    try { await this.veg.init(); } catch (e) { console.warn('vegetation', e); }
+    this.terrain.onTile = (k, tile) => this.veg.addTile(k, tile); this.terrain.onDrop = k => this.veg.dropTile(k);
+    for (const [k, tile] of this.terrain.tiles) if (tile.sat) this.veg.addTile(k, tile);
+    // what vehicles and feet need to know about the ground and the solid things on it
+    this.env = {
+      surfaceAt: (x, z) => this.settlements.deckAt(x, z) != null ? 'wood' : this.terrain.surfaceAt(x, z),
+      collide: (x, z, r, y) => this.settlements.collide(x, z, r, y) || this.veg.collide(x, z, r),
+    };
+    Object.defineProperties(this.env, { wet: { get: () => this.values.GWETROOT ?? 0.4 }, rain: { get: () => this.weather.rainRate } });
     const near = this.settlements.sites[0]; // start a short walk from the first site
     if (near) spawn = this.terrain.findNear(near.x + 120, near.z + 120, (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2, 40, 2000) || spawn;
     this.player = createCharacter(this.o.characterId); this.scene.add(this.player.object);
+    this.player.onStep = () => this.footstep();
     this.player.object.position.set(spawn.x, this.terrain.heightAt(spawn.x, spawn.z), spawn.z);
     if (this.o.vehicle) this.spawnVehicle(this.o.vehicle.kind, this.o.vehicle.color, this.o.vehicle.decal, true);
     this.hooks.progress.enterWorld(mode, year, lat, lon);
@@ -68,7 +87,7 @@ export class World {
     else spot = t.findNear(p.x + 7, p.z - 12, (x, z) => t.heightAt(x, z) > 0.5 && t.slopeAt(x, z) < (meta.class === 'air' ? 0.06 : 0.3), 30, 4000);
     if (!spot) { this.hooks.toast(meta.class === 'water' ? 'No open water within 12 km of here. Try a coastal destination for boats.' : 'No flat ground nearby to park this.'); return false; }
     const v = createVehicle(kind, { color, decal });
-    v.place(spot.x, spot.z, t, 0); this.scene.add(v.object); this.vehicle = v; this.vehicleMeta = meta;
+    v.place(spot.x, spot.z, t, 0); this.scene.add(v.object); if (v.fx) this.scene.add(v.fx); this.vehicle = v; this.vehicleMeta = meta;
     if (meta.class === 'water' || !nearPlayer) { // walk the traveller to it
       const ex = v.object.localToWorld(v.exitOffset.clone()); const land = t.findNear(ex.x, ex.z, (x, z) => t.heightAt(x, z) > 0.5, 20, 3000) || ex;
       this.player.object.position.set(land.x, t.heightAt(land.x, land.z), land.z);
@@ -78,7 +97,7 @@ export class World {
   deleteVehicle() {
     if (!this.vehicle) return;
     if (this.driving) this.toggleDrive();
-    this.scene.remove(this.vehicle.object); this.vehicle.dispose(); this.vehicle = null;
+    this.scene.remove(this.vehicle.object); if (this.vehicle.fx) this.scene.remove(this.vehicle.fx); this.vehicle.dispose(); this.vehicle = null;
   }
   toggleDrive() {
     if (!this.vehicle) return;
@@ -87,11 +106,12 @@ export class World {
       const land = this.terrain.isWater(ex.x, ex.z) ? (this.terrain.findNear(ex.x, ex.z, (x, z) => !this.terrain.isWater(x, z), 10, 400) || null) : ex;
       if (!land) { this.hooks.toast('Too far from shore to step out. Sail closer to land.'); return; }
       if (this.vehicle.telemetry().aglM > 3) { this.hooks.toast('Land first.'); return; }
-      this.driving = false; this.player.object.visible = true;
+      this.driving = false; this.player.object.visible = true; this.hooks.sound?.door(true);
       this.player.object.position.set(land.x, this.terrain.heightAt(land.x, land.z), land.z);
     } else {
       if (this.vehicle.object.position.distanceTo(this.player.object.position) > 14) { this.hooks.toast('Walk up to the vehicle first.'); return; }
       this.driving = true; this.player.object.visible = false; this.camDist = this.vehicle.cameraOffset.length();
+      this.hooks.sound?.door(false); setTimeout(() => this.driving && this.hooks.sound?.engineStart(this.vehicle.kind), 500);
     }
   }
 
@@ -101,7 +121,7 @@ export class World {
     const t = this.terrain, prog = this.hooks.progress;
     if (this.driving && this.vehicle) {
       const before = this.vehicle.object.position.clone(), wasStatus = this.vehicle.telemetry().status;
-      this.vehicle.update(dt, keys, t);
+      this.vehicle.update(dt, keys, t, this.env);
       const tel = this.vehicle.telemetry(), d = this.vehicle.object.position.distanceTo(before), cls = this.vehicleMeta.class;
       this.dist.total += d; if (cls === 'land') this.dist.land += d; if (cls === 'water') this.dist.water += d;
       if (this.dist.land > 2000) prog.earn('drive'); if (this.dist.water > 1000) prog.earn('sail'); if (this.dist.total > 20000) prog.earn('distance');
@@ -110,28 +130,65 @@ export class World {
       this.player.object.position.copy(this.vehicle.object.position);
     } else this.walk(dt, keys);
     this.settlements.update(dt, this.player.object.position);
+    this.veg.update(dt, this.focus.position, this.weather.windSpeed * (1 + this.weather.gust));
+    this.settlements.setNight(1 - this.weather.daylight); this.terrain.update2(dt, this.weather.windSpeed);
+    this.sound(dt);
     // stream terrain as the traveller moves
     const f = this.focus.position;
     if (f.distanceTo(this.lastStream) > 1500 && !this.streaming) {
       this.streaming = true; this.lastStream = f.clone(); t.update(f.x, f.z).finally(() => { this.streaming = false; });
     }
     this.updateCamera(dt);
-    this.weather.update(dt, this.camera);
+    this.weather.update(dt, this.camera, this.focus.position);
   }
 
   walk(dt, keys) {
     const p = this.player.object, t = this.terrain;
     const fwd = (keys.KeyW || keys.ArrowUp ? 1 : 0) - (keys.KeyS || keys.ArrowDown ? 1 : 0), side = (keys.KeyD || keys.ArrowRight ? 1 : 0) - (keys.KeyA || keys.ArrowLeft ? 1 : 0);
-    const speed = (keys.ShiftLeft || keys.ShiftRight ? 6 : 2.2) * (fwd || side ? 1 : 0);
+    const wade = t.heightAt(p.position.x, p.position.z) < 0.3;
+    // walking pace 1.4 m/s and a jog of 3.8 m/s are typical adult speeds; wading slows both
+    const speed = (keys.ShiftLeft || keys.ShiftRight ? 3.8 : 1.4) * (fwd || side ? 1 : 0) * (wade ? 0.55 : 1);
     if (speed) {
-      const ang = this.camYaw + Math.atan2(-side, fwd), nx = p.position.x - Math.sin(ang) * speed * dt, nz = p.position.z - Math.cos(ang) * speed * dt;
-      if (t.heightAt(nx, nz) > -1) { this.dist.total += speed * dt; p.position.x = nx; p.position.z = nz; }
+      const ang = this.camYaw + Math.atan2(-side, fwd);
+      let nx = p.position.x - Math.sin(ang) * speed * dt, nz = p.position.z - Math.cos(ang) * speed * dt;
+      const hit = this.env.collide(nx, nz, 0.35, p.position.y + 0.5);
+      if (hit) { nx += hit.nx * hit.depth; nz += hit.nz * hit.depth; }
+      if (t.heightAt(nx, nz) > -1.2 || this.settlements.deckAt(nx, nz) != null) { this.dist.total += speed * dt; p.position.x = nx; p.position.z = nz; }
       p.rotation.y = ang;
     }
-    this.vy = (this.vy || 0) - 20 * dt; if (keys.Space && this.onGround) { this.vy = 6; this.onGround = false; }
-    const ground = Math.max(t.heightAt(p.position.x, p.position.z), -1); p.position.y += this.vy * dt;
-    if (p.position.y <= ground) { p.position.y = ground; this.vy = 0; this.onGround = true; }
+    this.vy = (this.vy || 0) - 9.81 * dt; if (keys.Space && this.onGround) { this.vy = 4.2; this.onGround = false; }
+    const deck = this.settlements.deckAt(p.position.x, p.position.z), ground = deck ?? Math.max(t.heightAt(p.position.x, p.position.z), -1.2); p.position.y += this.vy * dt;
+    if (p.position.y <= ground) { if (!this.onGround && this.vy < -4) this.hooks.sound?.land(-this.vy, this.env.surfaceAt(p.position.x, p.position.z)); p.position.y = ground; this.vy = 0; this.onGround = true; }
     this.player.update(dt, speed);
+    // footsteps from the animation if it reports them, else from walking cadence
+    this.walkSpeed = speed; this.stepT += dt;
+    if (speed && this.onGround && performance.now() - this.lastStep > 1200 && this.stepT > 1 / (1.2 + speed * 0.45)) this.footstep(true);
+  }
+
+  footstep(fallback = false) {
+    if (!fallback) this.lastStep = performance.now();
+    this.stepT = 0; const p = this.player.object.position;
+    if (this.onGround !== false && this.player.object.visible) this.hooks.sound?.footstep(this.env.surfaceAt(p.x, p.z), this.walkSpeed > 2.5);
+  }
+
+  // Everything the sound engine needs, once per frame.
+  sound(dt) {
+    const S = this.hooks.sound; if (!S) return;
+    const v = this.vehicle, w = this.weather, p = this.player.object.position;
+    if (v?.events?.length) { for (const e of v.events) { if (e.type === 'land') S.land(e.v, this.env.surfaceAt(v.object.position.x, v.object.position.z)); else if (e.type === 'crash') S.crash(e.v, e.material); else if (e.type === 'splash') S.splash(e.v); else if (e.type === 'gear') S.gear(e.gear); } v.events.length = 0; }
+    this.waterDistT = (this.waterDistT || 0) - dt;
+    if (this.waterDistT <= 0) { // distance to the nearest sea or lake, checked twice a second
+      this.waterDistT = 0.5; const f = this.focus.position, hit = this.terrain.findNear(f.x, f.z, (x, z) => this.terrain.heightAt(x, z) < 0, 60, 900);
+      this.waterDist = hit ? Math.hypot(hit.x - f.x, hit.z - f.z) : 5000;
+    }
+    const tel = v?.telemetry();
+    S.update(dt, {
+      listener: this.camera,
+      env: { wind: w.windSpeed, gust: w.gust, rain: w.rainRate, snow: w.snow, night: 1 - w.daylight, tempC: this.values.T2M ?? 15, vegetation: this.terrain.greenAt(this.focus.position.x, this.focus.position.z) * (this.biome.density ? 1 : 0), waterDist: this.waterDist,
+        sites: this.settlements.sites.map(s => ({ kind: s.kind, x: s.x, y: this.terrain.heightAt(s.x, s.z), z: s.z })) },
+      player: { x: p.x, y: p.y, z: p.z, speed: this.driving ? 0 : this.walkSpeed || 0, onFoot: !this.driving, surface: this.env.surfaceAt(p.x, p.z) },
+      vehicle: v ? { kind: v.kind, class: v.class, x: v.object.position.x, y: v.object.position.y, z: v.object.position.z, inside: !!this.driving, ...tel } : null,
+    });
   }
 
   updateCamera(dt) {
@@ -154,5 +211,5 @@ export class World {
   zoom(d) { this.camDist = Math.max(3, Math.min(this.driving ? 400 : 30, this.camDist * (1 + d * 0.001))); }
   resize(w, h) { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
 
-  dispose() { this.terrain?.dispose(); this.settlements?.dispose(); this.player?.dispose(); this.vehicle?.dispose(); this.scene.clear(); }
+  dispose() { this.hooks.sound?.leave?.(); this.veg?.dispose(); this.weather?.dispose(); this.terrain?.dispose(); this.settlements?.dispose(); this.player?.dispose(); this.vehicle?.dispose(); this.scene.clear(); }
 }

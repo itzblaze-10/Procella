@@ -8,18 +8,23 @@ import { Progress, ADVANCEMENTS, ERAS } from './data/progress.js';
 import { geocode } from './data/power.js';
 import { CHARACTERS, createCharacter } from './people/index.js';
 import { VEHICLES, createVehicle } from './vehicles/index.js';
-import { startAudio, setMuted, knock, click } from './ui/audio.js';
+import * as audio from './ui/audio.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+const { startAudio, setMuted, knock, click } = audio;
 
 const P = () => window.Procella;
 const ui = document.getElementById('ui'), canvas = document.getElementById('gl');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75)); renderer.outputColorSpace = THREE.SRGBColorSpace;
+// filmic tone mapping and soft sun shadows
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1; renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; // r187 PCF filters softly; PCFSoft was removed
 const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
 const globe = new Globe(); globe.setBase('bluemarble', 8).catch(() => {});
 const preview = { scene: new THREE.Scene(), camera: new THREE.PerspectiveCamera(35, 1, 0.1, 500), obj: null, spin: 0 };
 preview.scene.background = new THREE.Color(0x0a111c);
+preview.scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture; preview.scene.environmentIntensity = 0.8;
 preview.scene.add(new THREE.HemisphereLight(0xdfeaff, 0x2b3d5a, 1.2));
 { const d = new THREE.DirectionalLight(0xfff1d6, 2.5); d.position.set(4, 8, 6); preview.scene.add(d);
   const disc = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 0.1, 48), new THREE.MeshStandardMaterial({ color: 0x192740 })); disc.position.y = -0.05; preview.scene.add(disc); }
@@ -131,9 +136,10 @@ app.enterWorld = async () => {
   ui.querySelector('#lc').innerHTML = P().Compass({ size: 120 });
   let b = 0; const spin = setInterval(() => P().compassTo(ui.querySelector('.pc-compass'), b += 37), 500);
   const c = app.choice, v = VEHICLES.find(x => x.kind === c.vehicle.kind);
-  const w = new World(renderer, { ...c, vehicle: { kind: v.kind, color: c.vehicle.color || v.colors[0], decal: c.vehicle.decal } }, {
+  renderer.shadowMap.enabled = app.settings.quality !== 'low';
+  const w = new World(renderer, { ...c, quality: app.settings.quality, vehicle: { kind: v.kind, color: c.vehicle.color || v.colors[0], decal: c.vehicle.decal } }, {
     status: m => { const el = ui.querySelector('#ls'); if (el) el.textContent = m; }, progress: app.progress,
-    toast: m => app.hud?.toast(m), refresh: () => app.hud?.renderPanel(),
+    toast: m => app.hud?.toast(m), refresh: () => app.hud?.renderPanel(), sound: app.settings.sound ? audio.sfx : null,
   });
   try { await w.start(); } catch (e) {
     clearInterval(spin); ui.querySelector('#ls').textContent = `NASA did not answer (${e.message}). Check the connection and try again.`;
@@ -176,7 +182,8 @@ app.credits = () => sheet(`<h2>Credits and data</h2>
   <p><b>Climate data:</b> NASA POWER (Prediction Of Worldwide Energy Resources) monthly and daily point API, values derived from NASA GMAO MERRA-2, CERES SYN1deg, GEWEX SRB and GPM IMERG. Fetched live every session.</p>
   <p><b>Imagery:</b> NASA GIBS (Global Imagery Browse Services): MODIS Blue Marble Next Generation, MODIS Terra Corrected Reflectance, GPM IMERG precipitation rate, AIRS surface air temperature.</p>
   <p><b>Elevation:</b> AWS Terrain Tiles (Mapzen terrarium encoding of SRTM, GMTED and ETOPO1), open data. <b>Place names:</b> © OpenStreetMap contributors via Nominatim.</p>
-  <p><b>Code:</b> three.js (MIT). All 3D models, icons and sounds are made in code for this project. Statistics: Mann-Kendall and Sen's slope, verified against pymannkendall.</p>
+  <p><b>Ground imagery:</b> Sentinel-2 cloudless 2020 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2020), CC BY-NC-SA 4.0, s2maps.eu.</p>
+  <p><b>Code and assets:</b> three.js (MIT); EZ-Tree by Daniel Greenheck (MIT) for trees; CC0 ground and building textures from Poly Haven. Vehicles, people, buildings, icons and sounds are made in code for this project. Statistics: Mann-Kendall and Sen's slope, verified against pymannkendall.</p>
   <p class="fine">Not endorsed by NASA. Built by Team Procella for the NASA Space Apps Challenge 2026.</p>`);
 app.pause = () => {
   const h = sheet(`<h2>Paused</h2><div class="menu"><button class="big primary" id="r">Resume</button><button class="big" id="t">Change time or destination</button><button class="big" id="a">Advancements</button><button class="big" id="s">Settings</button><button class="big ghost" id="q">Quit to home</button></div>`);
@@ -200,6 +207,7 @@ addEventListener('keydown', e => {
   if (e.code === 'KeyE') { const n = app.world.nearestNPC(); if (n) app.hud.story(n); }
   if (e.code === 'KeyT') app.hud.dossier('T2M');
   if (e.code === 'KeyJ') app.advancements();
+  if (e.code === 'BracketLeft' || e.code === 'BracketRight') { app.world.weather.shiftTime(e.code === 'BracketLeft' ? -1 : 1); app.hud.toast(`<b>${app.world.weather.clock()}</b><span>The sun moves to where it really stands at this latitude and month.</span>`); }
 });
 addEventListener('keyup', e => { keys[e.code] = false; });
 addEventListener('blur', () => Object.keys(keys).forEach(k => keys[k] = false));

@@ -310,3 +310,89 @@ Not detectable yet when the record starts in 2000.
   near-zero measured sunlight turns the sky to polar night. NPCs stroll loops around their workplaces and stop to face you.
 - Test server: Python's http.server queue of 5 dropped module loads; swapped for a threaded server with queue 128 (test only).
 - Root index.html forwards to app/ for any static host; README has run instructions.
+
+## 2026-11-15 18:40 Realism pass: terrain, sky, vegetation, structures
+
+**Ask (owner):** realistic terrain and textures, the place's vegetation, structures you can run into, realistic vehicles and people, a sound design for everything, and better lighting and feel. Real models and photos allowed where needed.
+
+**Sources checked before use (curl and browser):**
+- Sentinel-2 cloudless 2020 (EOX) tiles answer with CORS from localhost. The order is z/row/col, confirmed on a Gandhinagar z14 tile that shows real streets.
+- The 2016 layer path 404s.
+- Overpass timed out again, so building footprints stay procedural.
+- Poly Haven tree models are 2 to 17 million polygons (the fir bin is 478 MB), so they are unusable in a browser and were rejected.
+- EZ-Tree (MIT, about 20k triangles per tree, imports `three` so the importmap works) is used instead.
+- Poly Haven CC0 textures are fetched with curl (Python's urllib gets 403) and resized to 512 px with sips (2.8 MB total).
+
+**Terrain:**
+- The ground is now a Sentinel-2 canvas per elevation tile: z14 (1024 px) for the 3x3 around the player and z13 elsewhere.
+- Blue Marble stays as the colour (and surface grid) until the imagery arrives.
+- A shader blends seven CC0 detail textures by what the pixel looks like: green, dark canopy, sandy, shore, steep rock, wet mud, snow.
+- Detail normals come from world x/z, since the terrain is near-horizontal.
+- Rain-slick roughness follows the record.
+- The mesh went from 96 to 128 segments, with bilinear elevation.
+- `surfaceAt` (water, snow, rock, sand, road, mud, grass, dirt) feeds footsteps and vehicle grip.
+
+**Bugs found in browser:**
+1. *White world.* PMREM of the Preetham sky is in large physical units: env intensity 0.12 still saturated a pure-red test material. Fix: no sun disc in the env sky, and intensity 0.015 to 0.09.
+2. *Still pale after that.* Sentinel-2 mosaics are display-stretched (built-up Gandhinagar reads sRGB 215,199,173). Fix: map to physical albedo (×0.42 plus a small earthy lift so dense forest isn't black).
+3. *Texture means were wrong.* A 1x1 drawImage is not an average. Now 16x16, averaged in linear.
+4. *Leafless trees.* EZ-Tree's leaf wind shader ignores `instanceMatrix`. Replaced with our own leaf material and instanced sway.
+5. *Every EOX request failed at the same instant (about 2.9 s).* That is burst throttling on about 200 requests. Fix: a queue of 6 in flight, nearest tile first, 3 tries with backoff. World start waits only for the centre tile's imagery.
+6. *Grey blob sprite clouds looked fake.* Removed them; the r187 Sky shader's own clouds follow CLOUD_AMT.
+
+**Lighting:**
+- ACES tone mapping and PCF soft shadows (2048, ±70 m box following the focus).
+- The sun is placed by real solar geometry (declination for the month, latitude, solar hour). Time flows at 20x; `[` and `]` shift it. Svalbard in January now gets real polar night from geometry instead of the old sunlight heuristic.
+- Sky turbidity and clouds come from AOD and CLOUD_AMT; fog takes the horizon colour.
+- The water got an animated normal map and sky reflection.
+
+**Vegetation:**
+- Biome comes from the place's 45-year T2M and PRECTOTCORR means (ice, tundra, boreal, steppe, temperate, desert, savanna, tropical), each with its own EZ-Tree presets and tints.
+- Full trees are drawn within 200 m (60 per variant cap); baked billboard impostors beyond, discarded inside 200 m by shader.
+- Grass tufts within 42 m, tinted by the satellite pixel and swaying with WS10M.
+- CC0 rocks on steep or bare ground. Trunks and big rocks are colliders.
+- Black Forest test: 60 fps at about 12M triangles on this Mac before trimming the caps.
+
+**Structures:**
+- Settlements rebuilt with real-scale textured walls and roofs, windows and doors.
+- Flat roofs with water tanks where T2M is above 19 °C, pitched tiled roofs elsewhere.
+- Added a school, clinic, well, market stalls, lamps (windows glow at night), a barn, silos, fenced crop fields (colour from GWETROOT), hay bales, cows, a factory hall with sawtooth roof, chimneys (smoke opacity from AOD), tanks, an office, containers, pylons, and a harbour jetty you can walk on with moored boats, boathouses and net racks.
+- Oriented-box and circle colliders; the player slides along walls (tested).
+- Walk speed is now 1.4 m/s and jog 3.8 m/s (typical adult figures).
+
+## 2026-11-15 19:10 Realism pass: vehicles, people, sound, integration
+
+**Vehicles** (`app/src/vehicles/`), rebuilt at real size from references: Land Cruiser 76, Corolla, Manx-style buggy, Cessna 172, Bell 47, DHC-2 Beaver on floats, safari boat, 50 m steamship, 28 m explorer yacht. Clearcoat paint and treaded tyres.
+
+Physics now has engine RPM and gears, surface grip and rolling resistance (published mu and Crr ranges), lateral slip, weight transfer and per-wheel suspension. Measured in the browser:
+
+| Vehicle | Result |
+|---|---|
+| 4x4 | 0–100 km/h in 12.1 s |
+| Saloon | 0–100 km/h in 8.7 s |
+| Buggy | 0–100 km/h in 6.8 s |
+| Cessna | lifts off at 109 km/h, stalls at 89, climbs 3.6 m/s |
+| Beaver | stalls at 96 km/h |
+| Bell 47 | top speed 165 km/h |
+| Boats | 40 / 28 / 50 km/h |
+
+- Mud and dust use a shader overlay plus particles. Mud rate was cut about 4x after an in-world test caked the car in 8 s.
+- `vehicle.events` (land, crash, splash, gear) feed sound. Building and tree colliders come from `world.env.collide`.
+
+**People:** real proportions, smooth shading, faces, hair, regional skin tones and dress (`createNPC(role, seed, {lat, lon})`), walk and run cycles, a work loop for each role, talk gestures, and `onStep` for footsteps. About 7k triangles each. NPCs now alternate between working at their spot and strolling, and walk around buildings.
+
+**Sound:** a procedural Web Audio engine (`sfx`), with no audio files.
+- Wind, rain, thunder, birds and crickets (Dolbear's law), surf, and positional village, farm, factory and harbour loops.
+- An engine per vehicle, tyre noise per surface, a stall horn, rotor slap and steam chuff.
+- Footsteps on nine surfaces, and impacts.
+- NPCs speak their story through the browser's speechSynthesis, choosing an en-IN, en-GB or other regional voice from the country.
+- The loudest test peak was −3.5 dBFS.
+
+**Bugs found while integrating:**
+1. *Saloon stuck at 2 km/h in Mumbai.* `surfaceAt` called every point below 3 m "sand". Sand now needs real nearby water or a strongly sandy pixel; pale, unsaturated pixels are "road"; "mud" needs a wet month and dark soil. A Mumbai census is now grass, road, mud, sand and water; the saloon reaches 87 km/h.
+2. *Browser served stale modules after edits.* The local server now sends `Cache-Control: no-cache`.
+3. *Console warning.* PCFSoftShadowMap is removed in r187, so it now uses PCFShadowMap.
+
+**Performance:** full retina at 2800 px wide gives 34 fps (5.8M triangles, 881 draw calls) in Mumbai. The Settings "Low" option turns shadows off, cuts trees to 20 per variant and grass by 60 %.
+
+**Skipped under deadline:** a `/ponytail-review` pass on this diff, which is large (about 3k lines across agents). It goes on the to-do before the final submission freeze.

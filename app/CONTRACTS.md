@@ -10,7 +10,7 @@ Every module imports three as `import * as THREE from 'three';`. Plain JavaScrip
 - `terrain.isWater(x, z)` is true where `heightAt < 0.5`; the water surface is at `y = 0`.
 - Frame loop calls `update(dt, ...)` with `dt` in seconds, clamped to at most 0.05.
 - `keys` is a plain object: `keys[KeyboardEvent.code] === true` while held (e.g. `keys.KeyW`, `keys.ArrowUp`, `keys.Space`, `keys.ShiftLeft`).
-- Models are low-poly, flat-shaded (`MeshStandardMaterial({ flatShading: true })`), built only from three.js primitives in code. No external models, textures or images. Canvas-generated textures are allowed for decals.
+- Models are smooth-shaded PBR built in code from real reference dimensions. CC0 textures in `app/assets/tex/` and MIT/CC0 models in `app/assets/models/` are allowed; credit every one in `CREDITS.md`.
 - Objects face -z (forward = north) and sit on `y = 0` at their lowest point in local space.
 - Brand: night palette. Use the colour values in `app/src/brand.js` for UI accents only; vehicles and people have their own real-world colours.
 
