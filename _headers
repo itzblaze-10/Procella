@@ -15,13 +15,14 @@
 /index.html
   Content-Security-Policy: default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
-# The game. The one inline script is the import map, allowed by its hash (recompute it if the import map changes).
+# The game. Inline scripts allowed by hash only: the import map (recompute if it changes) and the
+# Netlify badge that the free plan injects (its code builds the badge inline; the plan cannot remove it).
 /app/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-hQ+wFu3wMFXKgOsbnF8FAoYhsl5Yfd/F2VqTxQn0zvU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tiles.maps.eox.at https://gibs.earthdata.nasa.gov https://s3.amazonaws.com; connect-src 'self' https://power.larc.nasa.gov https://nominatim.openstreetmap.org https://tiles.maps.eox.at https://gibs.earthdata.nasa.gov https://s3.amazonaws.com; media-src 'self' blob: data:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-hQ+wFu3wMFXKgOsbnF8FAoYhsl5Yfd/F2VqTxQn0zvU=' 'sha256-BkKP2XO6WOEc3kXOiLr2ZoY83hamalKjPY9xBcbXVuw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://tiles.maps.eox.at https://gibs.earthdata.nasa.gov https://s3.amazonaws.com; connect-src 'self' https://power.larc.nasa.gov https://nominatim.openstreetmap.org https://tiles.maps.eox.at https://gibs.earthdata.nasa.gov https://s3.amazonaws.com; media-src 'self' blob: data:; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'; upgrade-insecure-requests
 
 # The slide deck, also served at /deck/.
 /deck/*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-BkKP2XO6WOEc3kXOiLr2ZoY83hamalKjPY9xBcbXVuw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'
 
 # Static design and planning pages (inline chart scripts, no user input, no network calls).
 /docs/*
