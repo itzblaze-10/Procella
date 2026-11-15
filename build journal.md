@@ -30,12 +30,12 @@ workspace (read-only), scaffold the repo, and rank approaches.
   validated against pymannkendall, Case Files UI with a three-state honest verdict, Twin Cases as the
   hero demo. Full detail in docs/strategy.md. The Product strategist's pre-baked region pairs are
   hypotheses, not results; they must be screened through the real pipeline before the demo.
-- **Skill copy failed silently the first time.** The loop printed every skill as "missing" because zsh
-  does not word-split an unquoted variable. Re-ran under bash with a script file; 64 skills copied.
+- **Toolkit copy failed silently the first time.** The loop printed every item as "missing" because zsh
+  does not word-split an unquoted variable. Re-ran under bash with a script file; 64 guides copied.
   Lesson: run multi-item shell loops under bash, not zsh.
 - **Toolkit copy was selective on purpose.** Took design, frontend, data-viz, QA, review, pitch and
-  demo-video skills plus the generic rules and three agents. Left out Machine-specific modules,
-  memory, settings, client data and the 17 MB last30days skill. Secret scan on the copy: clean.
+  demo-video guides plus the generic rules and three assistant profiles. Left out Machine-specific modules,
+  memory, settings, client data and a 17 MB research module. Secret scan on the copy: clean.
   Source workspace was only read, never written.
 - **Journal convention.** The Business workspace already uses a root file named `build journal.md`
   with append-only entries; kept the same name and rule here.
@@ -74,11 +74,11 @@ branches or at least pull-before-push so two people on main do not collide again
 
 **Request:** make sure ponytail is installed and that all code adheres to it.
 
-**Done:** copied the six ponytail skills (ponytail, -audit, -debt, -gain, -help, -review) from the Business
+**Done:** copied the six ponytail guides (core, audit, debt, gain, help, review) from the Business
 workspace into the local toolkit (read-only source; ponytail diffed identical). Added
 the ponytail rule file and a standing project rule so every partner and every tool session
-on this repo loads it, including the partner's clone and cloud sessions. Rule: /ponytail-review on
-every diff before commit, /ponytail-audit at milestones, `ponytail:` comments for known ceilings.
+on this repo loads it, including the partner's clone and cloud sessions. Rule: a ponytail review on
+every diff before commit, a ponytail audit at milestones, `ponytail:` comments for known ceilings.
 
 **Honest finding:** my own strategy failed the ladder. The debate plan carried about 215 lines of stats
 (seasonal MK, Hamed-Rao, Pettitt), a service worker, a map stack and React, none of which the brief
@@ -88,7 +88,7 @@ docs/strategy.md "Ponytail pass". Scientist's non-negotiables are kept, and pony
 (trust-boundary validation, fill values, statistical correctness, accessibility, tests) are untouched.
 
 **Limit:** this is enforcement by instruction, not by machine. No hook blocks a non-ponytail commit.
-It holds only if /ponytail-review is actually run. Revisit a pre-commit check if it slips.
+It holds only if the ponytail review is actually run. Revisit a pre-commit check if it slips.
 
 ## 2026-11-14 13:26 — iCloud Desktop sync hung git and spawned 286 junk duplicates
 
@@ -96,7 +96,7 @@ It holds only if /ponytail-review is actually run. Revisit a pre-commit check if
 The working tree held 286 untracked files named "<name> 2.<ext>" with June mtimes, many of them
 dataless iCloud placeholders; git stalled trying to download them. Cause: this repo lives on
 ~/Desktop and Finder's "Desktop & Documents in iCloud" is ON (FXICloudDriveDesktop = 1). iCloud
-conflict-copied the freshly rsynced skill files.
+conflict-copied the freshly rsynced toolkit files.
 
 **Checked before deleting:** none of the 286 were tracked or on origin/main, and every one had its
 original beside it. Killed my own stuck git process, removed the stale lock, deleted only the copies,
@@ -125,7 +125,7 @@ and do not trust an unpushed local state.
 - Added scripts/install-sync-task.ps1 and scripts/uninstall-sync-task.ps1 to configure a recurring Windows Scheduled Task (Procella-5Min-Sync) running scripts/sync.ps1 every 5 minutes in the background.
 
 **Verification:** Verified with scripts/sync-check.ps1 and tested sync pass.
-## 2026-11-14 13:40 — Starter roadmap run for real; groundwork research launched (3 agents)
+## 2026-11-14 13:40 — Starter roadmap run for real; groundwork research launched (3 AI research assistants)
 
 **Request:** pick a named variable, preview in Giovanni, download a series, test the trend, report rate
 per year; then lay the groundwork for a cinematic, multi-page, quest-driven web app with music, 3D and a
@@ -150,7 +150,7 @@ statistics.linear_regression. 73 to 68 lines, results identical.
 rule 9); the brand follows the house system strictly (rule 10). The only existing
 design system on the account is "Munshi House Style" (a different project), so Procella gets its own.
 
-**Research launched, max 3 agents:** stack and components; official rules, experience design and brand
+**Research launched, at most 3 AI research assistants:** stack and components; official rules, experience design and brand
 candidates; data reality with a full variable-by-region trend screen. Notes land in .tmp/research (git-ignored)
 and get synthesised into docs/.
 
@@ -163,7 +163,7 @@ and get synthesised into docs/.
 URLs, so checked it once through a temporary localhost server (only console error: missing favicon). Interim
 neutral styling; the house system replaces it later.
 
-**Finding 1, the deadline:** the research agent read NASA's submission guide: submission closes Sunday 15 Nov 2026
+**Finding 1, the deadline:** the research assistant read NASA's submission guide: submission closes Sunday 15 Nov 2026
 11:59 pm local time, about 34 hours from now. I re-checked the saved page text myself before believing it. Demo is
 capped at 30 s video or 7 slides; most judging weight is on the final project link. This overrides any plan that
 assumes days of work: the cinematic scope must be cut to what ships tonight and tomorrow.
@@ -181,11 +181,10 @@ docs/challenge-brief.md "Open items".
 
 ## 2026-11-14 13:51 — Stack and experience research landed; two docs written
 
-**Stack agent finished.** Verified its key claim myself: the gsap-core, gsap-timeline, gsap-react, gsap-scrolltrigger,
-threejs and d3-visualization skills I copied from the Business workspace are ~1 KB stubs pointing at
-greensock/skills, which returns 404. The real repos are greensock/gsap-skills (MIT, 18k stars) and
-CloudAI-X/threejs-skills (MIT, 4k stars). Not installed: cloning downloads files, so it waits for the owner.
-This was a copy-time blind spot: I sized skills by du and never opened them.
+**Stack research finished.** Verified its key claim myself: the gsap-core, gsap-timeline, gsap-react, gsap-scrolltrigger,
+threejs and d3-visualization reference guides I copied from the Business workspace are ~1 KB stubs pointing at
+a repository that returns 404. The real ones are two MIT-licensed repositories. Not installed: cloning downloads files, so it waits for the owner.
+This was a copy-time blind spot: I sized the guides by du and never opened them.
 
 **Decisions captured in docs/stack.md:** one document with hash routes (separate pages reset audio and WebGL),
 Vite 8.3.5 + vanilla TypeScript, globe.gl 2.46.2 on three 0.187.0 lazy-loaded, GSAP 3.15.0 via npm only (free
@@ -195,15 +194,15 @@ and it can sonify the series). Budgets, lite tier, offline plan and Playwright c
 **docs/experience.md:** routes, five quests mapped to the four objectives plus a Twin Case finale, ranked
 goosebump moments, demo modes, data-first rules, three brand candidates (A Terminator recommended).
 
-**Still running:** the data-reality agent (variable catalogue and the trend screen across regions). The roadmap
-page updates in place when it lands. Artifact republished with stack status.
+**Still running:** the data-reality research (variable catalogue and the trend screen across regions). The roadmap
+page updates in place when it lands. Preview page republished with stack status.
 
-## 2026-11-14 14:05 — Data research landed and stopped; real GSAP and three.js skills installed
+## 2026-11-14 14:05 — Data research landed and stopped; real GSAP and three.js guides installed
 
-**Data agent stopped on the owner's call** once the research was enough: 221 trend rows (16 regions x 14
+**Data research stopped on the owner's call** once the research was enough: 221 trend rows (16 regions x 14
 variables, all re-checked against pymannkendall), access map, Giovanni login answer, twin cases, nulls,
 fragile cases, snapshot sizing. Only the optional MODIS NDVI pull was unfinished (ORNL: 8 to 59 s per 10-date
-call). Killed its three leftover ndvi.py processes too, which kept running after the agent stopped.
+call). Killed its three leftover ndvi.py processes too, which kept running after the research stopped.
 Notes moved into the repo as docs/data-reality.md and data/trend-screen-2026-11-14.csv.
 
 **What the data research overturned:**
@@ -218,9 +217,9 @@ Notes moved into the repo as docs/data-reality.md and data/trend-screen-2026-11-
   IMERG rainfall Beijing (up) vs Rondonia (down), corroborated by MERRA-2; haze Delhi (up) vs SE US (down).
 - Rule adopted: cross-source agreement (MERRA-2 vs IMERG) is the credibility filter. Show it in the app.
 
-**Skills:** cloned greensock/gsap-skills and CloudAI-X/threejs-skills into an isolated scratch folder,
-scanned for agent-directed instructions, shell, network and secrets (clean), then installed only what a
-vanilla TypeScript build uses: 6 GSAP skills, 11 three.js skills. Removed the six empty stubs (including
+**Reference guides:** cloned the two MIT repositories into an isolated scratch folder,
+scanned for embedded instructions, shell, network and secrets (clean), then installed only what a
+vanilla TypeScript build uses: 6 GSAP guides, 11 three.js guides. Removed the six empty stubs (including
 d3-visualization). MIT licence texts kept with the local toolkit; CREDITS.md started.
 
 ## 2026-11-14 14:16 — Procella House Style built; machine heat diagnosed
@@ -236,14 +235,14 @@ RouteLine, plus a cover. Previews use only real data: the Delhi and central Chil
 matched the screen exactly. First publish was refused for index.d.ts (no served type); resent as text/plain.
 Mirrored to brand/house-style/.
 
-**Heat:** load average hit about 25 during the research burst (three agents, NDVI downloads, headless renders) and
+**Heat:** load average hit about 25 during the research burst (three AI research runs, NDVI downloads, headless renders) and
 fell to about 10 after they stopped. Only one Chrome instance exists (the owner's, about 45 processes, 1.5 GB).
 Remaining CPU is a Chrome tab playing video (VideoToolbox decoder plus coreaudiod), WindowServer and kernel_task
 throttling. The real pressure is memory: an 8 GB Mac with about 6 GB swapped. Four idle older tool sessions each
-keep chrome-devtools and playwright MCP servers alive; they are idle and not orphaned, so left for the owner.
-Running one agent at a time from here.
+keep browser-automation helpers alive; they are idle and not orphaned, so left for the owner.
+Running one research job at a time from here.
 
-## 2026-11-14 14:20 — Judges' deck built by one sub-agent
+## 2026-11-14 14:20 — Judges' deck built by one AI assistant run
 
 7-slide "Procella Initial Statement" in the globe-trotter house style
 (kept outside the repo). Topics as the owners asked: challenge, team, solution, roadmap and
@@ -251,7 +250,7 @@ approach, datasets, plus findings. Every number traced to docs/roadmap.md and do
 what this session computed: Gandhinagar rainfall +0.0210/yr p=0.0083 with the start-year strip; Delhi -0.061 and
 central Chile +0.044 MJ/m2/day per year). Open: slide 3 names both partners (fine for review, must become
 "Team Procella" if submitted as the demo); lane assignment on slide 3 (one partner on data and stats, one on UI)
-was the agent's guess from name order and needs the partners' confirmation. Agent ran one headless render and
+was the assistant's guess from name order and needs the partners' confirmation. It ran one headless render and
 closed it; no stray browser processes left.
 
 ## 2026-11-15 16:30 — Game build started: globe-trotter in real terrain on live NASA data
@@ -274,7 +273,7 @@ placed procedurally on flat dry land and named with Nominatim reverse lookups. G
   decomposition, inconsistent GRACE and GISTEMP numbers, flat GLDAS cache).
 - Statistics ported to JS (Mann-Kendall, Sen with Gilbert CI, Spearman with detrended option, projection) and verified
   against pymannkendall values (stats.test.mjs).
-- Two sub-agents in parallel: vehicles (models plus physics) and people (characters plus NPCs), each writing only its own
+- Two AI assistants in parallel: vehicles (models plus physics) and people (characters plus NPCs), each writing only its own
   folder against app/CONTRACTS.md. People done: 30/30 smoke tests.
 - git pull hung again (iCloud); killed it and fetched with a timeout. Partner's test zip had vanished from the working tree
   (iCloud eviction); restored from git.
@@ -395,7 +394,7 @@ Physics now has engine RPM and gears, surface grip and rolling resistance (publi
 
 **Performance:** full retina at 2800 px wide gives 34 fps (5.8M triangles, 881 draw calls) in Mumbai. The Settings "Low" option turns shadows off, cuts trees to 20 per variant and grass by 60 %.
 
-**Skipped under deadline:** a `/ponytail-review` pass on this diff, which is large (about 3k lines across agents). It goes on the to-do before the final submission freeze.
+**Skipped under deadline:** a ponytail review pass on this diff, which is large (about 3k lines across both parallel builds). It goes on the to-do before the final submission freeze.
 
 ## 2026-11-15 19:40 Home screen redesign, vehicle scale check, sense of speed
 
@@ -485,7 +484,7 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
 
 **Not done:**
 - A phone-width check: the test browser window cannot be resized. The CSS has narrow-screen rules but they are untested.
-- A `/ponytail-review` of today's large diff.
+- A ponytail review of today's large diff.
 
 ## 2026-11-15 21:58 Launch clean-up
 
@@ -502,10 +501,10 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   help, honest-statistics notes, repository map.
 - CREDITS: GISTEMP row now says it is only used by the `research/` check.
 - Local only (git-ignored): 11 empty iCloud "* 2" folders in brand/, this session's test screenshots and
-  test pages in .tmp, Playwright logs. `.tmp/research` kept (docs/data-reality.md cites it).
+  test pages in .tmp, browser test logs. `.tmp/research` kept (docs/data-reality.md cites it).
 - Verified: every module passes node --check, stats.test.mjs and trend.py --selftest pass, the served
   root redirects, and a full UI run Home → onboarding → Paris lands by the Eiffel Tower with no console
-  errors. /ponytail-review skipped under deadline; this change only deletes and moves.
+  errors. The ponytail review was skipped under deadline; this change only deletes and moves.
 
 ## 2026-11-15 22:10 Public-repo prep: tooling out, MIT licence
 
@@ -513,10 +512,10 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   They stay on the owner's disk, hidden by `.git/info/exclude`, so `.gitignore` names no tools. A partner's
   next pull deletes them from that clone's working tree.
 - Tool and product names removed from public files at the owner's request: docs (brand, roadmap md and
-  html, strategy, challenge brief, experience, stack), CREDITS (the two editor-skill rows, which no longer
+  html, strategy, challenge brief, experience, stack), CREDITS (the two editor-toolkit rows, which no longer
   ship), the brand JSON's "via" field, and word-level edits to earlier journal entries. This is the one
   deliberate exception to append-only; no reasoning or outcome was changed. The journal still says
-  research and sub-agents were used, because Space Apps requires SI disclosure.
+  AI assistants were used, because Space Apps requires SI disclosure.
 - Added `LICENSE` (MIT, "Team Procella": the under-18 rule bars partners' names from public files) and a
   README licence section: city snapshots stay ODbL 1.0, vendored code MIT, textures CC0. README team line
   is now "Team Procella."
@@ -562,3 +561,14 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   made public.
 - Correction, same evening: the repository is already PUBLIC (gh repo view, 23:07), so the link works for
   everyone. The "still private" line above was wrong.
+
+## 2026-11-15 23:20 Folder prepared for sharing
+
+- Owner is sending this folder to people who want to see the code and how it was built. Tool-specific
+  jargon in earlier journal entries and docs/stack.md was replaced with plain wording (guides, AI research
+  assistants, browser-automation helpers, ponytail review), word for word, no outcome changed.
+  `.gitignore` no longer names the browser-test folder.
+- README gains "How it was built": the project was built with help from an AI coding assistant, which
+  Space Apps requires to be acknowledged in the project's own text for SI-assisted code.
+- The editor toolkit, the project-rules file, browser-test leftovers, `.tmp` and `.env` moved out of the
+  folder to a private sibling folder on the owner's Mac; nothing was deleted.

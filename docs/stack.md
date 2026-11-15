@@ -5,7 +5,7 @@ Research date 14 Nov 2026. Every version was checked on npm and is at least 14 d
 ## Four findings that shape the build
 
 1. **"Multi-page" means routes inside one document.** Separate HTML pages reset the AudioContext and the WebGL globe on every navigation and re-trigger the autoplay block. One `index.html`, hash routes, same-document View Transitions. Deploys to any static host and works offline.
-2. **Reference material matters.** The GSAP and three.js reference notes we started from were empty stubs; the real ones are `greensock/gsap-skills` and `CloudAI-X/threejs-skills`, both MIT.
+2. **Reference material matters.** The GSAP and three.js reference notes we started from were empty stubs; the official MIT-licensed versions replaced them.
 3. **GSAP is free including all plugins** (standard licence, effective 30 Apr 2025). It is not OSI open source, so use it as an npm dependency and never copy its files into the repo. Pin `3.15.0`; npm also carries a 4.0 beta tag.
 4. **Headless Chromium renders WebGL2** through software rendering, so automated globe screenshots work. FPS from that setup is not representative of a real GPU.
 
@@ -32,7 +32,7 @@ Tone.js `15.1.22` is the upgrade path if raw Web Audio is outgrown. Howler is po
 
 ## Component catalogue (verified with `gh api`: licence, last push, not archived)
 
-Useful: `vasturiano/globe.gl`, `vasturiano/three-globe`, `darkroomengineering/lenis`, `bramus/view-transitions-demos` (Apache-2.0, keep the notice), `greensock/gsap-skills`, `CloudAI-X/threejs-skills`, `pmndrs/postprocessing` (Zlib), `FarazzShaikh/glNoise`, `mdn/webaudio-examples` (CC0), `julianna-langston/chart2music` (accessible audio chart navigation), `Cuberto/mouse-follower` (20 lines of our own code does the same), `Makio64/threejs-cinematic-world-zoom` (camera ideas only; needs the network), `russellsamora/scrollama` (pattern only), `janarosmonaliev/github-globe` (visual reference only). The research notes list 16 in total.
+Useful: `vasturiano/globe.gl`, `vasturiano/three-globe`, `darkroomengineering/lenis`, `bramus/view-transitions-demos` (Apache-2.0, keep the notice), `pmndrs/postprocessing` (Zlib), `FarazzShaikh/glNoise`, `mdn/webaudio-examples` (CC0), `julianna-langston/chart2music` (accessible audio chart navigation), `Cuberto/mouse-follower` (20 lines of our own code does the same), `Makio64/threejs-cinematic-world-zoom` (camera ideas only; needs the network), `russellsamora/scrollama` (pattern only), `janarosmonaliev/github-globe` (visual reference only). The research notes list 16 in total.
 
 Rejected: `oframe/ogl` and `arscan/encom-globe` (no licence), `dataarts/webgl-globe` (archived), all `codrops/*` demos (no licence), `nasa/NASA-3D-Resources` (no SPDX), `badsvetac/visulaserz` (AGPL).
 

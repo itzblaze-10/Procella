@@ -31,5 +31,3 @@ __pycache__/
 * 2
 * 2.*
 
-# Browser test artefacts
-.playwright-mcp/

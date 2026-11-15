@@ -88,6 +88,13 @@ Everywhere: **F** gets in and out, **T** opens the trend dossier, **J** shows ad
 Partners working on the code: run `./scripts/install-hooks.sh` once per clone (every commit then pushes),
 and `./scripts/sync-check.sh` confirms local and GitHub are identical.
 
+## How it was built
+
+Team Procella built Procella with help from an AI coding assistant, which wrote and debugged code alongside us,
+researched and verified data sources, and drafted documentation. Every statistic is checked against
+pymannkendall, and every climate number is fetched live from NASA, never generated. The build journal
+records each step, fix and dead end.
+
 ## Data and credits
 
 NASA POWER, NASA GIBS, the ORNL DAAC MODIS service, AWS Terrain Tiles, Sentinel-2 cloudless by EOX
