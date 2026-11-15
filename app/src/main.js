@@ -27,7 +27,13 @@ preview.scene.background = new THREE.Color(0x0a111c);
 preview.scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture; preview.scene.environmentIntensity = 0.8;
 preview.scene.add(new THREE.HemisphereLight(0xdfeaff, 0x2b3d5a, 1.2));
 { const d = new THREE.DirectionalLight(0xfff1d6, 2.5); d.position.set(4, 8, 6); preview.scene.add(d);
-  const disc = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 0.1, 48), new THREE.MeshStandardMaterial({ color: 0x192740 })); disc.position.y = -0.05; preview.scene.add(disc); }
+  // a lit stage: soft pool of light on a dark floor and a thin lantern ring
+  const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d'), gr = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+  gr.addColorStop(0, '#1c2a42'); gr.addColorStop(0.5, '#0f1828'); gr.addColorStop(1, 'rgba(10,17,28,0)'); g.fillStyle = gr; g.fillRect(0, 0, 256, 256);
+  const tex = new THREE.CanvasTexture(c); tex.colorSpace = THREE.SRGBColorSpace;
+  const floor = new THREE.Mesh(new THREE.CircleGeometry(40, 64), new THREE.MeshBasicMaterial({ map: tex, transparent: true })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; preview.scene.add(floor);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(1, 1.04, 96), new THREE.MeshBasicMaterial({ color: 0xf2b84b, transparent: true, opacity: 0.55 })); ring.rotation.x = -Math.PI / 2; ring.position.y = 0.01; preview.ring = ring; preview.scene.add(ring);
+  const rim = new THREE.DirectionalLight(0x5ba2ff, 1.6); rim.position.set(-6, 4, -8); preview.scene.add(rim); }
 
 const keys = {};
 const app = {
@@ -77,57 +83,71 @@ function homeTags() {
 }
 
 const STEPS = ['Traveller', 'Vehicle', 'Time', 'Destination'];
+const KICK = ['who is travelling?', 'how will you get around?', 'when do you land?', 'where on Earth?'];
+const TITLES = ['Choose your traveller', 'Choose your ride', 'Choose your time', 'Choose your destination'];
+let CITY_INDEX = null;
+fetch(new URL('../data/cities/index.json', import.meta.url)).then(r => r.ok ? r.json() : null).then(j => { CITY_INDEX = j; }).catch(() => {});
 app.onboard = step => {
   globe.setCinema(false);
   app.screen = step === 3 ? 'pick' : 'preview'; app.step = step;
-  const head = `<div class="steps">${STEPS.map((s, i) => `<button class="${i === step ? 'on' : ''} ${i < step ? 'done' : ''}" data-s="${i}">${i + 1}. ${s}</button>`).join('')}</div>`;
-  const nav = `<div class="onav"><button id="back">${step ? 'Back' : 'Home'}</button>${step < 3 ? '<button class="primary" id="next">Next</button>' : ''}</div>`;
+  const head = `<header class="ob-top"><button class="ob-home" id="obHome" aria-label="Home">${P().Icon('globe', { size: 18 })}<span>PROCELLA</span></button>
+    <ol class="ob-steps">${STEPS.map((s, i) => `<li><button class="${i === step ? 'on' : ''} ${i < step ? 'done' : ''}" data-s="${i}" ${i > step ? 'disabled' : ''}><b>0${i + 1}</b><span>${s}</span></button></li>`).join('')}</ol></header>`;
+  const nav = `<footer class="ob-nav"><button class="ob-back" id="back">← ${step ? STEPS[step - 1] : 'Home'}</button>${step < 3 ? `<button class="ob-next" id="next">Next · ${STEPS[step + 1]} →</button>` : ''}</footer>`;
   let body = '';
-  if (step === 0) body = `<div class="opanel"><h2>Choose your traveller</h2><div class="cards">${CHARACTERS.map(c => `<button class="card ${c.id === app.choice.characterId ? 'on' : ''}" data-c="${c.id}"><b>${esc(c.name)}</b><span class="eyebrow">${esc(c.title)}</span><small>${esc(c.blurb)}</small></button>`).join('')}</div></div>`;
+  if (step === 0) body = `<div class="ob-grid two">${CHARACTERS.map(c => `<button class="ob-card ${c.id === app.choice.characterId ? 'on' : ''}" data-c="${c.id}"><span class="eyebrow">${esc(c.title)}</span><b>${esc(c.name)}</b><small>${esc(c.blurb)}</small></button>`).join('')}</div>`;
   if (step === 1) {
     const cur = VEHICLES.find(v => v.kind === app.choice.vehicle.kind);
-    body = `<div class="opanel"><h2>Choose your ride</h2>${['land', 'air', 'water'].map(cl => `<h4>${cl === 'land' ? 'Roads and trails' : cl === 'air' ? 'Sky' : 'Water'}</h4><div class="cards three">${VEHICLES.filter(v => v.class === cl).map(v => `<button class="card ${v.kind === cur.kind ? 'on' : ''}" data-v="${v.kind}"><b>${esc(v.name)}</b><small>${esc(v.blurb || '')}</small></button>`).join('')}</div>`).join('')}
+    const CL = { land: 'Roads and trails', air: 'Sky', water: 'Water' };
+    body = `<div class="ob-tabs">${Object.entries(CL).map(([k, l]) => `<button class="${cur.class === k ? 'on' : ''}" data-cl="${k}">${l}</button>`).join('')}</div>
+      <div class="ob-grid">${VEHICLES.filter(v => v.class === cur.class).map(v => `<button class="ob-card wide ${v.kind === cur.kind ? 'on' : ''}" data-v="${v.kind}"><b>${esc(v.name)}</b><small>${esc(v.blurb || '')}</small></button>`).join('')}</div>
       <h4>Paint</h4><div class="swatches">${cur.colors.map(c => `<button style="background:${c}" class="${c === (app.choice.vehicle.color || cur.colors[0]) ? 'on' : ''}" data-col="${c}" aria-label="Colour ${c}"></button>`).join('')}</div>
       <h4>Decal</h4><div class="chips">${cur.decals.map((d, i) => `<button class="${i === app.choice.vehicle.decal ? 'on' : ''}" data-dec="${i}">${esc(d)}</button>`).join('')}</div>
-      <p class="fine">You can spawn any other vehicle once you are in the world. Boats need open water nearby.</p></div>`;
+      <p class="fine">Spawn any other vehicle once you are in the world. Boats need open water nearby.</p>`;
   }
-  if (step === 2) body = `<div class="opanel"><h2>Choose your time</h2><div class="cards">
-      <button class="card ${app.choice.mode === 'year' ? 'on' : ''}" data-m="year"><b>A year in the record</b><small>Weather and stories from NASA's measured values for one month of one year, 1981 to 2025.</small></button>
-      <button class="card ${app.choice.mode === 'future' ? 'on' : ''}" data-m="future"><b>Future Zone</b><small>Each month's normal shifted along its 45-year trend to a future year. An extrapolation of the past, never a forecast.</small></button></div>
-      ${app.choice.mode === 'year' ? `<label>Year <b id="yL">${app.choice.year}</b><input type="range" id="yr" min="1981" max="2025" value="${app.choice.year}"></label>` : `<label>Future year <b id="yL">${app.choice.futureYear}</b><input type="range" id="fyr" min="2030" max="2075" step="5" value="${app.choice.futureYear}"></label>`}
-      <label>Month <select id="mo">${MONTHS.slice(1).map((m, i) => `<option value="${i + 1}" ${i + 1 === app.choice.month ? 'selected' : ''}>${m}</option>`).join('')}</select></label></div>`;
-  if (step === 3) body = `<div class="opanel pickp"><h2>Where to?</h2><p class="fine">Drag to turn the globe, scroll to zoom, click to drop your pin. Or search.</p>
-      <form id="sf"><input id="q" placeholder="Search a place, e.g. Kathmandu" autocomplete="off"><button>Search</button></form><div id="results"></div>
+  if (step === 2) {
+    const fut = app.choice.mode === 'future', yr = fut ? app.choice.futureYear : app.choice.year;
+    body = `<div class="ob-grid two">
+      <button class="ob-card ${!fut ? 'on' : ''}" data-m="year"><span class="eyebrow">1981 to 2025</span><b>A year in the record</b><small>Weather and stories from NASA's measured values for one month of one year.</small></button>
+      <button class="ob-card ${fut ? 'on' : ''}" data-m="future"><span class="eyebrow">2030 to 2075</span><b>Future Zone</b><small>Each month's normal pushed along its 45-year trend. An extrapolation, never a forecast.</small></button></div>
+      <div class="ob-year"><span class="eyebrow">${fut ? 'Future year' : 'Year'}</span><b id="yL">${yr}</b>
+      <input type="range" id="${fut ? 'fyr' : 'yr'}" min="${fut ? 2030 : 1981}" max="${fut ? 2075 : 2025}" step="${fut ? 5 : 1}" value="${yr}"></div>
+      <h4>Month</h4><div class="ob-months">${MONTHS.slice(1).map((m, i) => `<button class="${i + 1 === app.choice.month ? 'on' : ''}" data-mo="${i + 1}">${m}</button>`).join('')}</div>`;
+  }
+  if (step === 3) body = `<form id="sf" class="ob-search"><input id="q" placeholder="Search any place, e.g. Kathmandu" autocomplete="off"><button>Search</button></form><div id="results"></div>
+      ${CITY_INDEX?.length ? `<h4>World cities · rebuilt from OpenStreetMap</h4><div class="chips cities">${CITY_INDEX.map(c => `<button data-la="${c.lat}" data-lo="${c.lon}" data-n="${esc(c.name)}">${esc(c.name)}</button>`).join('')}</div>` : ''}
       <h4>Trend stations</h4><div class="chips">${STATIONS.map(([n, la, lo]) => `<button data-la="${la}" data-lo="${lo}" data-n="${esc(n)}">${esc(n)}</button>`).join('')}</div>
-      <div class="pinned" id="pinned">${app.choice.lat != null ? `${esc(app.choice.place || 'Pinned')} · ${app.choice.lat.toFixed(2)}, ${app.choice.lon.toFixed(2)}` : 'No pin yet'}</div>
-      <button class="primary big" id="enter" ${app.choice.lat == null ? 'disabled' : ''}>Enter the world<small>Land here and explore on foot and by vehicle</small></button>
-      <button class="big" id="stay" ${app.choice.lat == null ? 'disabled' : ''}>Stay at the globe<small>Globe Lab: compare trends from afar</small></button></div>`;
-  ui.innerHTML = `<div class="onboard">${head}${body}${nav}</div>`;
-  ui.querySelectorAll('.steps button').forEach(b => b.onclick = () => +b.dataset.s <= step && app.onboard(+b.dataset.s));
-  ui.querySelector('#back').onclick = () => step ? app.onboard(step - 1) : app.home();
-  ui.querySelector('#next')?.addEventListener('click', () => app.onboard(step + 1));
-  ui.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { app.choice.characterId = b.dataset.c; click(); app.onboard(0); });
-  ui.querySelectorAll('[data-v]').forEach(b => b.onclick = () => { app.choice.vehicle = { kind: b.dataset.v, color: null, decal: 0 }; click(); app.onboard(1); });
-  ui.querySelectorAll('[data-col]').forEach(b => b.onclick = () => { app.choice.vehicle.color = b.dataset.col; app.onboard(1); });
-  ui.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => { app.choice.vehicle.decal = +b.dataset.dec; app.onboard(1); });
-  ui.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { app.choice.mode = b.dataset.m; app.onboard(2); });
-  ui.querySelector('#yr')?.addEventListener('input', e => { app.choice.year = +e.target.value; ui.querySelector('#yL').textContent = e.target.value; });
-  ui.querySelector('#fyr')?.addEventListener('input', e => { app.choice.futureYear = +e.target.value; ui.querySelector('#yL').textContent = e.target.value; });
-  ui.querySelector('#mo')?.addEventListener('change', e => { app.choice.month = +e.target.value; });
+      <div class="pinned" id="pinned">${app.choice.lat != null ? `${P().Icon('pin', { size: 16 })} ${esc(app.choice.place || 'Pinned')} · ${app.choice.lat.toFixed(2)}, ${app.choice.lon.toFixed(2)}` : 'Drag the globe and click to drop a pin'}</div>
+      <button class="ob-go" id="enter" ${app.choice.lat == null ? 'disabled' : ''}><span class="h-play-ico">${P().Icon('play', { size: 24 })}</span><span class="h-play-txt">Enter the world<small>Land here on foot, with your ride</small></span></button>
+      <button class="ob-stay" id="stay" ${app.choice.lat == null ? 'disabled' : ''}>${P().Icon('globe', { size: 18 })} Stay at the globe · Globe Lab</button>`;
+  ui.innerHTML = `<div class="onboard s${step}"><div class="h-grain"></div>${head}<section class="ob-panel"><p class="h-kicker">${KICK[step]}</p><h2 class="ob-title">${TITLES[step]}</h2>${body}</section>${nav}</div>`;
+  const $ = q => ui.querySelector(q), all = (q, f) => ui.querySelectorAll(q).forEach(b => { b.addEventListener('mouseenter', () => click()); b.onclick = () => { click(); f(b); }; });
+  all('.ob-steps button', b => +b.dataset.s <= step && app.onboard(+b.dataset.s));
+  $('#obHome').onclick = () => app.home();
+  $('#back').onclick = () => step ? app.onboard(step - 1) : app.home();
+  $('#next')?.addEventListener('click', () => app.onboard(step + 1));
+  all('[data-c]', b => { app.choice.characterId = b.dataset.c; app.onboard(0); });
+  all('[data-cl]', b => { const v = VEHICLES.find(x => x.class === b.dataset.cl); app.choice.vehicle = { kind: v.kind, color: null, decal: 0 }; app.onboard(1); });
+  all('[data-v]', b => { app.choice.vehicle = { kind: b.dataset.v, color: null, decal: 0 }; app.onboard(1); });
+  all('[data-col]', b => { app.choice.vehicle.color = b.dataset.col; app.onboard(1); });
+  all('[data-dec]', b => { app.choice.vehicle.decal = +b.dataset.dec; app.onboard(1); });
+  all('[data-m]', b => { app.choice.mode = b.dataset.m; app.onboard(2); });
+  all('[data-mo]', b => { app.choice.month = +b.dataset.mo; ui.querySelectorAll('[data-mo]').forEach(x => x.classList.toggle('on', x === b)); });
+  $('#yr')?.addEventListener('input', e => { app.choice.year = +e.target.value; $('#yL').textContent = e.target.value; });
+  $('#fyr')?.addEventListener('input', e => { app.choice.futureYear = +e.target.value; $('#yL').textContent = e.target.value; });
   if (step === 3) {
     globe.autoSpin = false; globe.markers.clear();
     const setPin = (lat, lon, name) => { Object.assign(app.choice, { lat, lon, place: name || '' }); globe.setPin(lat, lon); app.onboard(3); };
     app.pickHandler = hit => hit && !hit.marker && setPin(hit.lat, hit.lon, '');
     if (app.choice.lat != null) globe.setPin(app.choice.lat, app.choice.lon);
-    ui.querySelectorAll('[data-la]').forEach(b => b.onclick = () => { globe.focus(+b.dataset.la, +b.dataset.lo); setPin(+b.dataset.la, +b.dataset.lo, b.dataset.n); });
-    ui.querySelector('#sf').onsubmit = async e => {
-      e.preventDefault(); const r = ui.querySelector('#results'); r.textContent = 'Searching OpenStreetMap…';
-      try { const res = await geocode(ui.querySelector('#q').value); r.innerHTML = res.map((x, i) => `<button data-i="${i}">${esc(x.display_name)}</button>`).join('') || 'Nothing found.';
+    all('[data-la]', b => { globe.focus(+b.dataset.la, +b.dataset.lo); setPin(+b.dataset.la, +b.dataset.lo, b.dataset.n); });
+    $('#sf').onsubmit = async e => {
+      e.preventDefault(); const r = $('#results'); r.textContent = 'Searching OpenStreetMap…';
+      try { const res = await geocode($('#q').value); r.innerHTML = res.map((x, i) => `<button data-i="${i}">${esc(x.display_name)}</button>`).join('') || 'Nothing found.';
         r.querySelectorAll('button').forEach(b => b.onclick = () => { const x = res[+b.dataset.i]; globe.focus(+x.lat, +x.lon); setPin(+x.lat, +x.lon, x.display_name.split(',')[0]); });
       } catch { r.textContent = 'Search did not answer. Click the globe instead.'; }
     };
-    ui.querySelector('#enter').onclick = () => app.enterWorld();
-    ui.querySelector('#stay').onclick = () => { app.openLab(); globe.focus(app.choice.lat, app.choice.lon); app.lab.addPin(app.choice.lat, app.choice.lon); };
+    $('#enter').onclick = () => { click(); app.enterWorld(); };
+    $('#stay').onclick = () => { app.openLab(); globe.focus(app.choice.lat, app.choice.lon); app.lab.addPin(app.choice.lat, app.choice.lon); };
   } else setPreview(step);
 };
 
@@ -139,11 +159,12 @@ function setPreview(step) {
   preview.scene.add(preview.obj.object);
   const box = new THREE.Box3().setFromObject(preview.obj.object), size = box.getSize(new THREE.Vector3()).length();
   preview.size = size; preview.center = box.getCenter(new THREE.Vector3());
+  const fp = box.getSize(new THREE.Vector3()); preview.ring.scale.setScalar(Math.max(fp.x, fp.z) * 0.62 + 0.4);
 }
 
 app.enterWorld = async () => {
   app.leaveWorld(); app.screen = 'loading';
-  ui.innerHTML = `<div class="loading"><div id="lc"></div><h2>Travelling to ${esc(app.choice.place || 'your pin')}</h2><p id="ls">Packing…</p><p class="fine">Everything you will see is fetched from NASA and open map services now.</p></div>`;
+  ui.innerHTML = `<div class="loading"><div class="h-grain"></div><p class="h-kicker">packing for the trip…</p><div id="lc"></div><h2 class="ob-title">Travelling to ${esc(app.choice.place || 'your pin')}</h2><p id="ls">Packing…</p><div class="ld-bar"><i></i></div><p class="fine">Everything you will see is fetched live from NASA and open map services.</p></div>`;
   ui.querySelector('#lc').innerHTML = P().Compass({ size: 120 });
   let b = 0; const spin = setInterval(() => P().compassTo(ui.querySelector('.pc-compass'), b += 37), 500);
   const c = app.choice, v = VEHICLES.find(x => x.kind === c.vehicle.kind);

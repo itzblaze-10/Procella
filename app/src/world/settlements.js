@@ -242,22 +242,25 @@ export class Settlements {
     this.terrain = terrain;
     const flat = (px, pz) => terrain.heightAt(px, pz) > 2 && terrain.slopeAt(px, pz) < 0.12 && terrain.slopeAt(px + 40, pz + 40) < 0.15;
     const shore = (px, pz) => terrain.heightAt(px, pz) > 1 && terrain.heightAt(px, pz) < 12 && terrain.findNear(px, pz, (a, b) => terrain.heightAt(a, b) < -1, 30, 120);
-    const plan = [['village', 0.4], ['farm', 2.1], ['industry', 4.0], ['harbour', 5.2]];
+    const city = climate.city; this.cityTest = city?.blocked; // inside a rebuilt city the people stand in its real streets; no generated buildings
+    const plan = city ? [['village', 0.4], ['industry', 2.5], ['harbour', 4.4]] : [['village', 0.4], ['farm', 2.1], ['industry', 4.0], ['harbour', 5.2]];
     let seed = Math.abs(Math.round(x * 13 + z * 7 + placeName.length * 101));
     this.aod = climate.aod ?? 0.2;
     for (const [kind, angle] of plan) {
-      const test = kind === 'harbour' ? shore : flat;
+      const test = city ? (px, pz) => terrain.heightAt(px, pz) > 0.5 && !city.blocked(px, pz) && [[6, 0], [-6, 0], [0, 6], [0, -6]].every(([a, b]) => !city.blocked(px + a, pz + b)) && (kind !== 'harbour' || shore(px, pz))
+        : kind === 'harbour' ? shore : flat;
       let spot = null;
-      for (let d = 600; d <= 2600 && !spot; d += 400) spot = terrain.findNear(x + Math.cos(angle) * d, z + Math.sin(angle) * d, test, 120, 900);
+      if (city) for (let d = 60; d <= 700 && !spot; d += 80) spot = terrain.findNear(x + Math.cos(angle) * d, z + Math.sin(angle) * d, test, 10, 120);
+      else for (let d = 600; d <= 2600 && !spot; d += 400) spot = terrain.findNear(x + Math.cos(angle) * d, z + Math.sin(angle) * d, test, 120, 900);
       if (!spot) continue;
       const s = new Site(this, spot.x, spot.z, (seed % 628) / 100);
       s.g.position.set(spot.x, 0, spot.z); s.g.rotation.y = s.ry;
-      KINDS[kind].build(s, { hot: (climate.tMean ?? 15) > 19, wet: soilWetness, seed }); this.group.add(s.g);
-      const site = { kind, label: KINDS[kind].label, x: spot.x, z: spot.z, r: kind === 'harbour' ? 30 : 62, npcs: [] };
+      if (!city) KINDS[kind].build(s, { hot: (climate.tMean ?? 15) > 19, wet: soilWetness, seed }); this.group.add(s.g);
+      const site = { kind, label: city ? { village: 'Street', industry: 'Works', harbour: 'Waterfront' }[kind] : KINDS[kind].label, x: spot.x, z: spot.z, r: city ? 0 : kind === 'harbour' ? 30 : 62, npcs: [] };
       KINDS[kind].roles.forEach((role, i) => {
         const p = createNPC(role, ++seed, terrain.toLatLon(spot.x, spot.z)), a = i * 2.1 + angle;
         let nx = spot.x + Math.cos(a) * (8 + i * 4), nz = spot.z + Math.sin(a) * (8 + i * 4);
-        const free = terrain.findNear(nx, nz, (px, pz) => !this.collide(px, pz, 1.5) && terrain.heightAt(px, pz) > 0.5, 3, 60); if (free) ({ x: nx, z: nz } = free);
+        const free = terrain.findNear(nx, nz, (px, pz) => !this.collide(px, pz, 1.5) && !city?.blocked(px, pz) && terrain.heightAt(px, pz) > 0.5, 3, 60); if (free) ({ x: nx, z: nz } = free);
         p.object.position.set(nx, terrain.heightAt(nx, nz), nz); p.object.rotation.y = seed % 6;
         this.group.add(p.object);
         const npc = { person: p, role, seed, site, heard: false, home: { x: nx, z: nz }, phase: seed % 7, clock: (seed % 20), beacon: this.beacon(nx, terrain.heightAt(nx, nz), nz) };
@@ -303,7 +306,7 @@ export class Settlements {
       } else {
         n.person.setWorking?.(false);
         n.phase += dt * 0.12; let x = n.home.x + Math.cos(n.phase) * 6 - 6, z = n.home.z + Math.sin(n.phase) * 6;
-        if (this.collide(x, z, 0.4)) { n.phase -= dt * 0.12; x = o.position.x; z = o.position.z; }
+        if (this.collide(x, z, 0.4) || this.cityTest?.(x, z)) { n.phase -= dt * 0.12; x = o.position.x; z = o.position.z; }
         o.rotation.y = Math.atan2(-(x - o.position.x), -(z - o.position.z));
         o.position.set(x, this.terrain.heightAt(x, z), z); n.person.update(dt, 0.72);
       }

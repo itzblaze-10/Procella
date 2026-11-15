@@ -41,6 +41,14 @@ python3 -m http.server 8000      # from the repository root
 
 Any static host works (GitHub Pages, Netlify, Cloudflare Pages): publish the repository root; `index.html` forwards to `app/`.
 
+After pulling new code, hard-reload the tab (Cmd+Shift+R / Ctrl+Shift+R): `http.server` lets the browser cache modules.
+
+- **World cities:** 30 famous cities (New York, London, Paris, Tokyo, Dubai, Mumbai, Delhi and more) are rebuilt from real
+  OpenStreetMap footprints, roads, parks and water (snapshot in `app/data/cities/`, fetched with `scripts/fetch_cities.py`),
+  with their landmarks modelled at real size. Pick one under *World cities* on the destination screen. See `app/CITIES.md`.
+- **Controls:** W A S D walk (Shift jogs), F gets in and out, E talks to people under gold beacons, T opens the trend dossier,
+  J shows advancements, `[` and `]` move the sun through the day, Esc pauses.
+
 - **Play:** pick a traveller, a vehicle (4x4, saloon, buggy, Cessna-style trainer, helicopter, float plane, safari boat,
   sailing steam liner, explorer yacht), a year (1981 to 2025) or the Future Zone, and a pin anywhere on Earth.
 - **In the world:** real elevation and NASA imagery; weather from that place's NASA record for that month, each effect

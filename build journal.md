@@ -423,3 +423,26 @@ These match real sizes. What read as wrong:
 - The owner's browser was likely still showing the pre-realism build, with its 4 m walls scaled 1.2×. The server now sends no-cache headers.
 
 **"Make them fast":** top speeds stay at the real figures. The chase camera now sells speed: FOV widens from 60 to 78° with km/h, there is a slight shake on rough ground above 40 km/h, and the land-vehicle camera sits 20 % closer.
+
+## 2026-11-15 20:05 Onboarding redesign, launch debugging, cities (part 1)
+
+**Onboarding redesign:** all four steps now share the title screen's look:
+- a numbered step-pill bar;
+- a frosted right-hand panel with a handwritten kicker and a big condensed title;
+- traveller cards, vehicle class tabs, a big year display and a 12-month grid;
+- World cities and Trend stations chips, and pill Next, Back and Enter buttons.
+
+The 3D preview stands on an unlit pool-of-light floor with a lantern ring sized to the subject. The loading screen matches, with an indeterminate bar.
+
+**Launch debugging (browser, end to end):**
+- home → 4 steps → Svalbard world → pause → quit home;
+- Globe Lab scan of 16 places, plus detail and correlation;
+- Kathmandu: dossier, NPC story, spawning cessna, helicopter, seaplane and offroad, driving, time-of-day keys, advancements.
+
+Bug found: a failed boat spawn inland deleted the current vehicle first. Now the old one is removed only once a valid spot exists.
+
+**Cities** (contract in `app/CITIES.md`):
+- Overpass works again on overpass-api.de and maps.mail.ru (kumi, private.coffee and osm.jp failed). City data is fetched once by `scripts/fetch_cities.py` and committed, so cities work offline.
+- `world/city.js` builds extruded OSM footprints on the real terrain, with a procedural window and facade shader, glass towers, night window lights, road ribbons, water, parks and street lamps. Collisions use a spatial hash.
+- `world.js` loads the city and landmarks when the pin is within 4 km of a city centre. People stand in real streets (settlements in city mode generate no buildings), and the spawn avoids buildings.
+- In-game Paris: 5,952 buildings, 47 fps, 6.1M triangles, 15.7 s total load. The Seine, Champ de Mars and Trocadéro are recognisable from the air.

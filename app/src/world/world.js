@@ -36,33 +36,72 @@ export class World {
     await this.terrain.update(0, 0);
     this.weather = new Weather(this.scene, this.renderer, lat, month === 13 ? 7 : month); this.weather.set(this.values, this.terrain); this.weather.bakeEnv();
     if (mode !== 'future') fetchImergMonth(lat, lon, year, month).then(r => { this.imerg = r; this.hooks.refresh?.(); }).catch(() => { this.imerg = null; });
-    s('Finding where people live and work nearby…');
-    let spawn = this.terrain.findNear(0, 0, (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2, 100, 8000) || { x: 0, z: 0 };
+    await this.loadCity(lat, lon);
+    s(this.city ? `Building ${this.city.data.name} from OpenStreetMap…` : 'Finding where people live and work nearby…');
+    const open = (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2 && !this.city?.blocked(x, z) && !this.landmarkHit(x, z, 2);
+    let spawn = this.terrain.findNear(0, 0, open, this.city ? 15 : 100, 8000) || { x: 0, z: 0 };
     const mean = id => { const v = this.pt.annual[id].values; return v.length ? v.reduce((a, b) => a + b, 0) / v.length : undefined; };
     this.tMean = mean('T2M') ?? 15; this.rainMean = mean('PRECTOTCORR') ?? 2;
     this.settlements = new Settlements(this.scene);
-    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName, { tMean: this.tMean, aod: this.values.AOD_55 });
+    this.settlements.build(this.terrain, spawn.x, spawn.z, this.values.GWETROOT ?? 0.4, this.placeName, { tMean: this.tMean, aod: this.values.AOD_55, city: this.city ? { blocked: (x, z) => this.city.blocked(x, z) || !!this.landmarkHit(x, z, 2) } : null });
     s('Growing the vegetation this climate supports…');
     this.biome = biomeFor(this.tMean, this.rainMean);
     this.veg = new Vegetation(this.scene, this.renderer, this.terrain, this.biome);
-    if (this.o.quality === 'low') { this.veg.cap = 20; this.veg.grassDensity = 0.4; } this.veg.blocked = (x, z) => this.settlements.blocked(x, z);
+    if (this.o.quality === 'low') { this.veg.cap = 20; this.veg.grassDensity = 0.4; }
+    this.veg.blocked = (x, z) => this.settlements.blocked(x, z) || !!this.city?.blocked(x, z) || !!this.landmarkHit(x, z, 3);
     try { await this.veg.init(); } catch (e) { console.warn('vegetation', e); }
     this.terrain.onTile = (k, tile) => this.veg.addTile(k, tile); this.terrain.onDrop = k => this.veg.dropTile(k);
     for (const [k, tile] of this.terrain.tiles) if (tile.sat) this.veg.addTile(k, tile);
     // what vehicles and feet need to know about the ground and the solid things on it
     this.env = {
-      surfaceAt: (x, z) => this.settlements.deckAt(x, z) != null ? 'wood' : this.terrain.surfaceAt(x, z),
-      collide: (x, z, r, y) => this.settlements.collide(x, z, r, y) || this.veg.collide(x, z, r),
+      surfaceAt: (x, z) => this.settlements.deckAt(x, z) != null ? 'wood' : this.city?.surfaceAt(x, z) || this.terrain.surfaceAt(x, z),
+      collide: (x, z, r, y) => this.city?.collide(x, z, r, y) || this.landmarkHit(x, z, r, y) || this.settlements.collide(x, z, r, y) || this.veg.collide(x, z, r),
     };
     Object.defineProperties(this.env, { wet: { get: () => this.values.GWETROOT ?? 0.4 }, rain: { get: () => this.weather.rainRate } });
     const near = this.settlements.sites[0]; // start a short walk from the first site
-    if (near) spawn = this.terrain.findNear(near.x + 120, near.z + 120, (x, z) => this.terrain.heightAt(x, z) > 1 && this.terrain.slopeAt(x, z) < 0.2, 40, 2000) || spawn;
+    if (near) spawn = this.terrain.findNear(near.x + (this.city ? 25 : 120), near.z + (this.city ? 25 : 120), open, this.city ? 5 : 40, 2000) || spawn;
     this.player = createCharacter(this.o.characterId); this.scene.add(this.player.object);
     this.player.onStep = () => this.footstep();
     this.player.object.position.set(spawn.x, this.terrain.heightAt(spawn.x, spawn.z), spawn.z);
     if (this.o.vehicle) this.spawnVehicle(this.o.vehicle.kind, this.o.vehicle.color, this.o.vehicle.decal, true);
     this.hooks.progress.enterWorld(mode, year, lat, lon);
     this.lastStream = this.player.object.position.clone();
+  }
+
+  // A famous city near the pin: real OpenStreetMap footprints plus modelled landmarks (see app/CITIES.md).
+  async loadCity(lat, lon) {
+    this.landmarks = [];
+    try {
+      const C = await import('./city.js'), idx = await C.loadIndex(), entry = C.cityNear(idx, lat, lon, 4);
+      let L = []; try { L = (await import('./landmarks.js')).landmarksNear(lat, lon, 8); } catch (e) { console.warn('landmarks', e); }
+      for (const l of L) { // place each landmark at its real coordinates, front to its real heading
+        const g = l.build(), p = this.terrain.toLocal(l.lat, l.lon), ry = -(l.heading || 0) * Math.PI / 180, c = Math.cos(ry), s = Math.sin(ry);
+        g.position.set(p.x, this.terrain.heightAt(p.x, p.z), p.z); g.rotation.y = ry; this.scene.add(g);
+        const cols = (l.colliders || []).map(k => ({ ...k, x: p.x + k.x * c + k.z * s, z: p.z - k.x * s + k.z * c, ry: (k.ry || 0) + ry }));
+        this.landmarks.push({ ...l, group: g, x: p.x, z: p.z, cols });
+      }
+      if (entry) {
+        this.hooks.status(`Loading ${entry.name} from OpenStreetMap…`);
+        const data = await C.loadCity(entry.slug);
+        this.city = new C.City(this.scene, this.terrain, data, L.filter(l => l.city === entry.slug)); await this.city.build();
+      }
+    } catch (e) { console.warn('city', e); this.city = null; }
+  }
+  // Landmark colliders (circles and boxes, world coordinates).
+  landmarkHit(x, z, r, y = -Infinity) {
+    for (const l of this.landmarks) for (const k of l.cols) {
+      if (k.top != null && y > l.group.position.y + k.top) continue;
+      if (k.type === 'circle') { const dx = x - k.x, dz = z - k.z, d = Math.hypot(dx, dz); if (d < r + k.r && d > 1e-6) return { nx: dx / d, nz: dz / d, depth: r + k.r - d, material: 'stone' }; }
+      else {
+        const c = Math.cos(k.ry), s = Math.sin(k.ry), dx = x - k.x, dz = z - k.z, lx = dx * c - dz * s, lz = dx * s + dz * c;
+        const cx = Math.max(-k.hw, Math.min(k.hw, lx)), cz = Math.max(-k.hd, Math.min(k.hd, lz)), ox = lx - cx, oz = lz - cz, d = Math.hypot(ox, oz);
+        if (d >= r) continue;
+        let nx = 1, nz = 0, depth = r;
+        if (d > 1e-6) { nx = ox / d; nz = oz / d; depth = r - d; } else { const px = k.hw - Math.abs(lx), pz = k.hd - Math.abs(lz); if (px < pz) { nx = Math.sign(lx) || 1; nz = 0; depth = px + r; } else { nx = 0; nz = Math.sign(lz) || 1; depth = pz + r; } }
+        return { nx: nx * c + nz * s, nz: -nx * s + nz * c, depth, material: 'stone' };
+      }
+    }
+    return null;
   }
 
   // Future Zone: each month's normal shifted by the variable's 45-year Sen trend to the chosen year.
@@ -80,12 +119,12 @@ export class World {
   get focus() { return this.vehicle && this.driving ? this.vehicle.object : this.player.object; }
 
   spawnVehicle(kind, color, decal, nearPlayer = false) {
-    this.deleteVehicle();
     const meta = VEHICLES.find(v => v.kind === kind), p = this.player.object.position, t = this.terrain;
     let spot;
     if (meta.class === 'water') spot = t.findNear(p.x, p.z, (x, z) => t.heightAt(x, z) < -2, 150, 12000);
-    else spot = t.findNear(p.x + 7, p.z - 12, (x, z) => t.heightAt(x, z) > 0.5 && t.slopeAt(x, z) < (meta.class === 'air' ? 0.06 : 0.3), 30, 4000);
+    else spot = t.findNear(p.x + 7, p.z - 12, (x, z) => t.heightAt(x, z) > 0.5 && t.slopeAt(x, z) < (meta.class === 'air' ? 0.06 : 0.3) && !this.env.collide(x, z, meta.class === 'air' ? 12 : 4), meta.class === 'air' ? 30 : 6, 4000);
     if (!spot) { this.hooks.toast(meta.class === 'water' ? 'No open water within 12 km of here. Try a coastal destination for boats.' : 'No flat ground nearby to park this.'); return false; }
+    this.deleteVehicle(); // only once a valid spot exists, so a failed boat spawn keeps the car you had
     const v = createVehicle(kind, { color, decal });
     v.place(spot.x, spot.z, t, 0); this.scene.add(v.object); if (v.fx) this.scene.add(v.fx); this.vehicle = v; this.vehicleMeta = meta;
     if (meta.class === 'water' || !nearPlayer) { // walk the traveller to it
@@ -131,7 +170,7 @@ export class World {
     } else this.walk(dt, keys);
     this.settlements.update(dt, this.player.object.position);
     this.veg.update(dt, this.focus.position, this.weather.windSpeed * (1 + this.weather.gust));
-    this.settlements.setNight(1 - this.weather.daylight); this.terrain.update2(dt, this.weather.windSpeed);
+    this.settlements.setNight(1 - this.weather.daylight); this.city?.setNight(1 - this.weather.daylight); this.city?.update(dt, this.camera); this.terrain.update2(dt, this.weather.windSpeed);
     this.sound(dt);
     // stream terrain as the traveller moves
     const f = this.focus.position;
@@ -217,5 +256,5 @@ export class World {
   zoom(d) { this.camDist = Math.max(3, Math.min(this.driving ? 400 : 30, this.camDist * (1 + d * 0.001))); }
   resize(w, h) { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
 
-  dispose() { this.hooks.sound?.leave?.(); this.veg?.dispose(); this.weather?.dispose(); this.terrain?.dispose(); this.settlements?.dispose(); this.player?.dispose(); this.vehicle?.dispose(); this.scene.clear(); }
+  dispose() { this.hooks.sound?.leave?.(); this.city?.dispose(); this.landmarks?.forEach(l => { this.scene.remove(l.group); l.group.traverse(o => o.geometry?.dispose()); }); this.veg?.dispose(); this.weather?.dispose(); this.terrain?.dispose(); this.settlements?.dispose(); this.player?.dispose(); this.vehicle?.dispose(); this.scene.clear(); }
 }
