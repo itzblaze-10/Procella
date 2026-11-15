@@ -551,3 +551,12 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   zero console errors and zero CSP violations. `.env`, local tooling, `.tmp` and `_headers` all 404.
 - README links both sites. Redeploy: `python3 scripts/deploy_netlify.py procella-game <export>` with an
   export from `git archive HEAD`, and `python3 scripts/deploy_netlify.py procella-deck deck`.
+
+## 2026-11-15 23:05 GitHub link on the home screen
+
+- Owner asked for a conspicuous link to the repository. Added a "Source on GitHub" pill (GitHub mark plus
+  label, lantern outline, fills on hover and keyboard focus) at the right of the home top bar, opening
+  https://github.com/itzblaze-10/Procella in a new tab with rel="noopener noreferrer". Checked at
+  1440 px and 500 px; the label no longer wraps. CSP unchanged: a plain link needs no new source.
+- The repository is still private, so visitors other than the partners get GitHub's 404 until it is
+  made public.
