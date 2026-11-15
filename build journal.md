@@ -509,7 +509,7 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
 
 ## 2026-11-15 22:10 Public-repo prep: tooling out, MIT licence
 
-- Owner's call: the editor toolkit (`.claude/`, 428 files) and the project-rules file are no longer tracked.
+- Owner's call: the editor toolkit folder (428 files) and the project-rules file are no longer tracked.
   They stay on the owner's disk, hidden by `.git/info/exclude`, so `.gitignore` names no tools. A partner's
   next pull deletes them from that clone's working tree.
 - Tool and product names removed from public files at the owner's request: docs (brand, roadmap md and
@@ -522,3 +522,22 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   is now "Team Procella."
 - Not done: git history still holds the toolkit and the old docs. Removing it needs a history rewrite and
   a force-push, which the partners decide.
+
+## 2026-11-15 22:30 Published to Netlify: deck and game as two sites
+
+- Deck: the 7-slide initial statement converted from the slides tool into a standalone page in `deck/`
+  (index.html, deck.css, deck.js): 1920x1080 canvas scaled to fit, arrows / space / swipe / click, N notes,
+  F full screen, #n deep links, print gives one slide per page. Slide 3 names became "Partner A" and
+  "Partner B" (under-18 rule); everything else is the original content, still the 14 Nov plan.
+- Security: `_headers` (game site) and `deck/_headers` (deck site). Per-path CSP listing only the hosts the
+  game calls (NASA POWER, Nominatim, EOX, GIBS, AWS terrain, Google Fonts); the game's only inline script
+  is the import map, allowed by hash, so recompute the hash if the import map changes. HSTS, nosniff,
+  DENY framing, strict referrer, COOP, and a Permissions-Policy that refuses camera, mic, location and
+  payment. CSP is never set on /* because Netlify joins duplicate headers.
+- `scripts/deploy_netlify.py` deploys a folder by file digest; the access key lives only in `.env`. The
+  game is deployed from `git archive HEAD`, never the working tree, so `.env`, local tooling and `.tmp`
+  cannot leak; the export is scanned for key patterns before upload.
+- Found: the Netlify account puts every new site behind a team login (HTTP 401 for visitors). Public
+  access is switched on per site for these two only; the account default is untouched.
+- Found: an earlier name scan piped `git ls-files` into xargs, which split "build journal.md" on its space
+  and skipped it. One leftover tool name fixed; scan with `git ls-files -z | xargs -0` from now on.
