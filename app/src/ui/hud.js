@@ -1,7 +1,7 @@
 // In-world HUD: NASA satellite panel (left), destination board, telemetry, dossier, stories, vehicle spawner.
 import { VARS } from '../data/power.js';
-import { trend, sensitivity } from '../data/stats.js';
-import { storyFor, VERDICT_WORD, ROLE_VAR } from '../data/stories.js';
+import { trend } from '../data/stats.js';
+import { storyFor, VERDICT_WORD } from '../data/stories.js';
 import { VEHICLES } from '../vehicles/index.js';
 import { knock, chime, sonify, click } from './audio.js';
 

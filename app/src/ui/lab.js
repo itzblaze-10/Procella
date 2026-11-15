@@ -2,7 +2,6 @@
 import { VARS, VAR_IDS, fetchPoint, reverse, bound } from '../data/power.js';
 import { trend, correlate, project } from '../data/stats.js';
 import { VERDICT_WORD } from '../data/stories.js';
-import { GLOBE_LAYERS } from '../world/globe.js';
 import { BRAND } from '../brand.js';
 import { knock, chime } from './audio.js';
 
