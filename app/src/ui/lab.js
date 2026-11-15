@@ -14,7 +14,7 @@ export const STATIONS = [
 ];
 const DIRS = { T2M: ['warm', 'cool'], T2M_MAX: ['warm', 'cool'], T2M_MIN: ['warm', 'cool'], PRECTOTCORR: ['wet', 'dry'], RH2M: ['wet', 'dry'], GWETROOT: ['wet', 'dry'], WS10M: ['cool', 'dry'], CLOUD_AMT: ['cool', 'dry'], ALLSKY_SFC_SW_DWN: ['dry', 'cool'], AOD_55: ['dry', 'cool'] };
 const fmtS = x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toPrecision(2);
-const fmtP = p => p < 0.001 ? p.toExponential(1) : p.toFixed(3);
+const fmtP = p => p < 1e-15 ? '< 1e−15' : p < 0.001 ? p.toExponential(1) : p.toFixed(3);
 
 export class Lab {
   constructor(root, globe, app) {
@@ -36,10 +36,10 @@ export class Lab {
     const layers = () => { this.g.setBase($('base').value, 7, $('date').value).catch(() => this.toast('NASA GIBS did not answer for that layer and date.')); this.g.setOverlay($('over').value, $('date').value).catch(() => this.toast('NASA GIBS has no overlay for that date.')); };
     $('base').onchange = layers; $('over').onchange = layers; $('date').onchange = layers;
     $('labBack').onclick = () => app.home();
-    this.g.markers.clear(); this.g.pin.visible = false;
+    this.g.markers.clear(); this.g.pin.visible = false; this.g.focus(15, 60);
   }
 
-  toast(m) { const el = document.createElement('div'); el.className = 'toast'; el.textContent = m; this.$('toasts').appendChild(el); setTimeout(() => el.remove(), 5000); }
+  toast(m, kind = '') { const el = document.createElement('div'); el.className = 'toast ' + kind; el.innerHTML = m; this.$('toasts').appendChild(el); setTimeout(() => el.remove(), 5000); }
 
   async get(pin) {
     const k = `${pin.lat},${pin.lon}`;
@@ -75,6 +75,8 @@ export class Lab {
 
   show(pin) {
     const d = this.$('detail'), v = this.v, se = pin.pt.annual[v], t = trend(se), meta = VARS[v];
+    if (this.vb === v) this.vb = VAR_IDS.find(k => k !== v);
+    this.g.focus(pin.lat, pin.lon);
     d.hidden = false;
     const corrRow = () => {
       const a = pin.pt.annual[v], b = pin.pt.annual[this.vb], raw = correlate(a, b), det = correlate(a, b, true);

@@ -64,7 +64,7 @@ export class World {
     const meta = VEHICLES.find(v => v.kind === kind), p = this.player.object.position, t = this.terrain;
     let spot;
     if (meta.class === 'water') spot = t.findNear(p.x, p.z, (x, z) => t.heightAt(x, z) < -2, 150, 12000);
-    else spot = t.findNear(p.x + 8, p.z + 8, (x, z) => t.heightAt(x, z) > 0.5 && t.slopeAt(x, z) < (meta.class === 'air' ? 0.06 : 0.3), 30, 4000);
+    else spot = t.findNear(p.x + 7, p.z - 12, (x, z) => t.heightAt(x, z) > 0.5 && t.slopeAt(x, z) < (meta.class === 'air' ? 0.06 : 0.3), 30, 4000);
     if (!spot) { this.hooks.toast(meta.class === 'water' ? 'No open water within 12 km of here. Try a coastal destination for boats.' : 'No flat ground nearby to park this.'); return false; }
     const v = createVehicle(kind, { color, decal });
     v.place(spot.x, spot.z, t, 0); this.scene.add(v.object); this.vehicle = v; this.vehicleMeta = meta;

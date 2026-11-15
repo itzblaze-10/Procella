@@ -97,7 +97,7 @@ export class Weather {
       wp.setXYZ(i * 2, x, y, z); wp.setXYZ(i * 2 + 1, x + 2 + wind * 0.3, y, z);
     }
     wp.needsUpdate = true;
-    this.clouds.position.set(cp.x, 0, cp.z); this.clouds.position.x += (this.t * wind * 4) % 3000;
+    this.clouds.position.set(cp.x, Math.max(0, this.terrain?.heightAt(cp.x, cp.z) ?? 0) - 600, cp.z); this.clouds.position.x += (this.t * wind * 4) % 3000;
     this.sun.target.position.copy(cp); this.sun.position.set(cp.x - 3000, cp.y + 6000, cp.z + 2500);
   }
 

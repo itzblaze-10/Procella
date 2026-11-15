@@ -26,12 +26,12 @@ export class Globe {
     this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0x0a111c);
     this.camera = new THREE.PerspectiveCamera(40, 1, 1, 5000); this.dist = 330; this.yaw = -1.2; this.pitch = 0.35; this.autoSpin = true;
     this.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-    const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(-300, 200, 400); this.scene.add(sun);
+    this.sun = new THREE.DirectionalLight(0xffffff, 2.2); this.scene.add(this.sun);
     this.loader = new THREE.TextureLoader(); this.loader.setCrossOrigin('anonymous');
     this.earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), new THREE.MeshStandardMaterial({ color: 0x1b2a40, roughness: 0.9 }));
     this.overlay = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 96, 64), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.85, depthWrite: false }));
     this.overlay.visible = false;
-    this.atmo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.06, 64, 32), new THREE.MeshBasicMaterial({ color: 0x5ba2ff, transparent: true, opacity: 0.08, side: THREE.BackSide }));
+    this.atmo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.035, 64, 32), new THREE.MeshBasicMaterial({ color: 0x5ba2ff, transparent: true, opacity: 0.22, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false }));
     this.root = new THREE.Group(); this.root.add(this.earth, this.overlay, this.atmo); this.scene.add(this.root);
     this.markers = new THREE.Group(); this.root.add(this.markers);
     const stars = new Float32Array(3000); for (let i = 0; i < 3000; i++) stars[i] = (Math.random() - 0.5) * 3000;
@@ -81,5 +81,6 @@ export class Globe {
     this.root.rotation.set(0, 0, 0);
     this.camera.position.set(Math.sin(this.yaw) * Math.cos(this.pitch) * this.dist, Math.sin(this.pitch) * this.dist, Math.cos(this.yaw) * Math.cos(this.pitch) * this.dist);
     this.camera.lookAt(0, 0, 0);
+    this.sun.position.copy(this.camera.position).applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.6).add(new THREE.Vector3(0, 120, 0)); // light follows the view
   }
 }

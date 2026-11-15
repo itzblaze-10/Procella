@@ -192,7 +192,7 @@ app.ending = () => sheet(`<div class="ending"><span class="eyebrow">Every advanc
 
 // ---------- input ----------
 addEventListener('keydown', e => {
-  if (e.target.matches('input, select, textarea')) return;
+  if (e.target.matches?.('input, select, textarea')) return;
   keys[e.code] = true; if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   if (e.code === 'Escape') { const m = [...document.querySelectorAll('.modal.top')].pop(); if (m) return m.close(); if (app.hud && !app.hud.$('modal').hidden) return app.hud.closeModal(); if (app.screen === 'world') app.pause(); return; }
   if (app.screen !== 'world' || app.modalOpen || e.repeat) return;
@@ -226,18 +226,20 @@ function resize() {
 addEventListener('resize', resize); resize();
 
 // ---------- loop ----------
-const clock = new THREE.Clock();
+let last = performance.now();
 renderer.setAnimationLoop(() => {
-  const dt = Math.min(0.05, clock.getDelta());
+  const now = performance.now(), dt = Math.min(0.05, (now - last) / 1000); last = now;
   if (app.screen === 'world' && app.world) {
     if (!app.modalOpen) app.world.update(dt, keys); else app.world.updateCamera(dt);
     app.hud?.frame(dt); renderer.render(app.world.scene, app.world.camera);
   } else if (app.screen === 'preview' && preview.obj) {
     preview.spin += dt * 0.5; preview.obj.update?.(dt, 0);
-    const r = preview.size * 1.25, c = preview.center;
-    preview.camera.position.set(c.x + Math.sin(preview.spin) * r, c.y + r * 0.35, c.z + Math.cos(preview.spin) * r); preview.camera.lookAt(c);
-    preview.camera.setViewOffset(innerWidth, innerHeight, -innerWidth * 0.22, 0, innerWidth, innerHeight);
+    const r = preview.size * 2.3, c = preview.center, s = preview.spin;
+    preview.camera.position.set(c.x + Math.sin(s) * r, c.y + r * 0.22, c.z + Math.cos(s) * r);
+    // aim right of the subject so it sits in the open space left of the panel
+    preview.camera.lookAt(c.x + Math.cos(s) * r * 0.3, c.y, c.z - Math.sin(s) * r * 0.3);
     renderer.render(preview.scene, preview.camera);
   } else { globe.update(dt); renderer.render(globe.scene, globe.camera); }
 });
+window.procella = app; // handy for debugging in the console
 app.home();

@@ -127,6 +127,7 @@ export function wake(p, beam, z, y) {
 }
 
 // Smoke: a pool of n puffs recycled from the funnel top. Returns update(dt, speed).
+// ponytail: puffs live in ship space, so they swing with the hull in turns; reparent to the scene if that ever shows.
 export function smoke(p, x, y, z, n = 12) {
   const g = new THREE.IcosahedronGeometry(1, 0);
   const puffs = Array.from({ length: n }, () => {

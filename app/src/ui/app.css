@@ -52,7 +52,7 @@ h4 { font: 600 13px/1.2 var(--font-display); letter-spacing: 0.12em; text-transf
 
 /* world HUD */
 .hud { position: absolute; inset: 0; }
-.sat-panel { position: absolute; left: 14px; top: 84px; width: 300px; max-height: calc(100vh - 170px); display: flex; flex-direction: column; background: rgba(17, 27, 42, 0.9); border: 1px solid var(--line); border-radius: var(--radius-card); backdrop-filter: blur(8px); box-shadow: var(--shadow-lift); }
+.sat-panel { position: absolute; left: 14px; top: 84px; width: 300px; max-height: calc(100vh - 210px); display: flex; flex-direction: column; background: rgba(17, 27, 42, 0.9); border: 1px solid var(--line); border-radius: var(--radius-card); backdrop-filter: blur(8px); box-shadow: var(--shadow-lift); }
 .sat-panel header { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--line); cursor: move; }
 .sat-btns button { padding: 2px 8px; margin-left: 4px; }
 .sat-body { overflow: auto; padding: 4px 12px 12px; }

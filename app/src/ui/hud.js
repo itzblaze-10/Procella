@@ -128,7 +128,7 @@ export class HUD {
       <p class="fine">Mann-Kendall test (two-sided, ties corrected) on annual means; Sen's slope with a 95% confidence interval. Data: NASA POWER, ${meta.product}, grid cell at ${w.o.lat.toFixed(2)}, ${w.o.lon.toFixed(2)}. ${w.pt.source === 'live' ? 'Fetched live this session.' : 'Shown from this browser’s last copy: NASA did not answer.'}</p></div>`, true);
     const draw = start => {
       const keep = se.years.map((y, i) => y >= start ? i : -1).filter(i => i >= 0), s2 = { years: keep.map(i => se.years[i]), values: keep.map(i => se.values[i]) }, t2 = trend(s2);
-      m.querySelector('#dPlate').innerHTML = P().ChartPlate({ eyebrow: `${w.placeName} · ${meta.product}`, title: meta.label, unit: meta.unit + ', annual mean', years: s2.years, values: s2.values, sen: t2.slope, intercept: t2.intercept,
+      m.querySelector('#dPlate').innerHTML = P().ChartPlate({ eyebrow: `${w.placeName} · ${meta.product}`, title: meta.label, unit: meta.unit + ', annual mean', years: s2.years, values: s2.values, sen: t2.slope, intercept: t2.intercept, width: 860, height: 300,
         caption: t2.verdict === 'short' ? `Only ${t2.n} years: too short to judge.` : `Sen's slope ${fmtS(t2.slope)} ${meta.unit} per year (95% CI ${fmtS(t2.lo)} to ${fmtS(t2.hi)}), p = ${fmtP(t2.p)}, ${t2.n} years.`,
         source: `Data: NASA POWER · ${meta.product}`, badges: [{ kind: w.pt.source === 'live' ? 'live' : 'cached', text: w.pt.source === 'live' ? 'Live' : 'Cached' }] });
       m.querySelector('#dStamp').innerHTML = P().Stamp({ state: t2.verdict, direction: t2.direction, press: true, size: 110, detail: `${t2.from}–${t2.to}` });
@@ -154,7 +154,7 @@ export class HUD {
     const box = m.querySelector('#lines'); let i = 0;
     const next = () => {
       if (i < s.lines.length) { const p = document.createElement('p'); p.textContent = s.lines[i++]; box.appendChild(p); click(); setTimeout(next, 1400); return; }
-      m.querySelector('#sPlate').innerHTML = P().ChartPlate({ eyebrow: s.source, title: s.meta.label, unit: s.meta.unit, years: s.series.years, values: s.series.values, sen: s.trend.slope, intercept: s.trend.intercept, caption: `${VERDICT_WORD[s.trend.verdict]} · p = ${fmtP(s.trend.p)}`, source: 'The number behind the story', badges: [] });
+      m.querySelector('#sPlate').innerHTML = P().ChartPlate({ eyebrow: s.source, title: s.meta.label, unit: s.meta.unit, years: s.series.years, values: s.series.values, sen: s.trend.slope, intercept: s.trend.intercept, width: 760, height: 260, caption: `${VERDICT_WORD[s.trend.verdict]} · p = ${fmtP(s.trend.p)}`, source: 'The number behind the story', badges: [] });
       m.querySelector('#thank').hidden = false;
     };
     next();
@@ -173,4 +173,4 @@ export class HUD {
 }
 
 const fmtS = x => (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x).toPrecision(2);
-const fmtP = p => p == null ? '–' : p < 0.001 ? p.toExponential(1) : p.toFixed(3);
+const fmtP = p => p == null ? '–' : p < 1e-15 ? '< 1e−15' : p < 0.001 ? p.toExponential(1) : p.toFixed(3);

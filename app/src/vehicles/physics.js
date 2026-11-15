@@ -109,7 +109,7 @@ export function plane(m, P) {
     const pIn = key(k, 'ArrowDown') - key(k, 'ArrowUp'), rIn = key(k, 'ArrowLeft') - key(k, 'ArrowRight'), yIn = key(k, 'KeyA') - key(k, 'KeyD');
     let drag = kd * s.u * s.u;
     if (s.ground) drag += beached ? 0.6 + 0.5 * s.u : wet ? (P.floats ? 0.2 + 0.0012 * s.u * s.u : 2 + 0.02 * s.u * s.u) : 0.15 + (k.Space ? 6 : 0);
-    s.u = Math.max(0, s.u + (s.thr * P.thrust * (beached ? 0.15 : 1) - G * Math.sin(s.pitch) - drag) * dt);
+    s.u = Math.max(0, s.u + (s.thr * P.thrust * (beached ? 0.25 : 1) - G * Math.sin(s.pitch) - drag) * dt);
     if (s.ground && s.thr < 0.05 && s.u < 1) s.u = 0; // parked: no rolling downhill
     const [fx, fz] = fwd(s.yaw);
     if (s.ground) {
@@ -121,11 +121,11 @@ export function plane(m, P) {
       s.pitch += (pIn ? pIn * 0.7 * clamp(s.u / 30, 0, 1) : -s.pitch * 0.4) * dt;
       s.roll += (rIn ? rIn * 1.3 : -s.roll * 0.8) * dt;
       s.yaw += (G * Math.tan(s.roll) / Math.max(s.u, 15) + yIn * 0.35) * dt; // bank turns the heading
-      if (s.u < vst) s.pitch = damp(s.pitch, -0.35, 1.2, dt); // stall: nose drops
+      if (s.u < vst) s.pitch = damp(s.pitch, -0.35, 2.5, dt); // stall: nose drops, overriding the stick
     }
     s.pitch = clamp(s.pitch, -0.7, 0.6); s.roll = clamp(s.roll, -1.1, 1.1);
     const lift = Math.min(G, G * (s.u / 30) ** 2) * Math.cos(s.roll); // ~ v^2, full lift from 108 km/h
-    s.vy = (s.vy + (lift - G) * dt) * Math.exp(-1.5 * dt);
+    s.vy = (s.vy + (lift - G) * dt) * Math.exp(-dt);
     const [gx, gz] = fwd(s.yaw), cp = Math.cos(s.pitch);
     o.position.x += gx * cp * s.u * dt; o.position.z += gz * cp * s.u * dt;
     o.position.y += (Math.sin(s.pitch) * s.u + s.vy) * dt;
@@ -149,6 +149,7 @@ export function heli(m, P) {
     s.vy = damp(s.vy, col > 0 ? 8 : col < 0 ? -6 : 0, 2, dt);                    // no keys: hold altitude
     if (!s.ground) { s.u += cyc * acc * dt; s.v += lat * acc * 0.7 * dt; }
     s.u -= s.u * (cyc ? kd : 0.7) * dt; s.v -= s.v * (lat ? 0.25 : 0.8) * dt;     // auto-settle into hover
+    const over = Math.hypot(s.u, s.v) / (P.top / KMH); if (over > 1) { s.u /= over; s.v /= over; }
     if (s.ground) { s.u = damp(s.u, 0, 5, dt); s.v = damp(s.v, 0, 5, dt); }
     s.yaw += yIn * 1.2 * dt;
     s.pitch = damp(s.pitch, s.ground ? 0 : -0.25 * cyc, 3, dt);

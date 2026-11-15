@@ -278,3 +278,23 @@ placed procedurally on flat dry land and named with Nominatim reverse lookups. G
   folder against app/CONTRACTS.md. People done: 30/30 smoke tests.
 - git pull hung again (iCloud); killed it and fetched with a timeout. Partner's test zip had vanished from the working tree
   (iCloud eviction); restored from git.
+
+## 2026-11-15 16:39 — Game playable end to end; first browser test pass
+
+Ran the full flow in one headless browser (closed after): home, onboarding, world, story, drive, fly, sail, dossier, Lab.
+Real results from live NASA calls: Gandhinagar Jul 2005 heavy rain 6.5 mm/day, AOD 0.86; Kathmandu Jul 2005 10.9 mm/day,
+92 % cloud, Cessna took off from the real valley floor at 1,310 m; Mumbai Jul 2019 35.4 mm/day (that year's record
+monsoon), yacht spawned on real coastline, harbour site generated. World loads in 4 to 6 s. Ravi the farmer's story quotes
++0.210 mm/day per decade, Detected, p = 0.008, matching the pymannkendall-verified figure. Kathmandu temperature flips to
+Not detectable yet when the record starts in 2000.
+
+**Bugs found and fixed:**
+- Car sat sunk into the ground: physics read 38 m elevation pixels while the mesh interpolated 100 m cells. heightAt now
+  interpolates the mesh's own triangles.
+- My scripted edit inserted the debug line at the first "app.home();" match, inside the onboarding Back handler, which would
+  have sent every step home. Lesson: never patch by a common substring; anchor on unique text.
+- Preview camera framed the traveller too close and behind the panel.
+- Globe Lab compared a variable with itself (rho = 1.00) and printed p = 0.0e+0; now picks a different variable and prints
+  "< 1e-15". Lab toasts printed raw HTML.
+- Ground detail texture aliased into dotted lines at distance; softened. Cloud deck now follows the ground height.
+- Python's local test server reset some module requests once (test harness, not the game).
