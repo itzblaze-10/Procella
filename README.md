@@ -30,10 +30,28 @@ cd Procella
 
 The core product needs no credentials. Copy `.env.example` to `.env` only if optional sources are added.
 
+## Play the game
+
+Procella is a static web app (three.js, no build step). Every session calls NASA live.
+
+```bash
+python3 -m http.server 8000      # from the repository root
+# open http://localhost:8000/app/
+```
+
+Any static host works (GitHub Pages, Netlify, Cloudflare Pages): publish the repository root; `index.html` forwards to `app/`.
+
+- **Play:** pick a traveller, a vehicle (4x4, saloon, buggy, Cessna-style trainer, helicopter, float plane, safari boat,
+  sailing steam liner, explorer yacht), a year (1981 to 2025) or the Future Zone, and a pin anywhere on Earth.
+- **In the world:** real elevation and NASA imagery; weather from that place's NASA record for that month, each effect
+  switchable in the left NASA panel; people nearby tell how their climate has changed, quoting the data.
+- **Explore (Globe Lab):** scan trends across the planet live, compare two variables, project forward with honest ranges.
+
+Statistics check: `node app/src/data/stats.test.mjs` (matches pymannkendall).
+
 ## Status
 
-Planning and scaffolding complete. Application code starts after the partners confirm the
-decisions listed at the bottom of [docs/strategy.md](docs/strategy.md).
+Playable build in `app/`. Progress and every fix are in the build journal.
 
 ## Data
 

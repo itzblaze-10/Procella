@@ -69,7 +69,7 @@ export class HUD {
       for (const [fx, id, label] of g.rows) {
         const tr = trend(w.pt.annual[id]);
         h += `<label class="sat-row ${on[fx] ? '' : 'off'}"><input type="checkbox" data-fx="${fx}" ${on[fx] ? 'checked' : ''}>
-          ${P().Icon(VARS[id].icon, { size: 18 })}<span class="lbl">${label}<small>${esc(desc[fx])}</small></span>
+          ${P().Icon(VARS[id].icon, { size: 18 })}<span class="lbl">${label}<small>${esc(desc[fx])}${w.capped?.includes(id) ? ' · capped at a physical limit' : ''}</small></span>
           <button class="chip chip-${tr.verdict}" data-var="${id}" title="Open the trend dossier">${tr.verdict === 'detected' ? (tr.direction === 'up' ? '▲' : '▼') : tr.verdict === 'null' ? '≈' : '⌛'}</button></label>`;
       }
       h += '</section>';

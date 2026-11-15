@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { Terrain } from './terrain.js';
 import { Weather } from './weather.js';
 import { Settlements } from './settlements.js';
-import { fetchPoint, fetchImergMonth, snapshot, climatology, reverse, VAR_IDS } from '../data/power.js';
+import { fetchPoint, fetchImergMonth, snapshot, climatology, reverse, VAR_IDS, bound } from '../data/power.js';
 import { trend } from '../data/stats.js';
 import { createCharacter } from '../people/index.js';
 import { createVehicle, VEHICLES } from '../vehicles/index.js';
@@ -52,7 +52,8 @@ export class World {
     for (const id of VAR_IDS) {
       const se = this.pt.annual[id]; if (!se.values.length) continue;
       const tr = trend(se), base = climatology(this.pt, id, m), mid = se.years[Math.floor(se.years.length / 2)];
-      out[id] = base + (tr.verdict === 'short' ? 0 : tr.slope * (this.o.futureYear - mid));
+      const b = bound(id, base + (tr.verdict === 'short' ? 0 : tr.slope * (this.o.futureYear - mid)));
+      out[id] = b.value; if (b.capped) (this.capped ||= []).push(id);
     }
     return out;
   }

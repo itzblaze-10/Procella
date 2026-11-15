@@ -64,12 +64,13 @@ export class Weather {
     const cloud = on.cloud ? clamp((v.CLOUD_AMT ?? 30) / 100, 0, 1) : 0;
     this.clouds.material.opacity = 0.25 + 0.7 * cloud; this.clouds.count = Math.round(220 * cloud);
     const haze = on.haze ? clamp((v.AOD_55 ?? 0.15) / 1.2, 0, 1) : 0, mist = on.mist ? clamp(((v.RH2M ?? 50) - 60) / 40, 0, 1) : 0;
-    const sunF = on.sun ? clamp((v.ALLSKY_SFC_SW_DWN ?? 18) / 25, 0.25, 1.15) : 1;
+    const sw = v.ALLSKY_SFC_SW_DWN ?? 18, sunF = on.sun ? clamp(sw / 25, 0.04, 1.15) : 1, night = on.sun ? clamp(1 - sw / 6, 0, 0.88) : 0; // polar night when the record says no sun
     this.sun.intensity = 2.4 * sunF * (1 - 0.5 * cloud); this.hemi.intensity = 0.7 + 0.4 * cloud;
     const base = new THREE.Color(0x8fb4d8).lerp(new THREE.Color(0x9aa3ad), cloud * 0.8).lerp(new THREE.Color(0xc9b991), haze * 0.6);
+    base.lerp(new THREE.Color(0x0a111c), night); this.hemi.intensity *= 1 - 0.7 * night;
     this.scene.background.copy(base); this.scene.fog.color.copy(base);
     this.scene.fog.near = 400 - 300 * mist; this.scene.fog.far = 26000 * (1 - 0.75 * haze) * (1 - 0.5 * mist) * (1 - 0.4 * this.rainRate);
-    this.terrain?.setWetness(on.soil ? clamp(v.GWETROOT ?? 0.4, 0, 1) : 0.4);
+    this.terrain?.setSurface({ wet: on.soil ? clamp(v.GWETROOT ?? 0.4, 0, 1) : 0.4, snow: on.temp ? clamp((1 - (v.T2M ?? 10)) / 8, 0, 1) : 0, wind: this.windSpeed });
   }
 
   update(dt, camera) {

@@ -1,5 +1,5 @@
 // Globe Lab: stay at the globe, scan trends across many places, compare variables, project forward.
-import { VARS, VAR_IDS, fetchPoint, reverse } from '../data/power.js';
+import { VARS, VAR_IDS, fetchPoint, reverse, bound } from '../data/power.js';
 import { trend, correlate, project } from '../data/stats.js';
 import { VERDICT_WORD } from '../data/stories.js';
 import { GLOBE_LAYERS } from '../world/globe.js';
@@ -86,8 +86,8 @@ export class Lab {
     };
     const projRow = () => {
       if (t.verdict === 'short') return '<p class="fine">Too short to project.</p>';
-      const pr = project(se, t, this.fy);
-      return `<p class="dverdict">${this.fy}: about ${pr.value.toFixed(2)} ${meta.unit} (range ${Math.min(pr.lo, pr.hi).toFixed(2)} to ${Math.max(pr.lo, pr.hi).toFixed(2)})</p>
+      const pr = project(se, t, this.fy), b = bound(v, pr.value); pr.value = b.value; [pr.lo, pr.hi] = [bound(v, Math.min(pr.lo, pr.hi)).value, bound(v, Math.max(pr.lo, pr.hi)).value];
+      return `<p class="dverdict">${this.fy}: about ${pr.value.toFixed(2)} ${meta.unit} (range ${pr.lo.toFixed(2)} to ${pr.hi.toFixed(2)})${b.capped ? ', capped at a physical limit' : ''}</p>
         <p class="fine">Straight-line extrapolation of the ${se.years[0]}–${se.years.at(-1)} Sen trend with its 95% confidence slopes. ${t.verdict === 'null' ? 'The trend itself is not detectable, so treat this range as wide open.' : ''} It is not a climate forecast: real futures depend on emissions and physics this line does not contain.</p>`;
     };
     d.innerHTML = `<button class="close" id="dClose">Close</button><span class="eyebrow">${pin.name} · ${pin.lat.toFixed(2)}, ${pin.lon.toFixed(2)}</span>

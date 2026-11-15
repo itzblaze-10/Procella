@@ -298,3 +298,15 @@ Not detectable yet when the record starts in 2000.
   "< 1e-15". Lab toasts printed raw HTML.
 - Ground detail texture aliased into dotted lines at distance; softened. Cloud deck now follows the ground height.
 - Python's local test server reset some module requests once (test harness, not the game).
+
+## 2026-11-15 16:45 — Honesty fixes in the Future Zone; weather now changes the surroundings
+
+- **Impossible values:** straight-line extrapolation gave Svalbard January 2060 106 % cloud cover and -0.6 MJ/m2/day
+  sunlight. Added physical limits per variable (percentages 0 to 100, wetness 0 to 1, amounts at least 0) in the world,
+  NPC stories and Globe Lab projections, each labelled "capped at a physical limit".
+- **Story flavour was climate-blind:** a teacher in -9 C Svalbard said children "wilt in the classroom". Temperature roles now
+  use cold-climate lines where the 45-year mean is below 8 C (winters losing their bite instead of heat stress).
+- Surroundings follow the data: snow washes the ground white below freezing, soil wetness darkens it, wind roughens water,
+  near-zero measured sunlight turns the sky to polar night. NPCs stroll loops around their workplaces and stop to face you.
+- Test server: Python's http.server queue of 5 dropped module loads; swapped for a threaded server with queue 128 (test only).
+- Root index.html forwards to app/ for any static host; README has run instructions.

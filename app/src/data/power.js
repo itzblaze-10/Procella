@@ -15,6 +15,10 @@ export const VARS = {
 };
 export const VAR_IDS = Object.keys(VARS);
 
+// Physical limits. A straight-line extrapolation can run past them (106 % cloud, negative sunlight); cap it and say so.
+const LIMITS = { PRECTOTCORR: [0, Infinity], WS10M: [0, Infinity], RH2M: [0, 100], GWETROOT: [0, 1], CLOUD_AMT: [0, 100], ALLSKY_SFC_SW_DWN: [0, Infinity], AOD_55: [0, Infinity] };
+export function bound(id, v) { const [lo, hi] = LIMITS[id] || [-Infinity, Infinity]; const c = Math.min(hi, Math.max(lo, v)); return { value: c, capped: c !== v }; }
+
 const BASE = 'https://power.larc.nasa.gov/api/temporal';
 const key = (lat, lon) => `procella:power:${lat.toFixed(2)},${lon.toFixed(2)}`;
 

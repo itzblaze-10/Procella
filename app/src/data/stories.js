@@ -1,6 +1,6 @@
 // NPC stories written from the place's own NASA record. Templates only: every number comes from the data,
 // nothing is generated, and no line claims a cause.
-import { VARS } from './power.js';
+import { VARS, bound } from './power.js';
 import { trend, project } from './stats.js';
 
 export const ROLE_VAR = { farmer: 'PRECTOTCORR', herder: 'GWETROOT', fisher: 'WS10M', factory: 'T2M_MAX', teacher: 'T2M', nurse: 'T2M_MIN', builder: 'ALLSKY_SFC_SW_DWN', vendor: 'AOD_55' };
@@ -17,6 +17,14 @@ const FEEL = {
   builder: { up: 'Brighter days on site. We start before sunrise to finish before the glare.', down: 'The sun on site is softer than it was. Some say it is the haze.', null: 'Bright years, dull years. The sun keeps no schedule for us.' },
   vendor:  { up: 'Some mornings the market is grey with haze and my throat is sore by noon.', down: 'The air over the stalls looks clearer than a few years back.', null: 'Clear days, hazy days. I cannot say it is getting worse or better.' },
 };
+
+// In cold places warming reads as winters losing their bite, not heat stress.
+const FEEL_COLD = {
+  factory: { up: 'Fewer days the frost stops the machines in winter.', down: 'The cold shifts feel longer than they used to.', null: 'Some winters bite, some do not. I could not call a direction.' },
+  teacher: { up: 'Winters are milder than when I started teaching. Snow days are rarer.', down: 'The winters feel harder on the children than a few years back.', null: 'Hard winters and soft winters take turns. I teach the children to measure before they believe.' },
+  nurse:   { up: 'Nights are less bitter. Fewer patients come in from the cold.', down: 'The nights are colder. We see more frostbite again.', null: 'Cold nights come and go. I have no pattern to tell you.' },
+};
+const COLD_ROLES = ['factory', 'teacher', 'nurse'];
 
 const NAMES = {
   southAsia: ['Meera', 'Arjun', 'Kavya', 'Ravi', 'Lakshmi', 'Imran', 'Pooja', 'Suresh'],
@@ -60,10 +68,11 @@ export function storyFor(role, seed, pt, ctx) {
   }
   if (tr.verdict === 'short') lines.push(`NASA's record here is only ${tr.n} years long. That is too short to judge a trend.`);
   else lines.push(`Over ${tr.n} years NASA's record shows ${meta.label.toLowerCase()} here changing by ${fmt(tr.slope * 10, 3)} ${meta.unit} per decade. Verdict: ${VERDICT_WORD[tr.verdict]} (p = ${tr.p < 0.001 ? tr.p.toExponential(1) : tr.p.toFixed(3)}).`);
-  lines.push(FEEL[role][tr.verdict === 'detected' ? tr.direction : 'null']);
+  const t2m = pt.annual.T2M.values, cold = t2m.length && t2m.reduce((s, v) => s + v, 0) / t2m.length < 8;
+  lines.push((cold && COLD_ROLES.includes(role) ? FEEL_COLD : FEEL)[role][tr.verdict === 'detected' ? tr.direction : 'null']);
   if (ctx.mode === 'future' && tr.verdict !== 'short') {
-    const pr = project(series, tr, ctx.futureYear);
-    lines.push(`If that straight line simply continued, ${ctx.futureYear} would sit near ${pr.value.toFixed(2)} ${meta.unit} (range ${Math.min(pr.lo, pr.hi).toFixed(2)} to ${Math.max(pr.lo, pr.hi).toFixed(2)}). That is an extrapolation of the past, not a forecast.`);
+    const pr = project(series, tr, ctx.futureYear), b = bound(id, pr.value), lo = bound(id, Math.min(pr.lo, pr.hi)).value, hi = bound(id, Math.max(pr.lo, pr.hi)).value; pr.value = b.value; pr.lo = lo; pr.hi = hi;
+    lines.push(`If that straight line simply continued, the yearly average in ${ctx.futureYear} would sit near ${pr.value.toFixed(2)} ${meta.unit} (range ${pr.lo.toFixed(2)} to ${pr.hi.toFixed(2)})${b.capped ? ', capped at a physical limit' : ''}. That is an extrapolation of the past, not a forecast.`);
   }
   return { name, role, variable: id, meta, trend: tr, series, lines, source: `NASA POWER · ${meta.product} · ${series.years[0]}–${series.years.at(-1)}` };
 }

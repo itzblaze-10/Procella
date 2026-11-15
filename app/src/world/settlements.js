@@ -36,6 +36,7 @@ export class Settlements {
 
   // Place up to four sites within about 0.6 to 2.5 km of (x, z).
   build(terrain, x, z, soilWetness, placeName) {
+    this.terrain = terrain;
     const flat = (px, pz) => terrain.heightAt(px, pz) > 2 && terrain.slopeAt(px, pz) < 0.12;
     const shore = (px, pz) => terrain.heightAt(px, pz) > 1 && terrain.heightAt(px, pz) < 12 && terrain.findNear(px, pz, (a, b) => terrain.heightAt(a, b) < 0, 60, 300);
     const plan = [['village', 0.4], ['farm', 2.1], ['industry', 4.0], ['harbour', 5.2]];
@@ -52,7 +53,7 @@ export class Settlements {
         const p = createNPC(role, ++seed), a = i * 2.1 + angle, nx = spot.x + Math.cos(a) * (9 + i * 4), nz = spot.z + Math.sin(a) * (9 + i * 4) + 20;
         p.object.position.set(nx, terrain.heightAt(nx, nz), nz); p.object.rotation.y = Math.random() * Math.PI * 2;
         this.group.add(p.object);
-        const npc = { person: p, role, seed, site, heard: false, beacon: this.beacon(nx, terrain.heightAt(nx, nz), nz) };
+        const npc = { person: p, role, seed, site, heard: false, home: { x: nx, z: nz }, phase: seed % 7, beacon: this.beacon(nx, terrain.heightAt(nx, nz), nz) };
         site.npcs.push(npc); this.npcs.push(npc);
       });
       this.sites.push(site);
@@ -78,11 +79,16 @@ export class Settlements {
   update(dt, playerPos) {
     this.t += dt;
     for (const n of this.npcs) {
-      n.person.update(dt, 0);
-      n.beacon.userData.gem.rotation.y += dt * 1.5; n.beacon.userData.gem.position.y = 2.7 + Math.sin(this.t * 2) * 0.15;
-      if (playerPos && n.person.object.position.distanceTo(playerPos) < 12) { // turn to face the traveller
-        const p = n.person.object.position; n.person.object.rotation.y = Math.atan2(-(playerPos.x - p.x), -(playerPos.z - p.z));
+      const o = n.person.object, near = playerPos && o.position.distanceTo(playerPos) < 12;
+      if (near) { // stop and face the traveller
+        n.person.update(dt, 0); o.rotation.y = Math.atan2(-(playerPos.x - o.position.x), -(playerPos.z - o.position.z));
+      } else { // stroll a small loop around their workplace
+        n.phase += dt * 0.12; const x = n.home.x + Math.cos(n.phase) * 6, z = n.home.z + Math.sin(n.phase) * 6;
+        o.rotation.y = Math.atan2(-(x - o.position.x), -(z - o.position.z));
+        o.position.set(x, this.terrain.heightAt(x, z), z); n.person.update(dt, 0.72);
       }
+      n.beacon.position.set(o.position.x, o.position.y, o.position.z);
+      n.beacon.userData.gem.rotation.y += dt * 1.5; n.beacon.userData.gem.position.y = 2.7 + Math.sin(this.t * 2) * 0.15;
     }
   }
 

@@ -35,3 +35,6 @@ __pycache__/
 # iCloud / Finder conflict copies ("name 2.ext"); never commit them
 * 2
 * 2.*
+
+# Browser test artefacts
+.playwright-mcp/

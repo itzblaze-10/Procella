@@ -125,7 +125,12 @@ export class Terrain {
   }
 
   setWind(sway) { this.treeMat.userData.sway = sway; }
-  setWetness(w) { this.material.color.setScalar(1 - 0.25 * w); }
+  // Surroundings follow the data: wet soil darkens the ground, sub-zero months whiten it, wind roughens the water.
+  setSurface({ wet = 0.4, snow = 0, wind = 2 }) {
+    this.material.color.setScalar(1 - 0.25 * wet); this.material.emissive.setRGB(0.55, 0.57, 0.62).multiplyScalar(snow * 0.75); // snow cover washes the ground white
+    this.water.material.roughness = Math.min(0.9, 0.15 + wind / 20);
+    this.water.material.color.set(wind > 6 ? 0x2a5670 : 0x1d4f6e);
+  }
 
   // Nearest point (searching outward) that satisfies a test, for spawning boats on water or people on land.
   findNear(x, z, test, step = 150, max = 9000) {
