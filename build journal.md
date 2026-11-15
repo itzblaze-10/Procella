@@ -560,3 +560,5 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   1440 px and 500 px; the label no longer wraps. CSP unchanged: a plain link needs no new source.
 - The repository is still private, so visitors other than the partners get GitHub's 404 until it is
   made public.
+- Correction, same evening: the repository is already PUBLIC (gh repo view, 23:07), so the link works for
+  everyone. The "still private" line above was wrong.
