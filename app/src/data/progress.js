@@ -22,7 +22,6 @@ export const ADVANCEMENTS = [
 ];
 export const ERAS = ['1980s', '1990s', '2000s', '2010s', '2020s', 'Future'];
 export const eraOf = (mode, year) => mode === 'future' ? 'Future' : `${Math.floor(year / 10) * 10}s`;
-export const ERA_GOAL = 'Hear 2 stories and open the trend dossier in this era to earn its stamp.';
 
 const KEY = 'procella:progress:v1';
 function load() { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } }

@@ -486,3 +486,23 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
 **Not done:**
 - A phone-width check: the test browser window cannot be resized. The CSS has narrow-screen rules but they are untested.
 - A `/ponytail-review` of today's large diff.
+
+## 2026-11-15 21:58 Launch clean-up
+
+- Root held five first-day Python experiments and a 2 MB SRTM test tile. The game never ran them. Moved
+  (git mv, history kept) into `research/` with a README saying what each checked. `test_access.py` now
+  downloads into its own folder instead of `./test`.
+- `app/vendor/addons/objects/Water.js` was vendored but never imported (water uses our own shader and
+  `waternormals.jpg`). Removed.
+- Dead code: `setWindLevel` (audio.js) and `ERA_GOAL` (progress.js) had no callers. Removed.
+  `stats.sensitivity` is also unused but kept: it is the start-year sensitivity strip in `docs/strategy.md`,
+  not yet wired into the dossier.
+- Added `scripts/serve.py`, the no-cache server used all session (plain http.server let browsers keep stale
+  modules after a pull). README rewritten for launch: run, features, controls table matching the in-game
+  help, honest-statistics notes, repository map.
+- CREDITS: GISTEMP row now says it is only used by the `research/` check.
+- Local only (git-ignored): 11 empty iCloud "* 2" folders in brand/, this session's test screenshots and
+  test pages in .tmp, Playwright logs. `.tmp/research` kept (docs/data-reality.md cites it).
+- Verified: every module passes node --check, stats.test.mjs and trend.py --selftest pass, the served
+  root redirects, and a full UI run Home → onboarding → Paris lands by the Eiffel Tower with no console
+  errors. /ponytail-review skipped under deadline; this change only deletes and moves.

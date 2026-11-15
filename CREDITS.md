@@ -9,7 +9,7 @@ all code, text, images, fonts and data used, including open-source material.
 |---|---|---|
 | NASA POWER (MERRA-2, CERES SYN1deg, GEWEX SRB, GPM IMERG derived) | Trend series | NASA open data |
 | ORNL DAAC MODIS Web Service (MOD13Q1) | Vegetation index | NASA open data |
-| NASA GISTEMP v4 | Global context | NASA open data |
+| NASA GISTEMP v4 | Early global trend check (`research/`, not in the app) | NASA open data |
 
 ## Development tooling (not shipped in the app)
 

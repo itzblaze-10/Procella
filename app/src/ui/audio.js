@@ -35,7 +35,6 @@ export function setMuted(m) {
   muted = m; if (m) globalThis.speechSynthesis?.cancel();
   if (master) master.gain.setTargetAtTime(m ? 0 : 0.5, ctx.currentTime, 0.1);
 }
-export function setWindLevel(ws) { if (drone) drone.gain.setTargetAtTime(0.02 + Math.min(0.05, ws / 300), ctx.currentTime, 1); }
 
 function blip(f, t, dur, type = 'sine', vol = 0.15) {
   const o = ctx.createOscillator(), g = ctx.createGain(); o.type = type; o.frequency.value = f;
