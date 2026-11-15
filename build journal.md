@@ -469,3 +469,20 @@ Bug found: a failed boat spawn inland deleted the current vehicle first. Now the
 | fps | 39 to 63 (lowest: Singapore 39, Shanghai 43, Sydney 44, Paris 45) |
 
 Amsterdam's file was still being written during the sweep, so no city mesh was built (the error is caught; the landmark still showed).
+
+## 2026-11-15 21:05 All 30 cities verified; launch pass
+
+**Data:** all 30 city files fetched, 15.7 MB total. Overpass threw many 502/504 errors, but retries got through; Amsterdam needed three split queries. Paris, Tokyo, Barcelona and Amsterdam were trimmed to fit 900 KB (marked `trimmed` in the index). Sidewalks and crossings were dropped, because they duplicate the roads.
+
+OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data says 522 m. The 828 m landmark replaces it: no OSM collider is left at 600 m (checked).
+
+**Sweep of the last eight cities in-game:**
+- Amsterdam 9,352 buildings, Seoul 6,253, Bangkok 7,439, Mexico City 5,308, Buenos Aires 3,986, Cape Town 3,497, Venice 4,185.
+- All spawn on a street, show their landmarks and run at 59 to 62 fps, with no errors.
+- From the air, Venice shows the Piazza San Marco, Campanile, Basilica, Grand Canal and lagoon.
+
+**Credits:** OSM/ODbL attribution added to `CREDITS.md` and to the in-app credits.
+
+**Not done:**
+- A phone-width check: the test browser window cannot be resized. The CSS has narrow-screen rules but they are untested.
+- A `/ponytail-review` of today's large diff.

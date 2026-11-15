@@ -22,7 +22,7 @@ RADIUS = 1400                # metres
 L = RADIUS * 10              # clip square half-size, decimetres
 MAX_BYTES = 900_000
 # (simplify tolerance m, min building area m2, drop footpaths) - first stage is the spec, the rest trim
-STAGES = [(0.6, 12, False), (1.0, 20, False), (1.0, 20, True), (1.5, 30, True), (2.0, 50, True), (3.0, 150, True)]
+STAGES = [(0.6, 12, False), (1.0, 20, False), (1.0, 20, True), (1.5, 30, True), (2.0, 50, True), (2.0, 65, True), (2.5, 80, True), (3.0, 150, True)]
 
 
 def log(*a):

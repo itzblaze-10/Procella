@@ -213,6 +213,7 @@ const saveSettings = () => { try { localStorage.setItem('procella:settings', JSO
 app.credits = () => sheet(`<h2>Credits and data</h2>
   <p><b>Climate data:</b> NASA POWER (Prediction Of Worldwide Energy Resources) monthly and daily point API, values derived from NASA GMAO MERRA-2, CERES SYN1deg, GEWEX SRB and GPM IMERG. Fetched live every session.</p>
   <p><b>Imagery:</b> NASA GIBS (Global Imagery Browse Services): MODIS Blue Marble Next Generation, MODIS Terra Corrected Reflectance, GPM IMERG precipitation rate, AIRS surface air temperature.</p>
+  <p><b>World cities:</b> building footprints, heights, roads, parks and water © OpenStreetMap contributors (ODbL), fetched once via the Overpass API. Landmarks modelled in code at published dimensions.</p>
   <p><b>Elevation:</b> AWS Terrain Tiles (Mapzen terrarium encoding of SRTM, GMTED and ETOPO1), open data. <b>Place names:</b> © OpenStreetMap contributors via Nominatim.</p>
   <p><b>Ground imagery:</b> Sentinel-2 cloudless 2020 by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2020), CC BY-NC-SA 4.0, s2maps.eu.</p>
   <p><b>Code and assets:</b> three.js (MIT); EZ-Tree by Daniel Greenheck (MIT) for trees; CC0 ground and building textures from Poly Haven. Vehicles, people, buildings, icons and sounds are made in code for this project. Statistics: Mann-Kendall and Sen's slope, verified against pymannkendall.</p>

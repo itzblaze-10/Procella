@@ -39,3 +39,10 @@ Added here as the build pulls them in.
 | NASA GIBS: Blue Marble Next Generation, MODIS Terra Corrected Reflectance, GPM IMERG, AIRS | Globe and fallback ground colour | NASA open data |
 | AWS Terrain Tiles (Mapzen terrarium: SRTM, GMTED2010, ETOPO1) | Elevation | Open data, registry.opendata.aws/terrain-tiles |
 | OpenStreetMap via Nominatim | Place names | © OpenStreetMap contributors, ODbL |
+
+## World cities
+
+| Source | Use | Terms |
+|---|---|---|
+| OpenStreetMap via the Overpass API (overpass-api.de, maps.mail.ru) | Building footprints and heights, roads, water and parks for 30 cities, snapshot fetched 2026-11-15 by `scripts/fetch_cities.py` into `app/data/cities/` | © OpenStreetMap contributors, ODbL 1.0 (openstreetmap.org/copyright) |
+| Landmark dimensions and positions | 37 landmarks modelled in code (`app/src/world/landmarks.js`), positions checked against OpenStreetMap | Published figures, cited in code comments |
