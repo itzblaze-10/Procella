@@ -49,7 +49,7 @@ export class World {
     this.biome = biomeFor(this.tMean, this.rainMean);
     this.veg = new Vegetation(this.scene, this.renderer, this.terrain, this.biome);
     if (this.o.quality === 'low') { this.veg.cap = 20; this.veg.grassDensity = 0.4; }
-    this.veg.blocked = (x, z) => this.settlements.blocked(x, z) || !!this.city?.blocked(x, z) || !!this.landmarkHit(x, z, 3);
+    this.veg.blocked = (x, z) => this.settlements.blocked(x, z) || !!this.city?.blocked(x, z) || this.landmarks.some(l => (x - l.x) ** 2 + (z - l.z) ** 2 < (l.clear || 20) ** 2);
     try { await this.veg.init(); } catch (e) { console.warn('vegetation', e); }
     this.terrain.onTile = (k, tile) => this.veg.addTile(k, tile); this.terrain.onDrop = k => this.veg.dropTile(k);
     for (const [k, tile] of this.terrain.tiles) if (tile.sat) this.veg.addTile(k, tile);
@@ -76,9 +76,9 @@ export class World {
     try {
       const C = await import('./city.js'), idx = await C.loadIndex(), entry = C.cityNear(idx, lat, lon, 4);
       let L = []; try { L = (await import('./landmarks.js')).landmarksNear(lat, lon, 8); } catch (e) { console.warn('landmarks', e); }
-      for (const l of L) { // place each landmark at its real coordinates, front to its real heading
-        const g = l.build(), p = this.terrain.toLocal(l.lat, l.lon), ry = -(l.heading || 0) * Math.PI / 180, c = Math.cos(ry), s = Math.sin(ry);
-        g.position.set(p.x, this.terrain.heightAt(p.x, p.z), p.z); g.rotation.y = ry; this.scene.add(g);
+      for (const l of L) { // place each landmark at its real coordinates
+        const g = l.build(), p = this.terrain.toLocal(l.lat, l.lon), ry = 0, c = 1, s = 0; // build() already faces the real heading, colliders in the same frame
+        g.position.set(p.x, this.terrain.heightAt(p.x, p.z), p.z); this.scene.add(g);
         const cols = (l.colliders || []).map(k => ({ ...k, x: p.x + k.x * c + k.z * s, z: p.z - k.x * s + k.z * c, ry: (k.ry || 0) + ry }));
         this.landmarks.push({ ...l, group: g, x: p.x, z: p.z, cols });
       }

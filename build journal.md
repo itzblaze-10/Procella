@@ -452,3 +452,20 @@ Bug found: a failed boat spawn inland deleted the current vehicle first. Now the
 - *Spawn in a back courtyard.* In cities the traveller (and the first settlement site) now lands on a real OSM street with 4 m of clearance.
 - *City NPCs placed by `blocked`.* That test excluded roads, which pushed people into courtyards. They now only avoid buildings, water and landmarks.
 - *Load times.* New York takes 7.8 s: NASA POWER 1.8 s, terrain and imagery 4.3 s, city build 0.3 s. Paris's 15.7 s earlier was a cold texture load.
+
+## 2026-11-15 20:45 Landmarks and city sweep
+
+**Landmarks:** `world/landmarks.js` has 37 landmarks for the 30 cities, at published heights, with coordinates verified against OSM (Nominatim, footprint centroids, Overpass). Two given centres were wrong: the Oriental Pearl Tower was off by 500 m and Tiananmen by 850 m; both are corrected.
+
+`build()` returns the model already turned to its real heading (from the OSM footprint's long axis). My integration rotated it a second time; that is fixed. Vegetation is now kept out of each landmark's `clear` radius; trees had grown between the Eiffel Tower's legs.
+
+**Automated in-game sweep of the 24 indexed cities:** enter the world, then record load time, building count, landmarks, spawn surface, NPCs and fps.
+
+| Result | Value |
+|---|---|
+| Errors | none |
+| Spawn surface | road in every loaded city |
+| Load time | 3.9 to 9.9 s |
+| fps | 39 to 63 (lowest: Singapore 39, Shanghai 43, Sydney 44, Paris 45) |
+
+Amsterdam's file was still being written during the sweep, so no city mesh was built (the error is caught; the landmark still showed).
