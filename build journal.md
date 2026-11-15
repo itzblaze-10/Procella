@@ -253,3 +253,28 @@ central Chile +0.044 MJ/m2/day per year). Open: slide 3 names both partners (fin
 "Team Procella" if submitted as the demo); lane assignment on slide 3 (Daksh on data and stats, Priyanshu on UI)
 was the agent's guess from name order and needs the partners' confirmation. Agent ran one headless render and
 closed it; no stray browser processes left.
+
+## 2026-11-15 16:30 — Game build started: globe-trotter in real terrain on live NASA data
+
+**Request:** a playable 3D globe-trotter game: home (Play, Explore, Settings), character and vehicle selection
+(9 vehicles with physics and paint and decals), Year or Future Zone, pin anywhere on a globe, real-Earth terrain
+built without AI, NPCs who tell climate stories from the data, a left panel of NASA layers that switch weather on and
+off, Minecraft-style advancements, plus a Globe Lab to compare trends from afar. NASA must be called live every time.
+
+**Verified first (all CORS-open from a browser):** AWS Terrain Tiles (terrarium elevation), NASA GIBS WMTS and WMS
+(Blue Marble NG, MODIS Terra true colour, GPM IMERG rain rate, AIRS surface air temperature), NASA POWER monthly and daily
+(10 variables in one monthly call, 585 values each), Nominatim. Failed: Overpass API (406 on three mirrors), so NPC sites are
+placed procedurally on flat dry land and named with Nominatim reverse lookups. GIBS MODIS NDVI layer name was wrong (400).
+
+**Decisions:**
+- Static ES modules with an importmap and vendored three r187 (no npm, no node_modules): a node_modules tree inside the
+  iCloud-synced Desktop would set off another sync storm on an overheating 8 GB Mac.
+- Partner's Python engine cannot run in a browser and its AIRS, GLDAS, GPM and GRACE plugins need an Earthdata login, so the
+  game calls open endpoints live. Critical review of those docs in docs/engine-review.md (causal claim, circular
+  decomposition, inconsistent GRACE and GISTEMP numbers, flat GLDAS cache).
+- Statistics ported to JS (Mann-Kendall, Sen with Gilbert CI, Spearman with detrended option, projection) and verified
+  against pymannkendall values (stats.test.mjs).
+- Two sub-agents in parallel: vehicles (models plus physics) and people (characters plus NPCs), each writing only its own
+  folder against app/CONTRACTS.md. People done: 30/30 smoke tests.
+- git pull hung again (iCloud); killed it and fetched with a timeout. Partner's test zip had vanished from the working tree
+  (iCloud eviction); restored from git.
