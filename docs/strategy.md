@@ -90,7 +90,7 @@ leads", and only call it AI if a model wrote the card text offline and we say so
 
 ## Ponytail pass (2026-11-14): what the lazy-senior-dev rule cuts from the plan above
 
-The ladder (`.claude/rules/procella/ponytail.md`) applied to the architecture. The debate optimised for
+The ponytail ladder (the laziest solution that works) applied to the architecture. The debate optimised for
 rigor and polish; this pass removes what the brief does not require. **Proposed, pending the partners.**
 
 | Plan item | Ladder verdict | Lazier replacement | Lines saved (est.) |

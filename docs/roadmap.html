@@ -3,12 +3,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Procella Roadmap</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 /* Layout: one reading column with a data-sheet feel. Sections are numbered because the approach is a real sequence.
-   Interim documentation styling. The Procella house brand (Claude Design system) replaces this once it exists. */
+   Interim documentation styling. The Procella house brand replaces this once it exists. */
 :root {
   --bg: #F4F6F7; --surface: #FFFFFF; --ink: #0F1B22; --muted: #52646E; --line: #D5DEE3;
   --accent: #0A6B80; --accent-soft: #DCEEF2;
@@ -115,7 +114,7 @@ footer { color: var(--muted); font-size: 0.85rem; display: flex; flex-direction:
 
 <div class="glance" aria-label="Summary">
   <div><b>Two sources work with no login.</b><span>NASA POWER (MERRA-2 and CERES derived) and ORNL MODIS both answer a plain browser request. Everything in the live app starts there.</span></div>
-  <div><b>Giovanni waits for a signed-in person.</b><span>Claude never types a password. You sign in once in Chrome; the preview and CSV download can then run in that session.</span></div>
+  <div><b>Giovanni waits for a signed-in person.</b><span>You sign in once in your browser; the preview and CSV download can then run in that session.</span></div>
   <div><b>First result: rain detected, temperature not.</b><span>Gandhinagar, 45 years. Both verdicts change with the start year, which is why the app shows a trust check.</span></div>
 </div>
 
@@ -257,7 +256,7 @@ python3 scripts/trend.py --lat 23.22 --lon 72.65 --param PRECTOTCORR --start 198
   <div class="sec-head"><span class="eyebrow">6 · Giovanni path</span><h2>The manual route the brief describes</h2>
   <p>Giovanni is NASA's own plotting tool and the brief points to it. Menu names below come from memory of the Giovanni guide, so we confirm them on screen once you are signed in.</p></div>
   <ol class="tight">
-    <li>You sign in to NASA Earthdata in Chrome, then tell Claude. Claude never types the password.</li>
+    <li>Sign in to NASA Earthdata in your browser.</li>
     <li>Open Giovanni and choose plot type <b>Time Series, Area-Averaged</b>.</li>
     <li>Search the variable. Examples: MERRA-2 2-meter air temperature, or GPM monthly precipitation.</li>
     <li>Enter a bounding box around Gandhinagar, for example west 72.4, south 23.0, east 72.9, north 23.4.</li>
@@ -278,15 +277,14 @@ python3 scripts/trend.py --lat 23.22 --lon 72.65 --param PRECTOTCORR --start 198
       <tr><td>Variable-by-region trend screen</td><td><span class="pill p-info">Running</span></td><td>Finds the real twin cases (opposite trends), honest nulls and fragile cases from about 15 regions</td></tr>
       <tr><td>Official rules, judging, experience design, brand candidates</td><td><span class="pill p-ok">Done</span></td><td>Deadline, 30-second demo cap, quests, goosebump moments, three brand directions</td></tr>
       <tr><td>Stack and component research</td><td><span class="pill p-ok">Done</span></td><td>Vite and plain TypeScript, globe.gl, GSAP, D3 micro-modules, procedural Web Audio. Details in <code>docs/stack.md</code></td></tr>
-      <tr><td>Install the real GSAP and three.js skills</td><td><span class="pill p-bad">Waiting on you</span></td><td>The copies we have are empty stubs. The real ones are two MIT repositories; installing downloads files, so it needs your go-ahead</td></tr>
       <tr><td>Scope cut for the clock</td><td><span class="pill p-warn">Next</span></td><td>Pick the build order that ships before the deadline: sonified chart, verdict seal and start-year check first, globe dive and timelapse only if time remains</td></tr>
       <tr><td>Public repo, licence, FortiGuard request</td><td><span class="pill p-warn">Next</span></td><td>NASA suggests open source, Apache-2.0 by default. Judges can only open a public link. Request web-filter classification once the site is live</td></tr>
-      <tr><td>SI disclosure versus the no-Claude-credit rule</td><td><span class="pill p-bad">Waiting on you</span></td><td>NASA requires disclosing SI use and says awards can depend on it. The repo rule forbids crediting Claude. You decide how to word an accurate disclosure</td></tr>
+      <tr><td>SI disclosure</td><td><span class="pill p-bad">Waiting on you</span></td><td>NASA requires disclosing SI use and says awards can depend on it. Word an accurate disclosure for the submission</td></tr>
       <tr><td>Under-18 names in public files</td><td><span class="pill p-bad">Waiting on you</span></td><td>NASA bars recognisable names, voices and likenesses of under-18s from submissions. The README and docs name both partners. Use "Team Procella" in anything public, and check the rule with your Local Lead</td></tr>
       <tr><td>Stats engine in TypeScript with start-year check</td><td><span class="pill p-warn">Next</span></td><td>Port the verified logic, add confidence interval, test against pymannkendall fixtures</td></tr>
       <tr><td>Snapshot generator and Live/Cached badge</td><td><span class="pill p-warn">Next</span></td><td>Curated places, committed JSON</td></tr>
       <tr><td>Giovanni preview and CSV</td><td><span class="pill p-bad">Waiting on you</span></td><td>Needs your Earthdata sign-in in Chrome</td></tr>
-      <tr><td>Brand direction for Claude Design</td><td><span class="pill p-bad">Waiting on you</span></td><td>Pick one of the candidates coming from the research</td></tr>
+      <tr><td>Brand direction</td><td><span class="pill p-bad">Waiting on you</span></td><td>Pick one of the candidates coming from the research</td></tr>
       <tr><td>Annual or monthly series, vanilla or React, select box or map</td><td><span class="pill p-bad">Waiting on you</span></td><td>Recommendations are in <code>docs/strategy.md</code></td></tr>
     </tbody></table></div>
 </section>

@@ -67,5 +67,5 @@ Sources: Project Submission Guide, Judging and Awards Guide, Participant FAQs, T
 ## Open items
 
 - Confirm which Local Event both partners are registered at (it sets the deadline's time zone).
-- Decide the SI-disclosure wording (see `CLAUDE.md` rule 3, which conflicts with disclosure).
+- Decide the SI-disclosure wording.
 - Decide public repo plus licence, and scrub partner names from anything public.

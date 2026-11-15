@@ -13,9 +13,8 @@ The four steps the challenge expects, with a worked example we actually ran.
 
 ## Step 1 — Giovanni preview (needs a person signed in)
 
-Giovanni (https://giovanni.gsfc.nasa.gov/giovanni/) needs a free NASA Earthdata Login to plot. Claude
-never types passwords, so the order is: you sign in once in Chrome, then say so, and Claude can drive
-the Giovanni page in that signed-in session: choose "Time Series, Area-Averaged", pick the variable and
+Giovanni (https://giovanni.gsfc.nasa.gov/giovanni/) needs a free NASA Earthdata Login to plot. Sign in once
+in your browser, then in that signed-in session: choose "Time Series, Area-Averaged", pick the variable and
 a bounding box, set the date range, plot, and download the CSV. The click-by-click version with the
 exact menu names is in `docs/data-reality.md` once the data research lands.
 

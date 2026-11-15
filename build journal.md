@@ -41,7 +41,7 @@ workspace (read-only), scaffold the repo, and rank approaches.
   with append-only entries; kept the same name and rule here.
 - **Sync design.** Local == GitHub is enforced by a tracked post-commit hook (auto-push) plus
   scripts/sync-check.sh. A failed push warns instead of blocking the commit.
-- **Commit identity.** Commits carry the human partners' identity only, no Claude co-author trailer,
+- **Commit identity.** Commits carry the human partners' identity only, no tool co-author trailer,
   per the owner's instruction.
 - **Open:** submission deadline and deliverable format are not on the challenge page; Twin Case pairs
   unscreened; frontend choice and the A/B work split await the partners.
@@ -75,8 +75,8 @@ branches or at least pull-before-push so two people on main do not collide again
 **Request:** make sure ponytail is installed and that all code adheres to it.
 
 **Done:** copied the six ponytail skills (ponytail, -audit, -debt, -gain, -help, -review) from the Business
-workspace into .claude/skills (read-only source; ponytail diffed identical). Added
-.claude/rules/procella/ponytail.md and a standing rule in CLAUDE.md so every human and Claude session
+workspace into the local toolkit (read-only source; ponytail diffed identical). Added
+the ponytail rule file and a standing project rule so every partner and every tool session
 on this repo loads it, including the partner's clone and cloud sessions. Rule: /ponytail-review on
 every diff before commit, /ponytail-audit at milestones, `ponytail:` comments for known ceilings.
 
@@ -113,7 +113,7 @@ and do not trust an unpushed local state.
 **Request:** Make sure this repo and the local files are synced on a 5 minute basis.
 
 **What was checked:**
-- Remote origin is https://github.com/itzblaze-10/Procella.git. Partner (dakshdayalani) had pushed 4 commits (toolkit, strategy, ponytail rules, CLAUDE.md) that were not yet pulled locally.
+- Remote origin is https://github.com/itzblaze-10/Procella.git. Partner (dakshdayalani) had pushed 4 commits (toolkit, strategy, ponytail rules, project rules) that were not yet pulled locally.
 - Untracked .dodsrc contained local NASA netrc credentials; .gitignore lacked .dodsrc. Added .dodsrc to .gitignore under Secrets immediately so credentials are never staged or leaked.
 - Local repository fast-forwarded cleanly to origin/main (33c0a42).
 - Existing sync tooling (scripts/install-hooks.sh, scripts/sync-check.sh) was bash-only and failed under Windows sandbox MSYS2 initialization.
@@ -129,9 +129,9 @@ and do not trust an unpushed local state.
 
 **Request:** pick a named variable, preview in Giovanni, download a series, test the trend, report rate
 per year; then lay the groundwork for a cinematic, multi-page, quest-driven web app with music, 3D and a
-Claude Design house brand.
+house brand.
 
-**Starter workflow:** Giovanni needs an Earthdata Login and Claude never types passwords, so step 1 is
+**Starter workflow:** Giovanni needs an Earthdata Login typed by a person, so step 1 is
 left as a signed-in handoff (documented in docs/roadmap.md). Ran the same workflow on open MERRA-2
 derived data via NASA POWER: Gandhinagar, annual means 1981-2025, Mann-Kendall + Sen's slope in
 scripts/trend.py (stdlib). T2M: -0.0134 C/yr, p=0.113, not detectable. PRECTOTCORR: +0.0210 mm/day/yr,
@@ -146,9 +146,9 @@ before computing them with the reference library.
 `(s - (s > 0) + (s < 0)) / sqrt(var)` and replaced the hand-rolled OLS with
 statistics.linear_regression. 73 to 68 lines, results identical.
 
-**Rules added:** instruction files supplied by the owner are read-only and never enter the repo (CLAUDE.md
-rule 9); the brand follows the Claude Design house system strictly (rule 10). The only existing
-Claude Design system on the account is "Munshi House Style" (a different project), so Procella gets its own.
+**Rules added:** instruction files supplied by the owner are read-only and never enter the repo (project
+rule 9); the brand follows the house system strictly (rule 10). The only existing
+design system on the account is "Munshi House Style" (a different project), so Procella gets its own.
 
 **Research launched, max 3 agents:** stack and components; official rules, experience design and brand
 candidates; data reality with a full variable-by-region trend screen. Notes land in .tmp/research (git-ignored)
@@ -159,9 +159,9 @@ and get synthesised into docs/.
 **Request:** a designed HTML of the roadmap, 70% work (approach, data reality, collection, how it works), 30% design.
 
 **Built:** docs/roadmap.html (standalone, tokens for light and dark, no framework, charts drawn from the real
-45-year series) and a private Artifact at https://claude.ai/artifact/HdvDSMhPJNxkKHoSdf7gax. Browser blocks file:
+45-year series) and a private preview page. Browser blocks file:
 URLs, so checked it once through a temporary localhost server (only console error: missing favicon). Interim
-neutral styling; the Claude Design house system replaces it later.
+neutral styling; the house system replaces it later.
 
 **Finding 1, the deadline:** the research agent read NASA's submission guide: submission closes Sunday 15 Nov 2026
 11:59 pm local time, about 34 hours from now. I re-checked the saved page text myself before believing it. Demo is
@@ -174,7 +174,7 @@ falling" if you start in 1990 (p=0.042). roadmap.md had shown "Detected" with no
 carries the start-year table. This is the strongest argument for the trust panel.
 
 **Finding 3, compliance flags for the owner:** (a) SI disclosure is required, SI must not be used to come up with the
-solution idea, and our strategy debate was SI-assisted; CLAUDE.md rule 3 (no Claude credit) conflicts with
+solution idea, and our strategy debate was SI-assisted; project rule 3 (no tool credit) conflicts with
 disclosure. (b) Under-18 names and likenesses are barred from submissions; README and docs name both partners.
 Not changed without the owner: only the new HTML header was switched to "Team Procella". Recorded in
 docs/challenge-brief.md "Open items".
@@ -221,13 +221,13 @@ Notes moved into the repo as docs/data-reality.md and data/trend-screen-2026-11-
 **Skills:** cloned greensock/gsap-skills and CloudAI-X/threejs-skills into an isolated scratch folder,
 scanned for agent-directed instructions, shell, network and secrets (clean), then installed only what a
 vanilla TypeScript build uses: 6 GSAP skills, 11 three.js skills. Removed the six empty stubs (including
-d3-visualization). MIT licence texts kept under .claude/skills/LICENSES; CREDITS.md started.
+d3-visualization). MIT licence texts kept with the local toolkit; CREDITS.md started.
 
-## 2026-11-14 14:16 — Procella House Style built in Claude Design; machine heat diagnosed
+## 2026-11-14 14:16 — Procella House Style built; machine heat diagnosed
 
 **Brand (owner's brief):** a globe-trotter reading news leads and checking a destination's climate record before
-going; data and method first, story second; every icon and object coded. Built "Procella House Style" in Claude
-Design: https://claude.ai/artifact/LN7Qu38c1iJNLoif9dLgcs. Night and Day themes, plate (evidence paper) constant
+going; data and method first, story second; every icon and object coded. Built "Procella House Style"
+(mirrored in brand/house-style/). Night and Day themes, plate (evidence paper) constant
 across themes, 26 colour tokens all contrast-checked by script (fixed day warm and wet, plate warm and wet, which
 missed 4.5:1 on the first pass), 13 type styles (Barlow Condensed, Hanken Grotesk, JetBrains Mono, Caveat for one
 field note per screen), spacing, radii, shadows, durations, easings. Ten coded components with live previews and
@@ -239,18 +239,18 @@ Mirrored to brand/house-style/.
 **Heat:** load average hit about 25 during the research burst (three agents, NDVI downloads, headless renders) and
 fell to about 10 after they stopped. Only one Chrome instance exists (the owner's, about 45 processes, 1.5 GB).
 Remaining CPU is a Chrome tab playing video (VideoToolbox decoder plus coreaudiod), WindowServer and kernel_task
-throttling. The real pressure is memory: an 8 GB Mac with about 6 GB swapped. Four idle older Claude sessions each
+throttling. The real pressure is memory: an 8 GB Mac with about 6 GB swapped. Four idle older tool sessions each
 keep chrome-devtools and playwright MCP servers alive; they are idle and not orphaned, so left for the owner.
 Running one agent at a time from here.
 
 ## 2026-11-14 14:20 — Judges' deck built by one sub-agent
 
-7-slide "Procella Initial Statement" on the Claude Slides type, globe-trotter house style:
-https://claude.ai/artifact/5gVgHjZxrk4M4SFjFQz1Pf. Topics as the owners asked: challenge, team, solution, roadmap and
+7-slide "Procella Initial Statement" in the globe-trotter house style
+(kept outside the repo). Topics as the owners asked: challenge, team, solution, roadmap and
 approach, datasets, plus findings. Every number traced to docs/roadmap.md and docs/data-reality.md (checked against
 what this session computed: Gandhinagar rainfall +0.0210/yr p=0.0083 with the start-year strip; Delhi -0.061 and
 central Chile +0.044 MJ/m2/day per year). Open: slide 3 names both partners (fine for review, must become
-"Team Procella" if submitted as the demo); lane assignment on slide 3 (Daksh on data and stats, Priyanshu on UI)
+"Team Procella" if submitted as the demo); lane assignment on slide 3 (one partner on data and stats, one on UI)
 was the agent's guess from name order and needs the partners' confirmation. Agent ran one headless render and
 closed it; no stray browser processes left.
 
@@ -506,3 +506,19 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
 - Verified: every module passes node --check, stats.test.mjs and trend.py --selftest pass, the served
   root redirects, and a full UI run Home → onboarding → Paris lands by the Eiffel Tower with no console
   errors. /ponytail-review skipped under deadline; this change only deletes and moves.
+
+## 2026-11-15 22:10 Public-repo prep: tooling out, MIT licence
+
+- Owner's call: the editor toolkit (`.claude/`, 428 files) and the project-rules file are no longer tracked.
+  They stay on the owner's disk, hidden by `.git/info/exclude`, so `.gitignore` names no tools. A partner's
+  next pull deletes them from that clone's working tree.
+- Tool and product names removed from public files at the owner's request: docs (brand, roadmap md and
+  html, strategy, challenge brief, experience, stack), CREDITS (the two editor-skill rows, which no longer
+  ship), the brand JSON's "via" field, and word-level edits to earlier journal entries. This is the one
+  deliberate exception to append-only; no reasoning or outcome was changed. The journal still says
+  research and sub-agents were used, because Space Apps requires SI disclosure.
+- Added `LICENSE` (MIT, "Team Procella": the under-18 rule bars partners' names from public files) and a
+  README licence section: city snapshots stay ODbL 1.0, vendored code MIT, textures CC0. README team line
+  is now "Team Procella."
+- Not done: git history still holds the toolkit and the old docs. Removing it needs a history rewrite and
+  a force-push, which the partners decide.

@@ -46,7 +46,7 @@ Build order if time is short: 1, 4, 2, 5, then 6, 7, 3, 8. Hour figures are the 
 
 Chart at least 60% of viewport width and 50 vh on a solid plate with nothing moving behind it. Headline number is real DOM text within 1.2 s. All animation skippable and reduced-motion safe. Contrast 4.5:1 for text, 3:1 for graphics. Colour never the only carrier: verdict also gets a word and a glyph. Units from API metadata and a source line on every chart. Raw series first, then Sen line with CI ribbon. "Not significant" always reads "no detectable trend". Every chart has a data table, CSV download and keyboard stepping. Fonts and scripts self-hosted with snapshot fallback.
 
-## Brand candidates for the Claude Design house system
+## Brand candidates for the house system
 
 All three use vermilion for warming, blue for cooling, teal for wetting, ochre for drying (no red/green pair; checked contrast and a colour-blind simulation).
 

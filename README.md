@@ -9,7 +9,7 @@ Built for the NASA Space Apps Challenge 2026, challenge **Earth System Trend Det
 
 ## Team
 
-Daksh Dayalani and Priyanshu Naskar.
+Team Procella.
 
 ## Run it
 
@@ -87,3 +87,10 @@ and `./scripts/sync-check.sh` confirms local and GitHub are identical.
 
 NASA POWER, NASA GIBS, the ORNL DAAC MODIS service, AWS Terrain Tiles, Sentinel-2 cloudless by EOX
 (CC BY-NC-SA 4.0) and OpenStreetMap (ODbL). Full list with licences in [CREDITS.md](CREDITS.md).
+
+## Licence
+
+Our code is under the [MIT licence](LICENSE). Third-party material keeps its own terms:
+the city snapshots in `app/data/cities/` are derived from OpenStreetMap and stay under ODbL 1.0,
+the vendored three.js and EZ-Tree code is MIT, and the Poly Haven textures are CC0. See
+[CREDITS.md](CREDITS.md).

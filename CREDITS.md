@@ -15,8 +15,6 @@ all code, text, images, fonts and data used, including open-source material.
 
 | Item | Source | Licence | Version |
 |---|---|---|---|
-| GSAP agent skills (core, timeline, scrolltrigger, plugins, performance, utils) | github.com/greensock/gsap-skills | MIT, `.claude/skills/LICENSES/gsap-skills-MIT.txt` | commit aed9cfd |
-| three.js agent skills (11 skills) | github.com/CloudAI-X/threejs-skills | MIT, `.claude/skills/LICENSES/threejs-skills-MIT.txt` | commit 0e18186 |
 | pymannkendall (test reference only) | PyPI | MIT | used in a local venv |
 
 ## App libraries and fonts

@@ -5,7 +5,7 @@ Research date 14 Nov 2026. Every version was checked on npm and is at least 14 d
 ## Four findings that shape the build
 
 1. **"Multi-page" means routes inside one document.** Separate HTML pages reset the AudioContext and the WebGL globe on every navigation and re-trigger the autoplay block. One `index.html`, hash routes, same-document View Transitions. Deploys to any static host and works offline.
-2. **The installed `gsap-*`, `threejs` and `d3-visualization` skills are empty stubs** (about 1 KB each, pointing at `greensock/skills`, which returns 404). The real ones are `greensock/gsap-skills` and `CloudAI-X/threejs-skills`, both MIT. Not yet installed; waiting for the owner's go-ahead.
+2. **Reference material matters.** The GSAP and three.js reference notes we started from were empty stubs; the real ones are `greensock/gsap-skills` and `CloudAI-X/threejs-skills`, both MIT.
 3. **GSAP is free including all plugins** (standard licence, effective 30 Apr 2025). It is not OSI open source, so use it as an npm dependency and never copy its files into the repo. Pin `3.15.0`; npm also carries a 4.0 beta tag.
 4. **Headless Chromium renders WebGL2** through software rendering, so automated globe screenshots work. FPS from that setup is not representative of a real GPU.
 
@@ -62,7 +62,7 @@ Playwright desktop, mobile WebKit and reduced-motion projects: zero console erro
 1. Effects bury the data and scope outruns two people. Build in slices, data-first Explore page first, fixed kill order: cursor, Lenis, shader backgrounds, overlay, sonification.
 2. The demo dies on stage. Same-origin assets, snapshots, local preview plus `dist.zip`, `webglcontextlost` handler, Enter click gate, backup recording.
 3. Performance on judges' devices. Budgets, lazy globe chunk, lite tier, early test on a weak machine.
-4. One-shot integration drift (GSAP 3 vs 4 beta, ScrollTrigger leaking across routes, invented APIs). Lockfile, real skills installed, one `mount()` cleanup contract per route, one hand-verified vertical slice first.
+4. One-shot integration drift (GSAP 3 vs 4 beta, ScrollTrigger leaking across routes, invented APIs). Lockfile, real references, one `mount()` cleanup contract per route, one hand-verified vertical slice first.
 5. Asset and licence provenance. Procedural music, no photo textures, `CREDITS.md` with an SPDX row per asset, a plain-text NASA credit with no logo, GSAP only via npm.
 
 ## Not verified
