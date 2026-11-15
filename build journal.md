@@ -113,7 +113,7 @@ and do not trust an unpushed local state.
 **Request:** Make sure this repo and the local files are synced on a 5 minute basis.
 
 **What was checked:**
-- Remote origin is https://github.com/itzblaze-10/Procella.git. Partner (dakshdayalani) had pushed 4 commits (toolkit, strategy, ponytail rules, project rules) that were not yet pulled locally.
+- Remote origin is https://github.com/itzblaze-10/Procella.git. A partner had pushed 4 commits (toolkit, strategy, ponytail rules, project rules) that were not yet pulled locally.
 - Untracked .dodsrc contained local NASA netrc credentials; .gitignore lacked .dodsrc. Added .dodsrc to .gitignore under Secrets immediately so credentials are never staged or leaked.
 - Local repository fast-forwarded cleanly to origin/main (33c0a42).
 - Existing sync tooling (scripts/install-hooks.sh, scripts/sync-check.sh) was bash-only and failed under Windows sandbox MSYS2 initialization.
