@@ -110,7 +110,7 @@ export class World {
       this.player.object.position.set(land.x, this.terrain.heightAt(land.x, land.z), land.z);
     } else {
       if (this.vehicle.object.position.distanceTo(this.player.object.position) > 14) { this.hooks.toast('Walk up to the vehicle first.'); return; }
-      this.driving = true; this.player.object.visible = false; this.camDist = this.vehicle.cameraOffset.length();
+      this.driving = true; this.player.object.visible = false; this.camDist = this.vehicle.cameraOffset.length() * (this.vehicleMeta.class === 'land' ? 0.8 : 1); // a lower, closer chase cam on the road
       this.hooks.sound?.door(false); setTimeout(() => this.driving && this.hooks.sound?.engineStart(this.vehicle.kind), 500);
     }
   }
@@ -204,7 +204,13 @@ export class World {
     }
     const want = base.clone().add(off), g = this.terrain.heightAt(want.x, want.z) + 1.5;
     if (want.y < g) want.y = g;
-    this.camera.position.lerp(want, 1 - Math.exp(-dt * 8)); this.camera.lookAt(base);
+    this.camera.position.lerp(want, 1 - Math.exp(-dt * 8));
+    // sense of speed: the view widens and, on the ground, shakes a little as speed builds
+    const tel = this.driving && this.vehicle ? this.vehicle.telemetry() : null, kmh = tel ? tel.speedKmh : 0;
+    const fov = 60 + Math.min(18, kmh / 11);
+    if (Math.abs(this.camera.fov - fov) > 0.05) { this.camera.fov += (fov - this.camera.fov) * (1 - Math.exp(-dt * 3)); this.camera.updateProjectionMatrix(); }
+    if (tel?.ground && this.vehicleMeta?.class === 'land' && kmh > 40) this.camera.position.y += (Math.random() - 0.5) * Math.min(0.08, kmh / 2500) * (tel.surface === 'road' ? 0.4 : 1);
+    this.camera.lookAt(base);
   }
 
   orbit(dx, dy) { this.camYaw -= dx * 0.005; this.camPitch = Math.max(-0.2, Math.min(1.2, this.camPitch + dy * 0.004)); }

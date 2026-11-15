@@ -396,3 +396,30 @@ Physics now has engine RPM and gears, surface grip and rolling resistance (publi
 **Performance:** full retina at 2800 px wide gives 34 fps (5.8M triangles, 881 draw calls) in Mumbai. The Settings "Low" option turns shadows off, cuts trees to 20 per variant and grass by 60 %.
 
 **Skipped under deadline:** a `/ponytail-review` pass on this diff, which is large (about 3k lines across agents). It goes on the to-do before the final submission freeze.
+
+## 2026-11-15 19:40 Home screen redesign, vehicle scale check, sense of speed
+
+**Home (owner: "looks old, make it look like a real game"):** rebuilt as a title screen over the live globe.
+
+- *Globe staging:* it is pushed right with `setViewOffset`. It has a Fresnel atmosphere and limb rim, and a fixed sun so a day/night terminator shows. NASA GIBS `VIIRS_Black_Marble` city lights (checked via WMS, 200 OK) glow only on the night side, through an emissive mask in the shader.
+- *Satellites:* stylised Terra, Aqua and GPM orbit with screen-tracked name tags.
+- *Title and actions:* a kinetic PROCELLA title with letter-by-letter rise and a handwritten kicker, a pill Play button with a halo (Enter also starts), four glass tiles (Globe Lab, Advancements with a progress ring, Settings, Credits) and a scrolling data ticker.
+- *Atmosphere and accessibility:* a grain and vignette overlay; motion is off under `prefers-reduced-motion`.
+- *Brand:* only the house-style tokens are used. The brand CSS loads Barlow Condensed up to 700 and Caveat 500, so the design uses only those weights.
+
+**Vehicle scale (owner: "not to scale with the architecture"):**
+
+| Object | Measured |
+|---|---|
+| Saloon | 4.8 × 2.0 × 1.49 m |
+| 4x4 | 5.06 × 2.47 m tall |
+| Traveller | 1.69 m |
+| House storeys | 3 m |
+| Doors | 2.1 m |
+| Windows | 1.1 × 1.2 m |
+
+These match real sizes. What read as wrong:
+- Trees of 24 to 26 m in the tropics dwarfed everything. They are now typical heights: tropical 15 to 17 m, temperate 12 to 15 m.
+- The owner's browser was likely still showing the pre-realism build, with its 4 m walls scaled 1.2×. The server now sends no-cache headers.
+
+**"Make them fast":** top speeds stay at the real figures. The chase camera now sells speed: FOV widens from 60 to 78° with km/h, there is a slight shake on rough ground above 40 km/h, and the land-vehicle camera sits 20 % closer.

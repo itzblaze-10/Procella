@@ -45,29 +45,40 @@ app.progress.onComplete = () => setTimeout(() => app.ending(), 2500);
 
 // ---------- screens ----------
 app.home = () => {
-  app.leaveWorld(); app.screen = 'home'; globe.autoSpin = true; globe.markers.clear(); globe.pin.visible = false; globe.setOverlay(null);
-  ui.innerHTML = `<div class="home">
-    <div class="brand-block"><span class="eyebrow">NASA Space Apps 2026 · Earth System Trend Detective</span><div id="board"></div>
-      <p class="lede">Pick a traveller and a ride, land anywhere on the real Earth, and read 45 years of NASA climate records with the people who live there.</p></div>
-    <nav class="menu">
-      <button class="big primary" id="play">Play<small>Travel into a real place and year</small></button>
-      <button class="big" id="explore">Explore<small>Globe Lab: trends across the planet</small></button>
-      <button class="big" id="adv">Advancements<small>${app.progress.earned.size} of ${ADVANCEMENTS.length}</small></button>
-      <button class="big" id="set">Settings<small>Sound, graphics, progress</small></button>
-      <button class="big ghost" id="cred">Credits and data</button>
-    </nav>
-    <div class="home-foot">${P().SourceBadge({ kind: 'live', text: 'Globe: NASA GIBS, live' })}${P().SourceBadge({ kind: 'live', text: 'Climate: NASA POWER, live' })}</div></div>`;
-  ui.querySelector('#board').innerHTML = P().FlapBoard({ text: 'PROCELLA', length: 8 });
-  setTimeout(() => P().flapTo(ui.querySelector('.pc-flap'), 'PROCELLA'), 200);
-  ui.querySelector('#play').onclick = () => app.onboard(0);
-  ui.querySelector('#explore').onclick = () => app.openLab();
-  ui.querySelector('#adv').onclick = () => app.advancements();
-  ui.querySelector('#set').onclick = () => app.settingsPanel();
-  ui.querySelector('#cred').onclick = () => app.credits();
+  app.leaveWorld(); app.screen = 'home'; globe.autoSpin = true; globe.markers.clear(); globe.pin.visible = false; globe.setOverlay(null); globe.setCinema(true);
+  const earned = app.progress.earned.size, total = ADVANCEMENTS.length, ring = 2 * Math.PI * 17;
+  const title = 'PROCELLA'.split('').map((c, i) => `<span style="--i:${i}">${c}</span>`).join('');
+  const feed = ['NASA POWER · 45 years at any point on Earth', 'MERRA-2 reanalysis', 'CERES clouds and sunlight', 'GPM IMERG rainfall', 'Sentinel-2 ground at 10 m', 'Real terrain from SRTM', ...STATIONS.map(s => `Trend station · ${s[0]}`), 'Mann-Kendall + Sen\'s slope', '9 vehicles · 6 travellers · 18 advancements'];
+  const tile = (id, icon, label, sub, extra = '') => `<button class="h-tile" id="${id}">${extra || P().Icon(icon, { size: 26 })}<b>${label}</b><small>${sub}</small></button>`;
+  ui.innerHTML = `<div class="home2">
+    <div class="h-vignette"></div><div class="h-grain"></div>
+    <header class="h-top"><span class="h-badge">${P().Icon('globe', { size: 18 })} NASA Space Apps 2026</span><span class="h-chal">Earth System Trend Detective</span><span class="h-live"><i></i>Live NASA data</span></header>
+    <section class="h-hero">
+      <p class="h-kicker">a globe-trotter's climate detective game</p>
+      <h1 class="h-title" aria-label="Procella">${title}</h1>
+      <p class="h-lede">Land anywhere on the real Earth. Drive, fly and sail through 45 years of NASA climate records, and hear it from the people who live there.</p>
+      <div class="h-cta"><button class="h-play" id="play"><span class="h-play-ico">${P().Icon('play', { size: 30 })}</span><span class="h-play-txt">Play<small>Pick a traveller, a ride, a year</small></span></button><span class="h-hint"><kbd>Enter</kbd> to start</span></div>
+      <nav class="h-tiles">
+        ${tile('explore', 'globe', 'Globe Lab', 'Trends across the planet')}
+        ${tile('adv', '', 'Advancements', `${earned} of ${total} earned`, `<svg class="h-ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><circle cx="20" cy="20" r="17" style="stroke-dasharray:${ring};stroke-dashoffset:${ring * (1 - earned / total)}"/></svg>`)}
+        ${tile('set', 'compass', 'Settings', 'Sound and graphics')}
+        ${tile('cred', 'info', 'Credits', 'Data and sources')}
+      </nav>
+    </section>
+    <div class="h-sats">${globe.satList.map(x => `<span class="h-sat">${x.name}</span>`).join('')}</div>
+    <footer class="h-ticker"><div class="h-track">${[...feed, ...feed].map(f => `<span>${esc(f)}</span>`).join('')}</div></footer></div>`;
+  const go = (id, fn) => { const b = ui.querySelector('#' + id); b.onclick = () => { click(); fn(); }; b.onmouseenter = () => click(); };
+  go('play', () => app.onboard(0)); go('explore', () => app.openLab()); go('adv', () => app.advancements()); go('set', () => app.settingsPanel()); go('cred', () => app.credits());
 };
+// satellite name tags follow their satellites across the screen
+function homeTags() {
+  const tags = ui.querySelectorAll('.h-sat');
+  globe.screenSats.forEach((p, i) => { const t = tags[i]; if (!t) return; t.style.transform = `translate(${p.x * innerWidth}px, ${p.y * innerHeight}px)`; t.style.opacity = p.front ? 1 : 0.25; });
+}
 
 const STEPS = ['Traveller', 'Vehicle', 'Time', 'Destination'];
 app.onboard = step => {
+  globe.setCinema(false);
   app.screen = step === 3 ? 'pick' : 'preview'; app.step = step;
   const head = `<div class="steps">${STEPS.map((s, i) => `<button class="${i === step ? 'on' : ''} ${i < step ? 'done' : ''}" data-s="${i}">${i + 1}. ${s}</button>`).join('')}</div>`;
   const nav = `<div class="onav"><button id="back">${step ? 'Back' : 'Home'}</button>${step < 3 ? '<button class="primary" id="next">Next</button>' : ''}</div>`;
@@ -153,7 +164,7 @@ app.enterWorld = async () => {
 };
 app.leaveWorld = () => { if (app.world) { app.world.dispose(); app.world = null; app.hud = null; } app.lab = null; app.modalOpen = false; };
 
-app.openLab = () => { app.leaveWorld(); app.screen = 'lab'; globe.autoSpin = false; app.lab = new Lab(ui, globe, app); };
+app.openLab = () => { globe.setCinema(false); app.leaveWorld(); app.screen = 'lab'; globe.autoSpin = false; app.lab = new Lab(ui, globe, app); };
 app.travelTo = (lat, lon) => { Object.assign(app.choice, { lat, lon, place: '' }); app.enterWorld(); };
 
 function sheet(html) {
@@ -202,6 +213,7 @@ addEventListener('keydown', e => {
   if (e.target.matches?.('input, select, textarea')) return;
   keys[e.code] = true; if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   if (e.code === 'Escape') { const m = [...document.querySelectorAll('.modal.top')].pop(); if (m) return m.close(); if (app.hud && !app.hud.$('modal').hidden) return app.hud.closeModal(); if (app.screen === 'world') app.pause(); return; }
+  if (app.screen === 'home' && e.code === 'Enter' && !app.modalOpen) { click(); return app.onboard(0); }
   if (app.screen !== 'world' || app.modalOpen || e.repeat) return;
   if (e.code === 'KeyF') app.world.toggleDrive();
   if (e.code === 'KeyE') { const n = app.world.nearestNPC(); if (n) app.hud.story(n); }
@@ -228,7 +240,7 @@ addEventListener('pointerup', e => {
 canvas.addEventListener('wheel', e => { e.preventDefault(); if (app.screen === 'world') app.world?.zoom(e.deltaY); else globe.zoom(e.deltaY); }, { passive: false });
 
 function resize() {
-  renderer.setSize(innerWidth, innerHeight, false); globe.resize(innerWidth, innerHeight);
+  renderer.setSize(innerWidth, innerHeight, false); globe.resize(innerWidth, innerHeight); if (globe.cinema) globe.setCinema(true);
   preview.camera.aspect = innerWidth / innerHeight; preview.camera.updateProjectionMatrix(); app.world?.resize(innerWidth, innerHeight);
 }
 addEventListener('resize', resize); resize();
@@ -247,7 +259,7 @@ renderer.setAnimationLoop(() => {
     // aim right of the subject so it sits in the open space left of the panel
     preview.camera.lookAt(c.x + Math.cos(s) * r * 0.3, c.y, c.z - Math.sin(s) * r * 0.3);
     renderer.render(preview.scene, preview.camera);
-  } else { globe.update(dt); renderer.render(globe.scene, globe.camera); }
+  } else { globe.update(dt); if (app.screen === 'home') homeTags(); renderer.render(globe.scene, globe.camera); }
 });
 window.procella = app; // handy for debugging in the console
 app.home();

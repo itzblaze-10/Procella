@@ -25,14 +25,44 @@ export class Globe {
   constructor() {
     this.scene = new THREE.Scene(); this.scene.background = new THREE.Color(0x0a111c);
     this.camera = new THREE.PerspectiveCamera(40, 1, 1, 5000); this.dist = 330; this.yaw = -1.2; this.pitch = 0.35; this.autoSpin = true;
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    this.ambient = new THREE.AmbientLight(0xffffff, 0.55); this.scene.add(this.ambient);
     this.sun = new THREE.DirectionalLight(0xffffff, 2.2); this.scene.add(this.sun);
     this.loader = new THREE.TextureLoader(); this.loader.setCrossOrigin('anonymous');
     this.earth = new THREE.Mesh(new THREE.SphereGeometry(R, 96, 64), new THREE.MeshStandardMaterial({ color: 0x1b2a40, roughness: 0.9 }));
     this.overlay = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 96, 64), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.85, depthWrite: false }));
     this.overlay.visible = false;
-    this.atmo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.035, 64, 32), new THREE.MeshBasicMaterial({ color: 0x5ba2ff, transparent: true, opacity: 0.22, side: THREE.BackSide, blending: THREE.AdditiveBlending, depthWrite: false }));
-    this.root = new THREE.Group(); this.root.add(this.earth, this.overlay, this.atmo); this.scene.add(this.root);
+    // atmosphere: a limb glow that brightens toward the edge of the disc (Fresnel), like photos from orbit
+    this.atmo = new THREE.Mesh(new THREE.SphereGeometry(R * 1.07, 64, 32), new THREE.ShaderMaterial({
+      uniforms: { c: { value: new THREE.Color(0x5ba2ff) } }, side: THREE.BackSide, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
+      vertexShader: 'varying vec3 vN; void main() { vN = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+      fragmentShader: 'uniform vec3 c; varying vec3 vN; void main() { float i = pow(clamp(0.72 + dot(vN, vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 4.0); gl_FragColor = vec4(c * i * 1.1, i); }',
+    }));
+    this.rim = new THREE.Mesh(new THREE.SphereGeometry(R * 1.002, 96, 64), new THREE.ShaderMaterial({
+      uniforms: { c: { value: new THREE.Color(0x7fb8ff) } }, blending: THREE.AdditiveBlending, transparent: true, depthWrite: false,
+      vertexShader: 'varying vec3 vN; varying vec3 vV; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }',
+      fragmentShader: 'uniform vec3 c; varying vec3 vN; varying vec3 vV; void main() { float f = pow(1.0 - max(dot(vN, vV), 0.0), 2.5); gl_FragColor = vec4(c * f * 0.9, f); }',
+    }));
+    this.root = new THREE.Group(); this.root.add(this.earth, this.overlay, this.rim, this.atmo); this.scene.add(this.root);
+    // NASA Black Marble (VIIRS) city lights glow on the night side only
+    this.sunView = { value: new THREE.Vector3(0, 0, 1) };
+    this.earth.material.onBeforeCompile = sh => {
+      sh.uniforms.uSun = this.sunView;
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uSun;')
+        .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\n totalEmissiveRadiance *= smoothstep(0.12, -0.25, dot(normalize(vNormal), uSun));');
+    };
+    this.loader.loadAsync(WMS('VIIRS_Black_Marble', '2016-01-01', 'image/jpeg')).then(t => { t.colorSpace = THREE.SRGBColorSpace; Object.assign(this.earth.material, { emissiveMap: t, emissive: new THREE.Color(0xffd9a0), emissiveIntensity: 1.6 }); this.earth.material.needsUpdate = true; }).catch(() => {});
+    // the satellites behind the data, on inclined orbits (stylised scale)
+    this.sats = new THREE.Group(); this.scene.add(this.sats);
+    const body = new THREE.MeshStandardMaterial({ color: 0xd8c27a, metalness: 0.7, roughness: 0.35 }), panel = new THREE.MeshStandardMaterial({ color: 0x1f3a6b, metalness: 0.5, roughness: 0.3, emissive: 0x0a1630 });
+    this.satList = [['TERRA', 0.17, 1.1, 0], ['AQUA', 0.15, 1.6, 2.1], ['GPM', 0.21, 0.65, 4.2]].map(([name, speed, incl, phase], i) => {
+      const g = new THREE.Group(), r = R * (1.28 + i * 0.07);
+      g.add(new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.2, 3.4), body));
+      for (const sx of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(6, 0.12, 2.2), panel); p.position.x = sx * 4.2; g.add(p); }
+      const orbit = new THREE.Group(); orbit.rotation.set(incl, i * 1.3, 0); orbit.add(g); this.sats.add(orbit);
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.12, 4, 160), new THREE.MeshBasicMaterial({ color: 0x5ba2ff, transparent: true, opacity: 0.09 })); ring.rotation.x = Math.PI / 2; orbit.add(ring);
+      return { name, speed, r, phase, g };
+    });
+    this.sats.visible = false; this.screenSats = [];
     this.markers = new THREE.Group(); this.root.add(this.markers);
     const stars = new Float32Array(3000); for (let i = 0; i < 3000; i++) stars[i] = (Math.random() - 0.5) * 3000;
     const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(stars, 3));
@@ -76,11 +106,25 @@ export class Globe {
   drag(dx, dy) { this.yaw -= dx * 0.005; this.pitch = Math.max(-1.3, Math.min(1.3, this.pitch + dy * 0.005)); this.autoSpin = false; }
   zoom(d) { this.dist = Math.max(140, Math.min(600, this.dist * (1 + d * 0.001))); }
   resize(w, h) { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
+  // Home screen framing: globe pushed right, a fixed sun so a night side shows, satellites in orbit.
+  setCinema(on, w = innerWidth, h = innerHeight) {
+    this.cinema = on; this.sats.visible = on;
+    if (on && w > 820) this.camera.setViewOffset(w, h, -w * 0.2, 0, w, h); else this.camera.clearViewOffset();
+    if (on) { this.dist = 370; if (!this.framed) { const v = latLonToVec(18, 72); this.yaw = Math.atan2(v.x, v.z); this.pitch = 0.3; this.framed = true; } }
+    this.ambient.intensity = on ? 0.12 : 0.55; this.sun.intensity = on ? 3 : 2.2;
+  }
   update(dt) {
-    if (this.autoSpin) this.yaw -= dt * 0.05;
+    this.t = (this.t || 0) + dt;
+    if (this.autoSpin) this.yaw -= dt * (this.cinema ? 0.035 : 0.05);
     this.root.rotation.set(0, 0, 0);
     this.camera.position.set(Math.sin(this.yaw) * Math.cos(this.pitch) * this.dist, Math.sin(this.pitch) * this.dist, Math.cos(this.yaw) * Math.cos(this.pitch) * this.dist);
     this.camera.lookAt(0, 0, 0);
-    this.sun.position.copy(this.camera.position).applyAxisAngle(new THREE.Vector3(0, 1, 0), 0.6).add(new THREE.Vector3(0, 120, 0)); // light follows the view
+    this.sun.position.copy(this.camera.position).applyAxisAngle(new THREE.Vector3(0, 1, 0), this.cinema ? -0.85 : 0.6).add(new THREE.Vector3(0, 120, 0)); // light follows the view
+    this.camera.updateMatrixWorld(); this.sunView.value.copy(this.sun.position).normalize().transformDirection(this.camera.matrixWorldInverse);
+    if (this.cinema) this.screenSats = this.satList.map(s => {
+      const a = this.t * s.speed + s.phase; s.g.position.set(Math.cos(a) * s.r, 0, Math.sin(a) * s.r); s.g.rotation.y = -a;
+      const p = s.g.getWorldPosition(new THREE.Vector3()), front = p.clone().sub(this.camera.position).length() < this.camera.position.length(); p.project(this.camera);
+      return { name: s.name, x: (p.x + 1) / 2, y: (1 - p.y) / 2, front };
+    });
   }
 }

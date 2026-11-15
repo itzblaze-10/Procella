@@ -16,12 +16,12 @@ const hash = (x, z, s = 0) => { const v = Math.sin(x * 127.1 + z * 311.7 + s * 7
 export function biomeFor(tMean, rain) {
   if (tMean < -6) return { name: 'ice', trees: [], density: 0, grass: 0 };
   if (tMean < 1) return { name: 'tundra', trees: [['Pine Small', 6, 0x3b5a3a], ['Bush 2', 1.2, 0x6a7a4a]], density: 0.25, grass: 0.5, dry: 0.3 };
-  if (tMean < 7) return { name: 'boreal', trees: [['Pine Large', 22, 0x2f4f33], ['Pine Medium', 15, 0x355a38], ['Aspen Medium', 14, 0x7a9a4a]], density: 1, grass: 0.7 };
+  if (tMean < 7) return { name: 'boreal', trees: [['Pine Large', 20, 0x2f4f33], ['Pine Medium', 15, 0x355a38], ['Aspen Medium', 14, 0x7a9a4a]], density: 1, grass: 0.7 };
   if (tMean < 18) return rain < 1 ? { name: 'steppe', trees: [['Bush 1', 1.8, 0x7d8a52], ['Ash Small', 7, 0x7b8f4f]], density: 0.3, grass: 0.8, dry: 0.6 }
-    : { name: 'temperate', trees: [['Oak Large', 18, 0x4d7a35], ['Ash Medium', 15, 0x5a8a3c], ['Aspen Medium', 13, 0x7d9d45], ['Pine Medium', 16, 0x355a38]], density: 1, grass: 1 };
+    : { name: 'temperate', trees: [['Oak Large', 15, 0x4d7a35], ['Ash Medium', 13, 0x5a8a3c], ['Aspen Medium', 12, 0x7d9d45], ['Pine Medium', 15, 0x355a38]], density: 1, grass: 1 };
   if (rain < 0.7) return { name: 'desert', trees: [['Bush 3', 1.5, 0x8a8a5a], ['Bush 1', 1.2, 0x9a9460]], density: 0.12, grass: 0.15, dry: 1 };
   if (rain < 2.6) return { name: 'savanna', trees: [['Ash Medium', 9, 0x6f8a3a], ['Bush 2', 2.2, 0x7a8a45], ['Oak Small', 8, 0x6a8540]], density: 0.4, grass: 1, dry: 0.7 };
-  return { name: 'tropical', trees: [['Oak Large', 24, 0x2e6a2a], ['Ash Large', 26, 0x336f2c], ['Bush 1', 2.5, 0x3a7a30]], density: 1.4, grass: 1 };
+  return { name: 'tropical', trees: [['Oak Large', 17, 0x2e6a2a], ['Ash Large', 15, 0x336f2c], ['Bush 1', 2.5, 0x3a7a30]], density: 1.4, grass: 1 };
 }
 
 const waitTextures = async mats => {
