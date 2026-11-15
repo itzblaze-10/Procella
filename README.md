@@ -11,6 +11,11 @@ Built for the NASA Space Apps Challenge 2026, challenge **Earth System Trend Det
 
 Team Procella.
 
+## Play it
+
+- **Game:** https://procella-game.netlify.app
+- **Slides:** https://procella-deck.netlify.app (arrow keys, N for speaker notes, F for full screen)
+
 ## Run it
 
 Procella is a static web app (three.js, ES modules, no build step, no credentials).

@@ -541,3 +541,13 @@ OSM gives the Burj Khalifa only `building:levels=163` (no height), so the data s
   access is switched on per site for these two only; the account default is untouched.
 - Found: an earlier name scan piped `git ls-files` into xargs, which split "build journal.md" on its space
   and skipped it. One leftover tool name fixed; scan with `git ls-files -z | xargs -0` from now on.
+
+## 2026-11-15 22:45 Live: procella-game.netlify.app and procella-deck.netlify.app
+
+- The free plan injects a "Built with Netlify" badge script into every page and cannot turn it off (API
+  answers 422). Its loader is same-origin; the inline code it runs is allowed by its exact hash in both
+  CSPs, nothing broader. If Netlify changes that code the badge stops rendering; the site is unaffected.
+- Verified live: home, onboarding, Paris (Live NASA badge), Globe Lab 16-place live scan, deck slides,
+  zero console errors and zero CSP violations. `.env`, local tooling, `.tmp` and `_headers` all 404.
+- README links both sites. Redeploy: `python3 scripts/deploy_netlify.py procella-game <export>` with an
+  export from `git archive HEAD`, and `python3 scripts/deploy_netlify.py procella-deck deck`.
